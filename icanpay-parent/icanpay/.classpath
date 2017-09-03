@@ -22,6 +22,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/works/install/java/Tomcat 8.0/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="D:/works/projects/java/icanpay/repository/alipay/alipay-sdk-JAVA-20170829142651/alipay-sdk-java20170829142630.jar" sourcepath="D:/works/projects/java/icanpay/repository/alipay/alipay-sdk-JAVA-20170829142651/alipay-sdk-java20170829142630-source.jar"/>
+	<classpathentry kind="lib" path="D:/works/projects/java/icanpay/repository/alipay/alipay-sdk-JAVA-20170829142651/commons-logging-1.1.1.jar" sourcepath="D:/works/projects/java/icanpay/repository/alipay/alipay-sdk-JAVA-20170829142651/commons-logging-1.1.1-sources.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

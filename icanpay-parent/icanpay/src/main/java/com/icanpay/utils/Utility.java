@@ -1,4 +1,4 @@
-package com.icanpay;
+package com.icanpay.utils;
 
 import java.security.MessageDigest;
 import java.util.UUID;

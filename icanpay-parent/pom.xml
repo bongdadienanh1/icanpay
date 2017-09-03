@@ -12,8 +12,9 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <junit.version>3.8.1</junit.version>
+    <junit.version>4.12</junit.version>
     <commons-lang3.version>3.6</commons-lang3.version>
+    <servlet-api.version>2.5</servlet-api.version>
   </properties>
   
  <dependencyManagement>
@@ -30,6 +31,13 @@
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-lang3</artifactId>
     <version>${commons-lang3.version}</version>
+   </dependency>
+   
+   <dependency>
+	 <groupId>javax.servlet</groupId>
+	 <artifactId>servlet-api</artifactId>
+	 <version>${servlet-api.version}</version>
+	 <scope>provided</scope>
    </dependency>
    
   </dependencies>
