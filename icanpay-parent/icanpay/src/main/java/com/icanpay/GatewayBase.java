@@ -312,6 +312,7 @@ public abstract class GatewayBase {
 	 * 当接收到支付网关通知并验证无误时按照支付网关要求格式输出表示成功接收到网关通知的字符串
 	 * 
 	 * @return
+	 * @throws Exception
 	 */
-	public abstract String writeSucceedFlag();
+	public abstract String writeSucceedFlag() throws Exception;
 }

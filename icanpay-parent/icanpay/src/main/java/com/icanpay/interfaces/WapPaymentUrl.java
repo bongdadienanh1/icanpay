@@ -16,5 +16,6 @@ public interface WapPaymentUrl {
 	 * @return
 	 * @throws Exception
 	 */
-	String buildWapPaymentUrl(String redirect_url) throws Exception;
+	String buildWapPaymentUrl(String redirect_url, String spbill_create_ip)
+			throws Exception;
 }

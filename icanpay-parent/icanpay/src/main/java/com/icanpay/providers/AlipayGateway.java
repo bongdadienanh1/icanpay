@@ -3,8 +3,6 @@ package com.icanpay.providers;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
@@ -82,8 +80,8 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 	 */
 
 	@Override
-	public String buildWapPaymentUrl(String redirect_url)
-			throws AlipayApiException {
+	public String buildWapPaymentUrl(String redirect_url,
+			String spbill_create_ip) throws AlipayApiException {
 		// TODO Auto-generated method stub
 		AlipayClient alipayClient = new DefaultAlipayClient(openapiGatewayUrl,
 				getMerchant().getAppId(), getMerchant().getPrivateKeyPem(),
@@ -140,6 +138,24 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 		}
 		return false;
 
+	}
+
+	@Override
+	protected boolean checkNotifyData() throws AlipayApiException {
+		// TODO Auto-generated method stub
+		if (validateAlipayNotifyRSASign()) {
+			return validateTrade();
+		}
+		return false;
+	}
+
+	@Override
+	public String writeSucceedFlag() {
+		// TODO Auto-generated method stub
+		if (getPaymentNotifyMethod() == PaymentNotifyMethod.ServerNotify) {
+			return "success";
+		}
+		return "";
 	}
 
 	@SuppressWarnings("unused")
@@ -207,7 +223,7 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 	 */
 	@SuppressWarnings("unused")
 	private void validatePaymentOrderParameter() {
-		if (StringUtils.isBlank(getGatewayParameterValue("seller_email"))) {
+		if (Utility.isBlankOrEmpty(getGatewayParameterValue("seller_email"))) {
 			throw new IllegalArgumentException(
 					"订单缺少seller_email参数，seller_email是卖家支付宝账号的邮箱。");
 		}
@@ -224,20 +240,11 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 	 * @return
 	 */
 	public boolean isEmail(String emailAddress) {
-		if (StringUtils.isBlank(emailAddress)) {
+		if (Utility.isBlankOrEmpty(emailAddress)) {
 			return false;
 		}
 
 		return emailAddress.matches(emailRegexString);
-	}
-
-	@Override
-	protected boolean checkNotifyData() throws AlipayApiException {
-		// TODO Auto-generated method stub
-		if (validateAlipayNotifyRSASign()) {
-			return validateTrade();
-		}
-		return false;
 	}
 
 	/**
@@ -260,7 +267,7 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 	private boolean validateTrade() {
 		// TODO Auto-generated method stub
 		String orderAmount = getGatewayParameterValue("total_amount");
-		orderAmount = StringUtils.isBlank(orderAmount) ? getGatewayParameterValue("total_fee")
+		orderAmount = Utility.isBlankOrEmpty(orderAmount) ? getGatewayParameterValue("total_fee")
 				: orderAmount;
 		getOrder().setOrderAmount(Double.parseDouble(orderAmount));
 		getOrder().setOrderNo(getGatewayParameterValue("out_trade_no"));
@@ -272,15 +279,6 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 			return true;
 		}
 		return false;
-	}
-
-	@Override
-	public String writeSucceedFlag() {
-		// TODO Auto-generated method stub
-		if (getPaymentNotifyMethod() == PaymentNotifyMethod.ServerNotify) {
-			return "success";
-		}
-		return "";
 	}
 
 }
