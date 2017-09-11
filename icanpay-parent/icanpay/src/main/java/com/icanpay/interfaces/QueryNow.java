@@ -1,5 +1,7 @@
 package com.icanpay.interfaces;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.alipay.api.AlipayApiException;
 import com.icanpay.enums.ProductSet;
 
@@ -10,13 +12,15 @@ import com.icanpay.enums.ProductSet;
  *
  */
 public interface QueryNow {
-
 	/**
 	 * 查询订单是否支付成功。
 	 * 
 	 * @param productSet
+	 * @param req
 	 * @return 服务器在查询url页面输出返回查询数据
 	 * @throws AlipayApiException
 	 */
-	boolean queryNow(ProductSet productSet) throws Exception;
+	boolean queryNow(ProductSet productSet, HttpServletRequest req)
+			throws Exception;
+
 }

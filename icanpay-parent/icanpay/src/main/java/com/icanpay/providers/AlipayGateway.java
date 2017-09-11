@@ -3,6 +3,8 @@ package com.icanpay.providers;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
@@ -80,8 +82,8 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 	 */
 
 	@Override
-	public String buildWapPaymentUrl(String redirect_url,
-			String spbill_create_ip) throws AlipayApiException {
+	public String buildWapPaymentUrl(Map<String, String> map)
+			throws AlipayApiException {
 		// TODO Auto-generated method stub
 		AlipayClient alipayClient = new DefaultAlipayClient(openapiGatewayUrl,
 				getMerchant().getAppId(), getMerchant().getPrivateKeyPem(),
@@ -117,7 +119,8 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 	}
 
 	@Override
-	public boolean queryNow(ProductSet productSet) throws AlipayApiException {
+	public boolean queryNow(ProductSet productSet, HttpServletRequest req)
+			throws AlipayApiException {
 		// TODO Auto-generated method stub
 		AlipayClient alipayClient = new DefaultAlipayClient(
 				"https://openapi.alipay.com/gateway.do", getMerchant()
@@ -141,7 +144,8 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 	}
 
 	@Override
-	protected boolean checkNotifyData() throws AlipayApiException {
+	protected boolean checkNotifyData(HttpServletRequest req)
+			throws AlipayApiException {
 		// TODO Auto-generated method stub
 		if (validateAlipayNotifyRSASign()) {
 			return validateTrade();

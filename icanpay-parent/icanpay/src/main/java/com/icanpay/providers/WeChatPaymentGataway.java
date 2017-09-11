@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.icanpay.GatewayBase;
 import com.icanpay.GatewayParameter;
 import com.icanpay.enums.GatewayType;
@@ -62,9 +64,10 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 	 * https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=15_4
 	 */
 	@Override
-	public String buildWapPaymentUrl(String redirect_url,
-			String spbill_create_ip) throws Exception {
+	public String buildWapPaymentUrl(Map<String, String> map) throws Exception {
 		// TODO Auto-generated method stub
+		String redirect_url = map.getOrDefault("redirect_url", "");
+		String spbill_create_ip = map.getOrDefault("spbill_create_ip", "");
 		initPaymentOrderParameter("MWEB", spbill_create_ip);
 		String xmlString = convertGatewayParameterDataToXml();
 		String resultXml = HttpClientUtil.doPost(xmlString, payGatewayUrl,
@@ -106,7 +109,8 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 	}
 
 	@Override
-	public boolean queryNow(ProductSet productSet) throws Exception {
+	public boolean queryNow(ProductSet productSet, HttpServletRequest req)
+			throws Exception {
 		// TODO Auto-generated method stub
 		initQueryOrderParameter();
 		String xmlString = convertGatewayParameterDataToXml();
@@ -134,7 +138,7 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 	}
 
 	@Override
-	protected boolean checkNotifyData() throws Exception {
+	protected boolean checkNotifyData(HttpServletRequest req) throws Exception {
 		// TODO Auto-generated method stub
 		readNotifyOrderParameter();
 		if (isSuccessResult()) {

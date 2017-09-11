@@ -17,6 +17,7 @@
     <slf4j-simple.version>1.7.21</slf4j-simple.version>
     <junit.version>4.12</junit.version>
     <commons-lang3.version>3.6</commons-lang3.version>
+    <commons-io.version>2.5</commons-io.version>
     <servlet-api.version>2.5</servlet-api.version>
   </properties>
   
@@ -52,6 +53,13 @@
     <artifactId>commons-lang3</artifactId>
     <version>${commons-lang3.version}</version>
    </dependency>
+   
+	<dependency>
+	    <groupId>commons-io</groupId>
+	    <artifactId>commons-io</artifactId>
+	    <version>${commons-io.version}</version>
+	</dependency>
+	   
    
    <dependency>
 	 <groupId>javax.servlet</groupId>

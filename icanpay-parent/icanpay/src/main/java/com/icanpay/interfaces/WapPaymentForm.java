@@ -12,6 +12,7 @@ public interface WapPaymentForm {
 	 * 创建包含支付订单数据的form表单的HTML代码
 	 * 
 	 * @return
+	 * @throws Exception
 	 */
-	String buildWapPaymentForm();
+	String buildWapPaymentForm() throws Exception;
 }

@@ -1,5 +1,7 @@
 package com.icanpay.interfaces;
 
+import java.util.Map;
+
 /**
  * 支付订单通过url提交
  * 
@@ -16,6 +18,5 @@ public interface WapPaymentUrl {
 	 * @return
 	 * @throws Exception
 	 */
-	String buildWapPaymentUrl(String redirect_url, String spbill_create_ip)
-			throws Exception;
+	String buildWapPaymentUrl(Map<String, String> map) throws Exception;
 }
