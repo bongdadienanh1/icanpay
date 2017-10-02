@@ -8,7 +8,7 @@ import org.junit.Test;
 public class CommonTest {
 
 	@Test
-	public void SortedMapTest() {
+	public void TestSortedMap() {
 		SortedMap<String, String> sortedMap = new TreeMap<String, String>();
 		sortedMap.put("c", "c");
 		sortedMap.put("d", "d");

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -20,6 +21,8 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -184,8 +187,8 @@ public class Utility {
 	 * @param request
 	 * @return
 	 */
-	public static String getClientIP(HttpServletRequest request) {
-		String ip = request.getHeader("X-Forwarded-For");
+	public static String getClientIP() {
+		String ip = getHttpServletRequest().getHeader("X-Forwarded-For");
 		if (!Utility.isBlankOrEmpty(ip) && !"unKnown".equalsIgnoreCase(ip)) {
 			// 多次反向代理后会有多个ip值，第一个ip才是真实ip
 			int index = ip.indexOf(",");
@@ -195,11 +198,11 @@ public class Utility {
 				return ip;
 			}
 		}
-		ip = request.getHeader("X-Real-IP");
+		ip = getHttpServletRequest().getHeader("X-Real-IP");
 		if (!Utility.isBlankOrEmpty(ip) && !"unKnown".equalsIgnoreCase(ip)) {
 			return ip;
 		}
-		return request.getRemoteAddr();
+		return getHttpServletRequest().getRemoteAddr();
 	}
 
 	/**
@@ -213,5 +216,17 @@ public class Utility {
 			return true;
 		}
 		return false;
+	}
+
+	public static HttpServletRequest getHttpServletRequest() {
+		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
+				.getRequestAttributes();
+		return attributes.getRequest();
+	}
+
+	public static HttpServletResponse getHttpServletResponse() {
+		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
+				.getRequestAttributes();
+		return attributes.getResponse();
 	}
 }

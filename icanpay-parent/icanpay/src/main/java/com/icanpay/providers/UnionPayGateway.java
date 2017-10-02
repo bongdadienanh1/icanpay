@@ -22,6 +22,7 @@ import com.icanpay.interfaces.AppParams;
 import com.icanpay.interfaces.PaymentForm;
 import com.icanpay.interfaces.QueryNow;
 import com.icanpay.interfaces.WapPaymentForm;
+import com.icanpay.utils.Utility;
 import com.unionpay.acp.sdk.AcpService;
 import com.unionpay.acp.sdk.LogUtil;
 import com.unionpay.acp.sdk.SDKConfig;
@@ -175,12 +176,11 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 				.getConfig().getAppRequestUrl(), getCharset());
 		Map<String, String> resParam = new HashMap<String, String>();
 		resParam.put("tn", resmap.get("tn"));
-		return null;
+		return resParam;
 	}
 
 	@Override
-	public boolean queryNow(ProductSet productSet, HttpServletRequest req)
-			throws Exception {
+	public boolean queryNow(ProductSet productSet) throws Exception {
 		// TODO Auto-generated method stub
 		// String orderId = req.getParameter("orderId");
 		// String txnTime = req.getParameter("txnTime");
@@ -318,11 +318,13 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 	}
 
 	@Override
-	protected boolean checkNotifyData(HttpServletRequest req) throws Exception {
+	protected boolean checkNotifyData() throws Exception {
 		// TODO Auto-generated method stub
-		String encoding = req.getParameter(SDKConstants.param_encoding);
+		String encoding = Utility.getHttpServletRequest().getParameter(
+				SDKConstants.param_encoding);
 		// 获取银联通知服务器发送的后台通知参数
-		Map<String, String> reqParam = getAllRequestParamStream(req);
+		Map<String, String> reqParam = getAllRequestParamStream(Utility
+				.getHttpServletRequest());
 		LogUtil.printRequestLog(reqParam);
 
 		// 重要！验证签名前不要修改reqParam中的键值对的内容，否则会验签不过

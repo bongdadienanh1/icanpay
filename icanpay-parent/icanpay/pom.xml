@@ -12,8 +12,15 @@
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <jdk.version>1.8</jdk.version>
   </properties>
+  
   <dependencies>
+	 <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+	 
      <dependency>
           <groupId>org.apache.httpcomponents</groupId>
           <artifactId>httpclient</artifactId>
@@ -50,5 +57,10 @@
 	 <artifactId>servlet-api</artifactId>
 	 <scope>provided</scope>
    </dependency>
+   
+   <dependency>
+    <groupId>com.google.zxing</groupId>
+    <artifactId>core</artifactId>
+    </dependency>
   </dependencies>
 </project>

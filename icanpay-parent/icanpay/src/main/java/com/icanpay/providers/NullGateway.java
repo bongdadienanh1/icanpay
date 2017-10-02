@@ -2,8 +2,6 @@ package com.icanpay.providers;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.icanpay.GatewayBase;
 import com.icanpay.GatewayParameter;
 import com.icanpay.enums.GatewayType;
@@ -31,7 +29,7 @@ public class NullGateway extends GatewayBase {
 	}
 
 	@Override
-	protected boolean checkNotifyData(HttpServletRequest req) {
+	protected boolean checkNotifyData() {
 		// TODO Auto-generated method stub
 		return false;
 	}

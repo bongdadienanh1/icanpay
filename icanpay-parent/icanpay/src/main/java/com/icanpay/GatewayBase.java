@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.alipay.api.AlipayApiException;
 import com.icanpay.enums.GatewayParameterRequestMethod;
 import com.icanpay.enums.GatewayType;
@@ -173,8 +171,8 @@ public abstract class GatewayBase {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean validateNotify(HttpServletRequest req) throws Exception {
-		if (checkNotifyData(req)) {
+	public boolean validateNotify() throws Exception {
+		if (checkNotifyData()) {
 			return true;
 		}
 
@@ -308,8 +306,7 @@ public abstract class GatewayBase {
 	 * @return
 	 * @throws AlipayApiException
 	 */
-	protected abstract boolean checkNotifyData(HttpServletRequest req)
-			throws Exception;
+	protected abstract boolean checkNotifyData() throws Exception;
 
 	/**
 	 * 当接收到支付网关通知并验证无误时按照支付网关要求格式输出表示成功接收到网关通知的字符串
