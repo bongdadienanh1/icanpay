@@ -1,4 +1,4 @@
-package events;
+package com.icanpay.events;
 
 import com.icanpay.enums.GatewayType;
 import com.icanpay.enums.PaymentNotifyMethod;

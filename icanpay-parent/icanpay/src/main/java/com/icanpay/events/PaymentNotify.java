@@ -1,4 +1,4 @@
-package events;
+package com.icanpay.events;
 
 import java.util.ArrayList;
 import java.util.List;

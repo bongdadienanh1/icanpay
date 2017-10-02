@@ -1,4 +1,4 @@
-package events;
+package com.icanpay.events;
 
 import com.icanpay.Order;
 import com.icanpay.enums.GatewayType;

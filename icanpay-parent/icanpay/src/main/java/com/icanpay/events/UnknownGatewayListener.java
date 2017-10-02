@@ -1,4 +1,5 @@
-package events;
+package com.icanpay.events;
+
 
 public interface UnknownGatewayListener {
 
