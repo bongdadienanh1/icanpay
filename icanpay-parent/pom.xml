@@ -20,6 +20,7 @@
     <junit.version>4.12</junit.version>
     <commons-lang3.version>3.6</commons-lang3.version>
     <commons-io.version>2.5</commons-io.version>
+    <commons-logging.version>1.2</commons-logging.version>
     <servlet-api.version>2.5</servlet-api.version>
   </properties>
   
@@ -69,8 +70,13 @@
 	    <artifactId>commons-io</artifactId>
 	    <version>${commons-io.version}</version>
 	</dependency>
-	   
-   
+	
+  <dependency>
+     <groupId>commons-logging</groupId>
+     <artifactId>commons-logging</artifactId>
+     <version>${commons-logging.version}</version>
+   </dependency>
+	      
    <dependency>
 	 <groupId>javax.servlet</groupId>
 	 <artifactId>servlet-api</artifactId>
@@ -78,7 +84,6 @@
 	 <scope>provided</scope>
    </dependency>
    
-<!-- https://mvnrepository.com/artifact/com.google.zxing/core -->
   <dependency>
     <groupId>com.google.zxing</groupId>
     <artifactId>core</artifactId>
@@ -104,5 +109,7 @@
 
   <modules>
     <module>icanpay</module>
+    <module>icanpay.demo</module>
+    <module>icanpay-demo</module>
   </modules>
 </project>

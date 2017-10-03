@@ -51,6 +51,11 @@
 	    <groupId>commons-io</groupId>
 	    <artifactId>commons-io</artifactId>
 	</dependency>
+	
+	<dependency>
+     <groupId>commons-logging</groupId>
+     <artifactId>commons-logging</artifactId>
+   </dependency>
     
     <dependency>
 	 <groupId>javax.servlet</groupId>

@@ -70,6 +70,9 @@ public abstract class GatewayBase {
 	}
 
 	public Merchant getMerchant() {
+		if (merchant == null) {
+			merchant = new Merchant();
+		}
 		return merchant;
 	}
 

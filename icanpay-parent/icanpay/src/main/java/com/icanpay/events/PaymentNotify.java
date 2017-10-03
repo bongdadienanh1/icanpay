@@ -34,45 +34,45 @@ public class PaymentNotify {
 	/**
 	 * 网关返回的支付通知验证失败时触发
 	 */
-	PaymentFailedListener PaymentFailed;
+	PaymentFailedListener paymentFailed;
 
 	/**
 	 * 网关返回的支付通知验证成功时触发
 	 */
-	PaymentSucceedListener PaymentSucceed;
+	PaymentSucceedListener paymentSucceed;
 
 	/**
 	 * 返回通知消息的网关无法识别时触发
 	 */
-	UnknownGatewayListener UnknownGateway;
+	UnknownGatewayListener unknownGateway;
 
 	public void setPaymentFailed(PaymentFailedListener paymentFailed) {
-		PaymentFailed = paymentFailed;
+		this.paymentFailed = paymentFailed;
 	}
 
 	public void setPaymentSucceed(PaymentSucceedListener paymentSucceed) {
-		PaymentSucceed = paymentSucceed;
+		this.paymentSucceed = paymentSucceed;
 	}
 
 	public void setUnknownGateway(UnknownGatewayListener unknownGateway) {
-		UnknownGateway = unknownGateway;
+		this.unknownGateway = unknownGateway;
 	}
 
 	protected void onPaymentFailed(PaymentFailedEventArgs e) {
-		if (PaymentFailed != null) {
-			PaymentFailed.handleEvent(e);
+		if (paymentFailed != null) {
+			paymentFailed.handleEvent(e);
 		}
 	}
 
 	protected void onPaymentSucceed(PaymentSucceedEventArgs e) {
-		if (PaymentSucceed != null) {
-			PaymentSucceed.handleEvent(e);
+		if (paymentSucceed != null) {
+			paymentSucceed.handleEvent(e);
 		}
 	}
 
 	protected void onUnknownGateway(UnknownGatewayEventArgs e) {
-		if (UnknownGateway != null) {
-			UnknownGateway.handleEvent(e);
+		if (unknownGateway != null) {
+			unknownGateway.handleEvent(e);
 		}
 	}
 

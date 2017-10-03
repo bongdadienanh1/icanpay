@@ -46,7 +46,7 @@ public class PaymentSetting {
 	boolean canBuildAppParams;
 
 	public PaymentSetting(GatewayType gatewayType) {
-		gateway = CreateGateway(gatewayType);
+		gateway = createGateway(gatewayType);
 	}
 
 	public PaymentSetting(GatewayType gatewayType, Merchant merchant,
@@ -84,7 +84,7 @@ public class PaymentSetting {
 		return gateway instanceof AppParams;
 	}
 
-	private GatewayBase CreateGateway(GatewayType gatewayType) {
+	private GatewayBase createGateway(GatewayType gatewayType) {
 		switch (gatewayType) {
 		case Alipay: {
 			return new AlipayGateway();
@@ -107,7 +107,7 @@ public class PaymentSetting {
 	 * @throws IOException
 	 * @throws Exception
 	 */
-	public void Payment() throws IOException, Exception {
+	public void payment() throws IOException, Exception {
 		HttpServletResponse response = Utility.getHttpServletResponse();
 		response.setCharacterEncoding(gateway.getCharset());
 		if (gateway instanceof PaymentUrl) {
@@ -124,7 +124,7 @@ public class PaymentSetting {
 
 		if (gateway instanceof PaymentQRCode) {
 			PaymentQRCode paymentQRCode = (PaymentQRCode) gateway;
-			BuildQRCodeImage(paymentQRCode.getPaymentQRCodeContent());
+			buildQRCodeImage(paymentQRCode.getPaymentQRCodeContent());
 			return;
 		}
 
@@ -138,7 +138,7 @@ public class PaymentSetting {
 	 * @param map
 	 * @throws Exception
 	 */
-	public void WapPayment(Map<String, String> map) throws Exception {
+	public void wapPayment(Map<String, String> map) throws Exception {
 		HttpServletResponse response = Utility.getHttpServletResponse();
 		response.setCharacterEncoding(gateway.getCharset());
 		if (gateway instanceof WapPaymentUrl) {
@@ -165,7 +165,7 @@ public class PaymentSetting {
 	 * 
 	 * @throws Exception
 	 */
-	public void QueryNotify() throws Exception {
+	public void queryNotify() throws Exception {
 		HttpServletResponse response = Utility.getHttpServletResponse();
 		response.setCharacterEncoding(gateway.getCharset());
 
@@ -192,7 +192,7 @@ public class PaymentSetting {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean QueryNow(ProductSet productSet) throws Exception {
+	public boolean queryNow(ProductSet productSet) throws Exception {
 		if (productSet == null) {
 			productSet = ProductSet.APP;
 		}
@@ -212,7 +212,7 @@ public class PaymentSetting {
 	 * @return
 	 * @throws Exception
 	 */
-	public Map<String, String> BuildPayParams() throws Exception {
+	public Map<String, String> buildPayParams() throws Exception {
 		if (gateway instanceof AppParams) {
 			AppParams appParams = (AppParams) gateway;
 			return appParams.buildPayParams();
@@ -228,7 +228,7 @@ public class PaymentSetting {
 	 * @param gatewayParameterName
 	 * @param gatewayParameterValue
 	 */
-	public void SetGatewayParameterValue(String gatewayParameterName,
+	public void setGatewayParameterValue(String gatewayParameterName,
 			String gatewayParameterValue) {
 		gateway.setGatewayParameterValue(gatewayParameterName,
 				gatewayParameterValue);
@@ -241,7 +241,7 @@ public class PaymentSetting {
 	 * @throws IOException
 	 * @throws WriterException
 	 */
-	private void BuildQRCodeImage(String paymentQRCodeContent)
+	private void buildQRCodeImage(String paymentQRCodeContent)
 			throws IOException, WriterException {
 		HttpServletResponse response = Utility.getHttpServletResponse();
 		response.setContentType("image/x-png");
