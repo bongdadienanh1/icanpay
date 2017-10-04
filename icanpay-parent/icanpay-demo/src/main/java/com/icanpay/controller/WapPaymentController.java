@@ -2,8 +2,10 @@ package com.icanpay.controller;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,8 +17,8 @@ import com.icanpay.properties.WeChatPaymentProperties;
 import com.unionpay.acp.sdk.SDKConfig;
 
 @RestController
-@RequestMapping("/webpayment")
-public class WebPaymentController {
+@RequestMapping("/wappayment")
+public class WapPaymentController {
 
 	@Autowired
 	private AlipayProperties alipayProperties;
@@ -27,7 +29,7 @@ public class WebPaymentController {
 	@Autowired
 	private UnionPayProperties unionPayProperties;
 
-	@RequestMapping("/alipay")
+	@GetMapping("/alipay")
 	public void Alipay() throws IOException, Exception {
 
 		PaymentSetting paymentSetting = new PaymentSetting(GatewayType.Alipay);
@@ -48,10 +50,11 @@ public class WebPaymentController {
 		paymentSetting.getOrder().setOrderAmount(0.01);
 		paymentSetting.getOrder().setOrderNo("yourorderno");
 		paymentSetting.getOrder().setSubject("alipay");
-		paymentSetting.payment();
+		paymentSetting.wapPayment(null);
 	}
 
-	@RequestMapping("/wechatpayment")
+	@SuppressWarnings("serial")
+	@GetMapping("/wechatpayment")
 	public void WeChatPayment() throws IOException, Exception {
 		PaymentSetting paymentSetting = new PaymentSetting(
 				GatewayType.WeChatPayment);
@@ -63,14 +66,22 @@ public class WebPaymentController {
 		paymentSetting.getMerchant().setKey(weChatPaymentProperties.getKey());
 		paymentSetting.getMerchant().setNotifyUrl(
 				new URI(weChatPaymentProperties.getNotifyurl()));
+		paymentSetting.getMerchant().setReturnUrl(
+				new URI(weChatPaymentProperties.getReturnurl()));
 
 		paymentSetting.getOrder().setOrderAmount(0.01);
 		paymentSetting.getOrder().setOrderNo("yourorderno");
 		paymentSetting.getOrder().setSubject("wechatpayment");
-		paymentSetting.payment();
+		// 可以在这里传跳转页面url，如果不传则默认取配置中的returnurl
+		// https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=15_4
+		paymentSetting.wapPayment(new HashMap<String, String>() {
+			{
+				put("redirect_url", "yourredirect_url");
+			}
+		});
 	}
 
-	@RequestMapping("/unionpay")
+	@GetMapping("/unionpay")
 	public void UnionPay() throws IOException, Exception {
 		// 从应用的classpath下加载acp_sdk.properties属性文件并将该属性文件中的键值对赋值到SDKConfig类中
 		SDKConfig.getConfig().loadPropertiesFromSrc();
@@ -86,6 +97,6 @@ public class WebPaymentController {
 		paymentSetting.getOrder().setOrderAmount(0.01);
 		paymentSetting.getOrder().setOrderNo("yourorderno");
 		paymentSetting.getOrder().setSubject("unionpay");
-		paymentSetting.payment();
+		paymentSetting.wapPayment(null);
 	}
 }

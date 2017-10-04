@@ -118,7 +118,7 @@ public class PaymentSetting {
 
 		if (gateway instanceof PaymentForm) {
 			PaymentForm paymentForm = (PaymentForm) gateway;
-			response.getWriter().print(paymentForm.buildPaymentForm());
+			response.getWriter().write(paymentForm.buildPaymentForm());
 			return;
 		}
 
@@ -143,16 +143,20 @@ public class PaymentSetting {
 		response.setCharacterEncoding(gateway.getCharset());
 		if (gateway instanceof WapPaymentUrl) {
 			WapPaymentUrl paymentUrl = (WapPaymentUrl) gateway;
-			response.getWriter()
-					.print(String
-							.format("<script language='javascript'>window.location='%s'</script>",
-									paymentUrl.buildWapPaymentUrl(map)));
+			if (gateway.getGatewayType() == GatewayType.WeChatPayment) {
+				response.getWriter()
+						.write(String
+								.format("<script language='javascript'>window.location='%s'</script>",
+										paymentUrl.buildWapPaymentUrl(map)));
+			} else {
+				response.sendRedirect(paymentUrl.buildWapPaymentUrl(map));
+			}
 			return;
 		}
 
 		if (gateway instanceof WapPaymentForm) {
 			WapPaymentForm paymentForm = (WapPaymentForm) gateway;
-			response.getWriter().print(paymentForm.buildWapPaymentForm());
+			response.getWriter().write(paymentForm.buildWapPaymentForm());
 			return;
 		}
 

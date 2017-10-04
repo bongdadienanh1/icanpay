@@ -16,32 +16,39 @@
   </properties>
   <dependencies>
      <dependency>
-		<groupId>com.icanpay</groupId>
-	    <artifactId>icanpay</artifactId>
-	    <version>0.0.1-SNAPSHOT</version>
+		 <groupId>com.icanpay</groupId>
+	     <artifactId>icanpay</artifactId>
+	     <version>0.0.1-SNAPSHOT</version>
      </dependency>
-  
-  
-     <dependency>
-		<groupId>org.springframework.boot</groupId>
-	    <artifactId>spring-boot-starter-web</artifactId>
-	</dependency>
+    
+      <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
 
-    <dependency>
-		<groupId>org.springframework.boot</groupId>
-	    <artifactId>spring-boot-starter-test</artifactId>
-		<scope>test</scope>
-    </dependency>
- 
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-aop</artifactId>
-    </dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
      
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+   
   </dependencies>
+  
+      <!-- Package as an executable jar -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                </configuration>
+            </plugin>         
+        </plugins>
+    </build>
+    
 </project>

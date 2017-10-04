@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class AlipayProperties {
 
 	private String appid;
-	private String email;
+	private String partner;
 	private String seller_email;
 	private String key;
 	private String privatekeypem;
@@ -22,14 +22,6 @@ public class AlipayProperties {
 
 	public void setAppid(String appid) {
 		this.appid = appid;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	public String getSeller_email() {
@@ -78,5 +70,13 @@ public class AlipayProperties {
 
 	public void setPublicKeypem(String publicKeypem) {
 		this.publicKeypem = publicKeypem;
+	}
+
+	public String getPartner() {
+		return partner;
+	}
+
+	public void setPartner(String partner) {
+		this.partner = partner;
 	}
 }

@@ -73,7 +73,12 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 		redirect_url = Utility.isBlankOrEmpty(redirect_url) ? getMerchant()
 				.getReturnUrl().toString() : redirect_url;
 		redirect_url = URLEncoder.encode(redirect_url, "UTF-8");
-		return String.format("%s&redirect_url=%s", url, redirect_url);
+		if (Utility.isBlankOrEmpty(redirect_url)) {
+			return url;
+		} else {
+			return String.format("%s&redirect_url=%s", url, redirect_url);
+		}
+
 	}
 
 	@Override

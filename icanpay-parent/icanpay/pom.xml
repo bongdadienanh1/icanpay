@@ -17,52 +17,31 @@
   
   <dependencies>
 	 <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-	 
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    
+     <dependency>
+		<groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-test</artifactId>
+		<scope>test</scope>
+    </dependency>
+    
      <dependency>
           <groupId>org.apache.httpcomponents</groupId>
           <artifactId>httpclient</artifactId>
     </dependency>
-  
-   <dependency>
-         <groupId>org.slf4j</groupId>
-         <artifactId>slf4j-api</artifactId>
-     </dependency>
-
+	 
      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-simple</artifactId>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
     </dependency>
-  
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-    
-    <dependency>
-     <groupId>org.apache.commons</groupId>
-     <artifactId>commons-lang3</artifactId>
-    </dependency> 
-    
-    <dependency>
+       
+   <dependency>
 	    <groupId>commons-io</groupId>
 	    <artifactId>commons-io</artifactId>
 	</dependency>
-	
-	<dependency>
-     <groupId>commons-logging</groupId>
-     <artifactId>commons-logging</artifactId>
-   </dependency>
-    
-    <dependency>
-	 <groupId>javax.servlet</groupId>
-	 <artifactId>servlet-api</artifactId>
-	 <scope>provided</scope>
-   </dependency>
-   
+       
    <dependency>
     <groupId>com.google.zxing</groupId>
     <artifactId>core</artifactId>
