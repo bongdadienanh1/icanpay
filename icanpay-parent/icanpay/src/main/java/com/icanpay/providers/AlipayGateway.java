@@ -119,16 +119,15 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 	@Override
 	public boolean queryNow(ProductSet productSet) throws AlipayApiException {
 		// TODO Auto-generated method stub
-		AlipayClient alipayClient = new DefaultAlipayClient(
-				"https://openapi.alipay.com/gateway.do", getMerchant()
-						.getAppId(), getMerchant().getPrivateKeyPem(), "json",
-				getCharset(), getMerchant().getPrivateKeyPem(), "RSA2"); // 获得初始化的AlipayClient
+		AlipayClient alipayClient = new DefaultAlipayClient(openapiGatewayUrl,
+				getMerchant().getAppId(), getMerchant().getPrivateKeyPem(),
+				"json", getCharset(), getMerchant().getPrivateKeyPem(), "RSA2"); // 获得初始化的AlipayClient
 		AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();// 创建API对应的request类
 		request.setBizContent("{" + "   \"out_trade_no\":\""
 				+ getOrder().getOrderNo() + "\"," + "  }");// 设置业务参数
 		AlipayTradeQueryResponse response = alipayClient.execute(request);// 通过alipayClient调用API，获得对应的response类
-		if (((response.getTradeStatus().equals("TRADE_FINISHED") || response
-				.getTradeStatus().equals("TRADE_SUCCESS")))) {
+		if (((response.getTradeStatus().equalsIgnoreCase("TRADE_FINISHED") || response
+				.getTradeStatus().equalsIgnoreCase("TRADE_SUCCESS")))) {
 			double orderAmount = Double.parseDouble(response.getTotalAmount());
 			if (getOrder().getOrderAmount() == orderAmount
 					&& getOrder().getOrderNo().equals(response.getOutTradeNo())) {
@@ -273,8 +272,9 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 		getOrder().setOrderNo(getGatewayParameterValue("out_trade_no"));
 		getOrder().setTradeNo(getGatewayParameterValue("trade_no"));
 		// 支付状态是否为成功。TRADE_FINISHED（普通即时到账的交易成功状态，TRADE_SUCCESS（开通了高级即时到账或机票分销产品后的交易成功状态）
-		if (getGatewayParameterValue("trade_status").equals("TRADE_FINISHED")
-				|| getGatewayParameterValue("trade_status").equals(
+		if (getGatewayParameterValue("trade_status").equalsIgnoreCase(
+				"TRADE_FINISHED")
+				|| getGatewayParameterValue("trade_status").equalsIgnoreCase(
 						"TRADE_SUCCESS")) {
 			return true;
 		}

@@ -114,7 +114,7 @@ public class NotifyProcess {
 		int compareCount = 0;
 		for (String item : parmaName) {
 			GatewayParameter existsParam = gatewayParameterData.stream()
-					.filter(p -> p.name.equals(item)).findFirst().get();
+					.filter(p -> p.name.equals(item)).findFirst().orElse(null);
 
 			if (existsParam != null) {
 				compareCount++;
@@ -162,7 +162,7 @@ public class NotifyProcess {
 
 		GatewayParameter existsParam = gatewayParameterList.stream()
 				.filter(p -> p.name.equals(gatewayParameterName)).findFirst()
-				.get();
+				.orElse(null);
 
 		if (existsParam == null) {
 			GatewayParameter param = new GatewayParameter(gatewayParameterName,

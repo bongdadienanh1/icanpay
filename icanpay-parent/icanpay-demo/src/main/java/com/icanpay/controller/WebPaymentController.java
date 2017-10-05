@@ -2,8 +2,11 @@ package com.icanpay.controller;
 
 import java.io.IOException;
 import java.net.URI;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,7 +30,7 @@ public class WebPaymentController {
 	@Autowired
 	private UnionPayProperties unionPayProperties;
 
-	@RequestMapping("/alipay")
+	@GetMapping("/alipay")
 	public void Alipay() throws IOException, Exception {
 
 		PaymentSetting paymentSetting = new PaymentSetting(GatewayType.Alipay);
@@ -46,13 +49,15 @@ public class WebPaymentController {
 				new URI(alipayProperties.getReturnurl()));
 
 		paymentSetting.getOrder().setOrderAmount(0.01);
-		paymentSetting.getOrder().setOrderNo("yourorderno");
+		paymentSetting.getOrder().setOrderNo(
+				new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()));
 		paymentSetting.getOrder().setSubject("alipay");
 		paymentSetting.payment();
 	}
 
-	@RequestMapping("/wechatpayment")
+	@GetMapping("/wechatpayment")
 	public void WeChatPayment() throws IOException, Exception {
+
 		PaymentSetting paymentSetting = new PaymentSetting(
 				GatewayType.WeChatPayment);
 
@@ -65,12 +70,13 @@ public class WebPaymentController {
 				new URI(weChatPaymentProperties.getNotifyurl()));
 
 		paymentSetting.getOrder().setOrderAmount(0.01);
-		paymentSetting.getOrder().setOrderNo("yourorderno");
+		paymentSetting.getOrder().setOrderNo(
+				new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()));
 		paymentSetting.getOrder().setSubject("wechatpayment");
 		paymentSetting.payment();
 	}
 
-	@RequestMapping("/unionpay")
+	@GetMapping("/unionpay")
 	public void UnionPay() throws IOException, Exception {
 		// 从应用的classpath下加载acp_sdk.properties属性文件并将该属性文件中的键值对赋值到SDKConfig类中
 		SDKConfig.getConfig().loadPropertiesFromSrc();
@@ -84,7 +90,9 @@ public class WebPaymentController {
 				new URI(unionPayProperties.getReturnurl()));
 
 		paymentSetting.getOrder().setOrderAmount(0.01);
-		paymentSetting.getOrder().setOrderNo("yourorderno");
+		paymentSetting.getOrder().setOrderNo(
+				new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()));
+		paymentSetting.getOrder().setPaymentDate(new Date());
 		paymentSetting.getOrder().setSubject("unionpay");
 		paymentSetting.payment();
 	}

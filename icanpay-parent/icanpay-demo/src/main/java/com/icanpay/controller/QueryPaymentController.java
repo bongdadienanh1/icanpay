@@ -3,6 +3,7 @@ package com.icanpay.controller;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,6 +12,7 @@ import com.icanpay.enums.GatewayType;
 import com.icanpay.properties.AlipayProperties;
 import com.icanpay.properties.UnionPayProperties;
 import com.icanpay.properties.WeChatPaymentProperties;
+import com.unionpay.acp.sdk.SDKConfig;
 
 @RestController
 @RequestMapping("/querypayment")
@@ -25,7 +27,7 @@ public class QueryPaymentController {
 	@Autowired
 	private UnionPayProperties unionPayProperties;
 
-	@RequestMapping("/query")
+	@GetMapping("/query")
 	public void QueryPayment(Integer type) throws Exception {
 
 		GatewayType gatewayType = GatewayType.Alipay;
@@ -36,6 +38,8 @@ public class QueryPaymentController {
 			gatewayType = GatewayType.WeChatPayment;
 		}
 		if (type == 2) {
+			// 从应用的classpath下加载acp_sdk.properties属性文件并将该属性文件中的键值对赋值到SDKConfig类中
+			SDKConfig.getConfig().loadPropertiesFromSrc();
 			gatewayType = GatewayType.UnionPay;
 		}
 

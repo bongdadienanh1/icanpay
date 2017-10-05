@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.icanpay.Merchant;
 import com.icanpay.enums.GatewayType;
@@ -18,46 +21,55 @@ import com.icanpay.events.UnknownGatewayListener;
 import com.icanpay.properties.AlipayProperties;
 import com.icanpay.properties.UnionPayProperties;
 import com.icanpay.properties.WeChatPaymentProperties;
+import com.unionpay.acp.sdk.SDKConfig;
 
-//@RestController
-//@RequestMapping("/notify")
+@RestController
+@RequestMapping("/notify")
 public class NotifyController {
 
 	List<Merchant> merchantList;
 
 	PaymentNotify notify;
 
-	@Autowired
 	private AlipayProperties alipayProperties;
 
-	@Autowired
 	private WeChatPaymentProperties weChatPaymentProperties;
 
-	@Autowired
 	private UnionPayProperties unionPayProperties;
 
-	public NotifyController() {
+	@Autowired
+	public NotifyController(AlipayProperties alipayProperties,
+			WeChatPaymentProperties weChatPaymentProperties,
+			UnionPayProperties unionPayProperties) {
+		this.alipayProperties = alipayProperties;
+		this.weChatPaymentProperties = weChatPaymentProperties;
+		this.unionPayProperties = unionPayProperties;
+
+		// 从应用的classpath下加载acp_sdk.properties属性文件并将该属性文件中的键值对赋值到SDKConfig类中
+		SDKConfig.getConfig().loadPropertiesFromSrc();
 
 		merchantList = new ArrayList<Merchant>();
 
 		Merchant alipayMerchant = new Merchant();
 		alipayMerchant.setGatewayType(GatewayType.Alipay);
-		alipayMerchant.setAppId(alipayProperties.getAppid());
-		alipayMerchant.setEmail(alipayProperties.getSeller_email());
-		alipayMerchant.setPartner(alipayProperties.getPartner());
-		alipayMerchant.setKey(alipayProperties.getKey());
-		alipayMerchant.setPrivateKeyPem(alipayProperties.getPrivatekeypem());
-		alipayMerchant.setPublicKeyPem(alipayProperties.getPublicKeypem());
+		alipayMerchant.setAppId(this.alipayProperties.getAppid());
+		alipayMerchant.setEmail(this.alipayProperties.getSeller_email());
+		alipayMerchant.setPartner(this.alipayProperties.getPartner());
+		alipayMerchant.setKey(this.alipayProperties.getKey());
+		alipayMerchant.setPrivateKeyPem(this.alipayProperties
+				.getPrivatekeypem());
+		alipayMerchant.setPublicKeyPem(this.alipayProperties.getPublicKeypem());
 
 		Merchant weChatPaymentMerchant = new Merchant();
 		weChatPaymentMerchant.setGatewayType(GatewayType.WeChatPayment);
-		weChatPaymentMerchant.setAppId(weChatPaymentProperties.getAppid());
-		weChatPaymentMerchant.setPartner(weChatPaymentProperties.getMch_id());
-		weChatPaymentMerchant.setKey(weChatPaymentProperties.getKey());
+		weChatPaymentMerchant.setAppId(this.weChatPaymentProperties.getAppid());
+		weChatPaymentMerchant.setPartner(this.weChatPaymentProperties
+				.getMch_id());
+		weChatPaymentMerchant.setKey(this.weChatPaymentProperties.getKey());
 
 		Merchant unionPayMerchant = new Merchant();
 		unionPayMerchant.setGatewayType(GatewayType.UnionPay);
-		unionPayMerchant.setPartner(unionPayProperties.getMerid());
+		unionPayMerchant.setPartner(this.unionPayProperties.getMerid());
 
 		merchantList.add(alipayMerchant);
 		merchantList.add(unionPayMerchant);
@@ -102,13 +114,13 @@ public class NotifyController {
 
 	}
 
-	// @RequestMapping("/servernotify")
+	@GetMapping("/servernotify")
 	public void ServerNotify() throws Exception {
 		// 接收并处理支付通知
 		notify.received(PaymentNotifyMethod.ServerNotify);
 	}
 
-	// @RequestMapping("/autoreturn")
+	@GetMapping("/autoreturn")
 	public void AutoReturn() throws Exception {
 		// 接收并处理支付通知
 		notify.received(PaymentNotifyMethod.AutoReturn);

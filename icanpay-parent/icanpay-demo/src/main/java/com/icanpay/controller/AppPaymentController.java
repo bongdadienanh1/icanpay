@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +19,8 @@ import com.icanpay.properties.WeChatPaymentProperties;
 import com.unionpay.acp.sdk.SDKConfig;
 
 @RestController
-@RequestMapping("/wappayment")
-public class WapPaymentController {
-
+@RequestMapping("/apppayment")
+public class AppPaymentController {
 	@Autowired
 	private AlipayProperties alipayProperties;
 
@@ -32,7 +31,7 @@ public class WapPaymentController {
 	private UnionPayProperties unionPayProperties;
 
 	@GetMapping("/alipay")
-	public void Alipay() throws IOException, Exception {
+	public Map<String, String> Alipay() throws IOException, Exception {
 
 		PaymentSetting paymentSetting = new PaymentSetting(GatewayType.Alipay);
 		paymentSetting.getMerchant().setAppId(alipayProperties.getAppid());
@@ -53,12 +52,11 @@ public class WapPaymentController {
 		paymentSetting.getOrder().setOrderNo(
 				new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()));
 		paymentSetting.getOrder().setSubject("alipay");
-		paymentSetting.wapPayment(null);
+		return paymentSetting.buildPayParams();
 	}
 
-	@SuppressWarnings("serial")
 	@GetMapping("/wechatpayment")
-	public void WeChatPayment() throws IOException, Exception {
+	public Map<String, String> WeChatPayment() throws IOException, Exception {
 
 		PaymentSetting paymentSetting = new PaymentSetting(
 				GatewayType.WeChatPayment);
@@ -77,17 +75,11 @@ public class WapPaymentController {
 		paymentSetting.getOrder().setOrderNo(
 				new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()));
 		paymentSetting.getOrder().setSubject("wechatpayment");
-		// 可以在这里传跳转页面url，如果不传则默认取配置中的returnurl
-		// https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=15_4
-		paymentSetting.wapPayment(new HashMap<String, String>() {
-			{
-				put("redirect_url", "yourredirect_url");
-			}
-		});
+		return paymentSetting.buildPayParams();
 	}
 
 	@GetMapping("/unionpay")
-	public void UnionPay() throws IOException, Exception {
+	public Map<String, String> UnionPay() throws IOException, Exception {
 		// 从应用的classpath下加载acp_sdk.properties属性文件并将该属性文件中的键值对赋值到SDKConfig类中
 		SDKConfig.getConfig().loadPropertiesFromSrc();
 
@@ -104,6 +96,6 @@ public class WapPaymentController {
 				new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()));
 		paymentSetting.getOrder().setPaymentDate(new Date());
 		paymentSetting.getOrder().setSubject("unionpay");
-		paymentSetting.wapPayment(null);
+		return paymentSetting.buildPayParams();
 	}
 }

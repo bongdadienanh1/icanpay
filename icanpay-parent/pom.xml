@@ -16,8 +16,11 @@
     <spring-boot-dependencies.version>1.5.7.RELEASE</spring-boot-dependencies.version>
     <httpclient.version>4.5.3</httpclient.version>
     <commons-lang3.version>3.6</commons-lang3.version>
+    <commons-lang.version>2.5</commons-lang.version>
     <commons-io.version>2.5</commons-io.version>
     <commons-logging.version>1.2</commons-logging.version>
+    <zxing.version>3.3.0</zxing.version>
+    <bcprov-jdk15on.version>1.58</bcprov-jdk15on.version>
   </properties>
   
  <dependencyManagement>
@@ -35,13 +38,19 @@
          <artifactId>httpclient</artifactId>
          <version>${httpclient.version}</version>
      </dependency>
-    
+     
+   <dependency>
+     <groupId>org.apache.commons</groupId>
+     <artifactId>commons-lang3</artifactId>
+     <version>${commons-lang3.version}</version>
+   </dependency>   
+     
   <dependency>
-    <groupId>org.apache.commons</groupId>
-    <artifactId>commons-lang3</artifactId>
-    <version>${commons-lang3.version}</version>
+    <groupId>commons-lang</groupId>
+    <artifactId>commons-lang</artifactId>
+    <version>${commons-lang.version}</version>
    </dependency>
-   
+    
 	<dependency>
 	    <groupId>commons-io</groupId>
 	    <artifactId>commons-io</artifactId>
@@ -54,12 +63,18 @@
      <version>${commons-logging.version}</version>
    </dependency>
 	       
-  <dependency>
-    <groupId>com.google.zxing</groupId>
-    <artifactId>core</artifactId>
-    <version>3.3.0</version>
-  </dependency>
+   <dependency>
+     <groupId>com.google.zxing</groupId>
+     <artifactId>core</artifactId>
+     <version>${zxing.version}</version>
+   </dependency>
    
+    <dependency>
+     <groupId>org.bouncycastle</groupId>
+      <artifactId>bcprov-jdk15on</artifactId>
+      <version>${bcprov-jdk15on.version}</version>
+   </dependency>
+  
   </dependencies>
  </dependencyManagement>
 

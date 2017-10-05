@@ -53,7 +53,7 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 		// TODO Auto-generated method stub
 		initPaymentOrderParameter("NATIVE", "127.0.0.1");
 		String xmlString = convertGatewayParameterDataToXml();
-		String resultXml = HttpClientUtil.doPost(xmlString, payGatewayUrl,
+		String resultXml = HttpClientUtil.doPost(payGatewayUrl, xmlString,
 				"text/xml");
 		return getWeixinPaymentUrl(resultXml);
 	}
@@ -67,7 +67,7 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 		String redirect_url = map.getOrDefault("redirect_url", "");
 		initPaymentOrderParameter("MWEB", Utility.getClientIP());
 		String xmlString = convertGatewayParameterDataToXml();
-		String resultXml = HttpClientUtil.doPost(xmlString, payGatewayUrl,
+		String resultXml = HttpClientUtil.doPost(payGatewayUrl, xmlString,
 				"text/xml");
 		String url = getWeixinPaymentUrl(resultXml);
 		redirect_url = Utility.isBlankOrEmpty(redirect_url) ? getMerchant()
@@ -86,7 +86,7 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 		// TODO Auto-generated method stub
 		initPaymentOrderParameter("APP", "127.0.0.1");
 		String xmlString = convertGatewayParameterDataToXml();
-		String resultString = HttpClientUtil.doPost(xmlString, payGatewayUrl,
+		String resultString = HttpClientUtil.doPost(payGatewayUrl, xmlString,
 				"text/xml");
 		getWeixinPaymentUrl(resultString);
 
@@ -115,7 +115,7 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 		// TODO Auto-generated method stub
 		initQueryOrderParameter();
 		String xmlString = convertGatewayParameterDataToXml();
-		String resultXml = HttpClientUtil.doPost(xmlString, payGatewayUrl,
+		String resultXml = HttpClientUtil.doPost(payGatewayUrl, xmlString,
 				"text/xml");
 		return checkQueryResult(resultXml);
 	}
@@ -298,8 +298,8 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 		setGatewayParameterValue("nonce_str", Utility.generateUUID());
 		setGatewayParameterValue("body", getOrder().getSubject());
 		setGatewayParameterValue("out_trade_no", getOrder().getOrderNo());
-		setGatewayParameterValue("total_fee",
-				(getOrder().getOrderAmount() * 100));
+		setGatewayParameterValue("total_fee", (int) (getOrder()
+				.getOrderAmount() * 100));
 		setGatewayParameterValue("spbill_create_ip", spbill_create_ip);
 		setGatewayParameterValue("notify_url", getMerchant().getNotifyUrl()
 				.toString());

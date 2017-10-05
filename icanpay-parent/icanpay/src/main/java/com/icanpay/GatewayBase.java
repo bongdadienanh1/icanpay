@@ -81,6 +81,9 @@ public abstract class GatewayBase {
 	}
 
 	public Order getOrder() {
+		if (order == null) {
+			order = new Order();
+		}
 		return order;
 	}
 
@@ -250,7 +253,8 @@ public abstract class GatewayBase {
 			GatewayParameterRequestMethod gatewayParameterRequestMethod) {
 		GatewayParameter existsParam = gatewayParameterData.stream()
 				.filter(p -> p.name.equals(gatewayParameterName)).findFirst()
-				.get();
+				.orElse(null);
+
 		if (existsParam == null) {
 			GatewayParameter param = new GatewayParameter(gatewayParameterName,
 					gatewayParameterValue, gatewayParameterRequestMethod);
@@ -296,7 +300,7 @@ public abstract class GatewayBase {
 				.filter(p -> p.getName().equals(gatewayParameterName)
 						&& (gatewayParameterRequestMethod.getCode() == 3 ? true
 								: p.getRequestMethod() == gatewayParameterRequestMethod))
-				.findFirst().get();
+				.findFirst().orElse(null);
 		if (parameter != null) {
 			return parameter.getValue();
 		}

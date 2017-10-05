@@ -77,7 +77,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 				.format(getOrder().getPaymentDate())); // 订单发送时间，取系统时间，格式为YYYYMMDDhhmmss，必须取当前时间，否则会报txnTime无效
 		requestData.put("currencyCode", "156"); // 交易币种（境内商户一般是156 人民币）
 		double txnAmt = getOrder().getOrderAmount() * 100;
-		requestData.put("txnAmt", String.valueOf(txnAmt)); // 交易金额，单位分，不要带小数点
+		requestData.put("txnAmt", String.valueOf((int) txnAmt)); // 交易金额，单位分，不要带小数点
 		// requestData.put("reqReserved", "透传字段");
 		// //请求方保留域，如需使用请启用即可；透传字段（可以实现商户自定义参数的追踪）本交易的后台通知,对本交易的交易状态查询交易、对账文件中均会原样返回，商户可以按需上传，长度为1-1024个字节。出现&={}[]符号时可能导致查询接口应答报文解析失败，建议尽量只传字母数字并使用|分割，或者可以最外层做一次base64编码(base64编码之后出现的等号不会导致解析失败可以不用管)。
 
@@ -162,7 +162,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 				.format(getOrder().getPaymentDate()));
 		// 交易金额，单位分
 		double txnAmt = getOrder().getOrderAmount() * 100;
-		param.put("txnAmt", String.valueOf(txnAmt));
+		param.put("txnAmt", String.valueOf((int) txnAmt));
 		// 交易币种
 		param.put("currencyCode", "156");
 		// 请求方保留域，透传字段，查询、通知、对账文件中均会原样出现
@@ -170,7 +170,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 		// 订单描述，可不上送，上送时控件中会显示该信息
 		// param.Add("orderDesc", "订单描述");
 
-		AcpService.sign(param, getCharset());
+		param = AcpService.sign(param, getCharset());
 
 		Map<String, String> resmap = AcpService.post(param, SDKConfig
 				.getConfig().getAppRequestUrl(), getCharset());
