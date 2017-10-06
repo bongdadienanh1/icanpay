@@ -250,8 +250,9 @@ public class NotifyProcess {
 		String requestType = request.getMethod();
 		String contentType = request.getContentType();
 		String userAgent = request.getHeader("User-Agent");
-		if (requestType.equals("POST") && contentType.equals("text/xml")
-				&& userAgent.equals("Mozilla/4.0")) {
+		if (requestType.equalsIgnoreCase("POST")
+				&& contentType.equalsIgnoreCase("text/xml")
+				&& userAgent.equalsIgnoreCase("Mozilla/4.0")) {
 			return true;
 		}
 		return false;

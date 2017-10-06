@@ -1,17 +1,21 @@
 package com.icanpay.providers;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.domain.AlipayTradePagePayModel;
+import com.alipay.api.domain.AlipayTradeQueryModel;
+import com.alipay.api.domain.AlipayTradeWapPayModel;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
-import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.icanpay.GatewayBase;
 import com.icanpay.GatewayParameter;
@@ -59,17 +63,21 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 		// TODO Auto-generated method stub
 		AlipayClient alipayClient = new DefaultAlipayClient(openapiGatewayUrl,
 				getMerchant().getAppId(), getMerchant().getPrivateKeyPem(),
-				"json", getCharset(), getMerchant().getPublicKeyPem(), "RSA2"); // 获得初始化的AlipayClient
+				"json", getCharset(), getMerchant().getPublicKeyPem(), "RSA"); // 获得初始化的AlipayClient
+
 		AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();// 创建API对应的request
 		alipayRequest.setReturnUrl(getMerchant().getReturnUrl().toString());
 		alipayRequest.setNotifyUrl(getMerchant().getNotifyUrl().toString());// 在公共参数中设置回跳和通知地址
-		alipayRequest.setBizContent("{" + "    \"out_trade_no\":\""
-				+ getOrder().getOrderNo() + "\","
-				+ "    \"product_code\":\"FAST_INSTANT_TRADE_PAY\","
-				+ "    \"total_amount\":" + getOrder().getOrderAmount() + ","
-				+ "    \"subject\":\"" + getOrder().getSubject() + "\"" + " }");// 填充业务参数
-		return alipayClient.pageExecute(alipayRequest).getBody(); // 调用SDK生成表单
 
+		AlipayTradePagePayModel model = new AlipayTradePagePayModel();
+		model.setSubject(getOrder().getSubject());
+		model.setOutTradeNo(getOrder().getOrderNo());
+		model.setTimeoutExpress("30m");
+		model.setTotalAmount(String.valueOf(getOrder().getOrderAmount()));
+		model.setProductCode("FAST_INSTANT_TRADE_PAY");
+		alipayRequest.setBizModel(model);
+
+		return alipayClient.pageExecute(alipayRequest).getBody(); // 调用SDK生成表单
 	}
 
 	/*
@@ -85,15 +93,20 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 		// TODO Auto-generated method stub
 		AlipayClient alipayClient = new DefaultAlipayClient(openapiGatewayUrl,
 				getMerchant().getAppId(), getMerchant().getPrivateKeyPem(),
-				"json", getCharset(), getMerchant().getPublicKeyPem(), "RSA2"); // 获得初始化的AlipayClient
+				"json", getCharset(), getMerchant().getPublicKeyPem(), "RSA"); // 获得初始化的AlipayClient
+
 		AlipayTradeWapPayRequest alipayRequest = new AlipayTradeWapPayRequest();// 创建API对应的request
 		alipayRequest.setReturnUrl(getMerchant().getReturnUrl().toString());
 		alipayRequest.setNotifyUrl(getMerchant().getNotifyUrl().toString());// 在公共参数中设置回跳和通知地址
-		alipayRequest.setBizContent("{" + " \"out_trade_no\":\""
-				+ getOrder().getOrderNo() + "\"," + " \"total_amount\":\""
-				+ getOrder().getOrderAmount() + "\"," + " \"subject\":\""
-				+ getOrder().getSubject() + "\","
-				+ " \"product_code\":\"QUICK_WAP_PAY\"" + " }");// 填充业务参数
+
+		AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
+		model.setSubject(getOrder().getSubject());
+		model.setOutTradeNo(getOrder().getOrderNo());
+		model.setTimeoutExpress("30m");
+		model.setTotalAmount(String.valueOf(getOrder().getOrderAmount()));
+		model.setProductCode("QUICK_WAP_PAY");
+		alipayRequest.setBizModel(model);
+
 		return alipayClient.pageExecute(alipayRequest).getBody(); // 调用SDK生成表单
 	}
 
@@ -102,18 +115,23 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 		// TODO Auto-generated method stub
 		AlipayClient alipayClient = new DefaultAlipayClient(openapiGatewayUrl,
 				getMerchant().getAppId(), getMerchant().getPrivateKeyPem(),
-				"json", getCharset(), getMerchant().getPublicKeyPem(), "RSA2"); // 获得初始化的AlipayClient
+				"json", getCharset(), getMerchant().getPublicKeyPem(), "RSA"); // 获得初始化的AlipayClient
+
 		AlipayTradeAppPayRequest alipayRequest = new AlipayTradeAppPayRequest();// 创建API对应的request
 		alipayRequest.setReturnUrl(getMerchant().getReturnUrl().toString());
 		alipayRequest.setNotifyUrl(getMerchant().getNotifyUrl().toString());// 在公共参数中设置回跳和通知地址
-		alipayRequest.setBizContent("{" + " \"out_trade_no\":\""
-				+ getOrder().getOrderNo() + "\"," + " \"total_amount\":\""
-				+ getOrder().getOrderAmount() + "\"," + " \"subject\":\""
-				+ getOrder().getSubject() + "\","
-				+ " \"product_code\":\"QUICK_WAP_PAY\"" + " }");// 填充业务参数
-		AlipayTradeAppPayResponse alipayResponse = alipayClient
-				.pageExecute(alipayRequest);
-		return alipayResponse.getParams();
+
+		AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+		model.setSubject(getOrder().getSubject());
+		model.setOutTradeNo(getOrder().getOrderNo());
+		model.setTimeoutExpress("30m");
+		model.setTotalAmount(String.valueOf(getOrder().getOrderAmount()));
+		model.setProductCode("QUICK_MSECURITY_PAY");
+		alipayRequest.setBizModel(model);
+
+		Map<String, String> resParam = new HashMap<String, String>();
+		resParam.put("body", alipayClient.pageExecute(alipayRequest).getBody());
+		return resParam;
 	}
 
 	@Override
@@ -121,11 +139,16 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 		// TODO Auto-generated method stub
 		AlipayClient alipayClient = new DefaultAlipayClient(openapiGatewayUrl,
 				getMerchant().getAppId(), getMerchant().getPrivateKeyPem(),
-				"json", getCharset(), getMerchant().getPrivateKeyPem(), "RSA2"); // 获得初始化的AlipayClient
-		AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();// 创建API对应的request类
-		request.setBizContent("{" + "   \"out_trade_no\":\""
-				+ getOrder().getOrderNo() + "\"," + "  }");// 设置业务参数
-		AlipayTradeQueryResponse response = alipayClient.execute(request);// 通过alipayClient调用API，获得对应的response类
+				"json", getCharset(), getMerchant().getPrivateKeyPem(), "RSA"); // 获得初始化的AlipayClient
+
+		AlipayTradeQueryRequest alipayRequest = new AlipayTradeQueryRequest();// 创建API对应的request类
+
+		AlipayTradeQueryModel model = new AlipayTradeQueryModel();
+		model.setOutTradeNo(getOrder().getOrderNo());
+		alipayRequest.setBizModel(model);
+
+		AlipayTradeQueryResponse response = alipayClient.execute(alipayRequest);// 通过alipayClient调用API，获得对应的response类
+
 		if (((response.getTradeStatus().equalsIgnoreCase("TRADE_FINISHED") || response
 				.getTradeStatus().equalsIgnoreCase("TRADE_SUCCESS")))) {
 			double orderAmount = Double.parseDouble(response.getTotalAmount());
@@ -265,17 +288,17 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 
 	private boolean validateTrade() {
 		// TODO Auto-generated method stub
-		String orderAmount = getGatewayParameterValue("total_amount");
-		orderAmount = Utility.isBlankOrEmpty(orderAmount) ? getGatewayParameterValue("total_fee")
-				: orderAmount;
-		getOrder().setOrderAmount(Double.parseDouble(orderAmount));
-		getOrder().setOrderNo(getGatewayParameterValue("out_trade_no"));
-		getOrder().setTradeNo(getGatewayParameterValue("trade_no"));
 		// 支付状态是否为成功。TRADE_FINISHED（普通即时到账的交易成功状态，TRADE_SUCCESS（开通了高级即时到账或机票分销产品后的交易成功状态）
 		if (getGatewayParameterValue("trade_status").equalsIgnoreCase(
 				"TRADE_FINISHED")
 				|| getGatewayParameterValue("trade_status").equalsIgnoreCase(
 						"TRADE_SUCCESS")) {
+			String orderAmount = getGatewayParameterValue("total_amount");
+			orderAmount = Utility.isBlankOrEmpty(orderAmount) ? getGatewayParameterValue("total_fee")
+					: orderAmount;
+			getOrder().setOrderAmount(Double.parseDouble(orderAmount));
+			getOrder().setOrderNo(getGatewayParameterValue("out_trade_no"));
+			getOrder().setTradeNo(getGatewayParameterValue("trade_no"));
 			return true;
 		}
 		return false;

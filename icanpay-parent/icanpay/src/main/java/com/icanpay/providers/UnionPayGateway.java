@@ -337,7 +337,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 			double txnAmt = Double.parseDouble(reqParam.getOrDefault("txnAmt",
 					"0.0")) * 0.01;
 			getOrder().setOrderAmount(txnAmt);
-			getOrder().setTradeNo(reqParam.getOrDefault("orderId", ""));
+			getOrder().setTradeNo(reqParam.getOrDefault("queryId", ""));
 
 			LogUtil.writeLog("验证签名结果[成功].");
 			// 【注：为了安全验签成功才应该写商户的成功处理逻辑】交易成功，更新商户订单状态

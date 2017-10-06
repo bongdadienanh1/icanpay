@@ -115,7 +115,7 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 		// TODO Auto-generated method stub
 		initQueryOrderParameter();
 		String xmlString = convertGatewayParameterDataToXml();
-		String resultXml = HttpClientUtil.doPost(payGatewayUrl, xmlString,
+		String resultXml = HttpClientUtil.doPost(queryGatewayUrl, xmlString,
 				"text/xml");
 		return checkQueryResult(resultXml);
 	}
@@ -127,7 +127,7 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 		readResultXml(resultXml);
 		if (isSuccessResult()) {
 			if (!Utility.isBlankOrEmpty(getGatewayParameterValue("total_fee"))) {
-				if (getOrder().getOrderNo().equals(
+				if (getOrder().getOrderNo().equalsIgnoreCase(
 						getGatewayParameterValue("out_trade_no"))
 						&& getOrder().getOrderAmount() == Integer
 								.parseInt(getGatewayParameterValue("total_fee")) / 100.0) {
@@ -141,8 +141,8 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 	@Override
 	protected boolean checkNotifyData() throws Exception {
 		// TODO Auto-generated method stub
-		readNotifyOrderParameter();
 		if (isSuccessResult()) {
+			readNotifyOrderParameter();
 			return true;
 		}
 		return false;
@@ -228,8 +228,9 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 	 */
 	private boolean validateResult() {
 		// TODO Auto-generated method stub
-		if (getGatewayParameterValue("return_code").equals("SUCCESS")
-				&& getGatewayParameterValue("result_code").equals("SUCCESS")) {
+		if (getGatewayParameterValue("return_code").equalsIgnoreCase("SUCCESS")
+				&& getGatewayParameterValue("result_code").equalsIgnoreCase(
+						"SUCCESS")) {
 			return true;
 		}
 
@@ -244,7 +245,7 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 	 */
 	private boolean validateSign() throws Exception {
 		// TODO Auto-generated method stub
-		if (getGatewayParameterValue("sign").equals(getSign())) {
+		if (getGatewayParameterValue("sign").equalsIgnoreCase(getSign())) {
 			return true;
 		}
 
@@ -311,7 +312,7 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 		// TODO Auto-generated method stub
 		StringBuilder signBuilder = new StringBuilder();
 		getSortedGatewayParameter().forEach((key, val) -> {
-			if (!Utility.isBlankOrEmpty(val) && !key.equals("sign")) {
+			if (!Utility.isBlankOrEmpty(val) && !key.equalsIgnoreCase("sign")) {
 				signBuilder.append(String.format("%s=%s&", key, val));
 			}
 		});
