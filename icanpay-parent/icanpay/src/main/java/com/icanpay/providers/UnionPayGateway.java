@@ -351,12 +351,11 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 	}
 
 	@Override
-	public String writeSucceedFlag() throws Exception {
+	public void writeSucceedFlag() throws Exception {
 		// TODO Auto-generated method stub
 		if (getPaymentNotifyMethod() == PaymentNotifyMethod.ServerNotify) {
-			return "ok";
+			Utility.getHttpServletResponse().getWriter().write("ok");
 		}
-		return "";
 	}
 
 }

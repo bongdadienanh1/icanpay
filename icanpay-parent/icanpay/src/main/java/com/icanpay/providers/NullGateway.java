@@ -35,9 +35,8 @@ public class NullGateway extends GatewayBase {
 	}
 
 	@Override
-	public String writeSucceedFlag() {
+	public void writeSucceedFlag() {
 		// TODO Auto-generated method stub
-		return "";
 	}
 
 }

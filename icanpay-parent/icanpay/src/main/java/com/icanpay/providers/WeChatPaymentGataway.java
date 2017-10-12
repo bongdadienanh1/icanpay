@@ -149,11 +149,12 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 	}
 
 	@Override
-	public String writeSucceedFlag() throws Exception {
+	public void writeSucceedFlag() throws Exception {
 		// TODO Auto-generated method stub
 		clearGatewayParameterData();
 		initProcessSuccessParameter();
-		return convertGatewayParameterDataToXml();
+		Utility.getHttpServletResponse().getWriter()
+				.write(convertGatewayParameterDataToXml());
 	}
 
 	/**

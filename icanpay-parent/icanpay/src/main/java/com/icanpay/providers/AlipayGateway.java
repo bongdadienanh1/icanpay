@@ -1,5 +1,6 @@
 package com.icanpay.providers;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -172,12 +173,11 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 	}
 
 	@Override
-	public String writeSucceedFlag() {
+	public void writeSucceedFlag() throws IOException {
 		// TODO Auto-generated method stub
 		if (getPaymentNotifyMethod() == PaymentNotifyMethod.ServerNotify) {
-			return "success";
+			Utility.getHttpServletResponse().getWriter().write("success");
 		}
-		return "";
 	}
 
 	@SuppressWarnings("unused")

@@ -321,5 +321,5 @@ public abstract class GatewayBase {
 	 * @return
 	 * @throws Exception
 	 */
-	public abstract String writeSucceedFlag() throws Exception;
+	public abstract void writeSucceedFlag() throws Exception;
 }
