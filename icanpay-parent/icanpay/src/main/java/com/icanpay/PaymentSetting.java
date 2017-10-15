@@ -22,6 +22,7 @@ import com.icanpay.interfaces.PaymentUrl;
 import com.icanpay.interfaces.QueryForm;
 import com.icanpay.interfaces.QueryNow;
 import com.icanpay.interfaces.QueryUrl;
+import com.icanpay.interfaces.RefundReq;
 import com.icanpay.interfaces.WapPaymentForm;
 import com.icanpay.interfaces.WapPaymentUrl;
 import com.icanpay.providers.AlipayGateway;
@@ -44,6 +45,7 @@ public class PaymentSetting {
 	boolean canQueryNotify;
 	boolean canQueryNow;
 	boolean canBuildAppParams;
+	boolean canRefund;
 
 	public PaymentSetting(GatewayType gatewayType) {
 		gateway = createGateway(gatewayType);
@@ -80,8 +82,8 @@ public class PaymentSetting {
 		return gateway instanceof QueryNow;
 	}
 
-	public boolean isCanBuildAppParams() {
-		return gateway instanceof AppParams;
+	public boolean isCanRefund() {
+		return gateway instanceof RefundReq;
 	}
 
 	private GatewayBase createGateway(GatewayType gatewayType) {
@@ -224,6 +226,41 @@ public class PaymentSetting {
 
 		throw new NotImplementedException(gateway.getGatewayType()
 				+ " 没有实现 AppParams 查询接口");
+	}
+
+	/**
+	 * 创建退款
+	 * 
+	 * @param refund
+	 * @return
+	 * @throws Exception
+	 */
+	public Refund buildRefund(Refund refund) throws Exception {
+		if (gateway instanceof RefundReq) {
+			RefundReq appParams = (RefundReq) gateway;
+			return appParams.buildRefund(refund);
+		}
+
+		throw new NotImplementedException(gateway.getGatewayType()
+				+ " 没有实现 RefundReq 查询接口");
+	}
+
+	/**
+	 * 查询退款结果
+	 * 
+	 * @param refund
+	 * @return
+	 * @throws Exception
+	 */
+
+	public Refund buildRefundQuery(Refund refund) throws Exception {
+		if (gateway instanceof RefundReq) {
+			RefundReq appParams = (RefundReq) gateway;
+			return appParams.buildRefundQuery(refund);
+		}
+
+		throw new NotImplementedException(gateway.getGatewayType()
+				+ " 没有实现 RefundReq 查询接口");
 	}
 
 	/**

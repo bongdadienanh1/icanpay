@@ -7,11 +7,13 @@ import java.util.Map;
 
 import com.icanpay.GatewayBase;
 import com.icanpay.GatewayParameter;
+import com.icanpay.Refund;
 import com.icanpay.enums.GatewayType;
 import com.icanpay.enums.ProductSet;
 import com.icanpay.interfaces.AppParams;
 import com.icanpay.interfaces.PaymentQRCode;
 import com.icanpay.interfaces.QueryNow;
+import com.icanpay.interfaces.RefundReq;
 import com.icanpay.interfaces.WapPaymentUrl;
 import com.icanpay.utils.HttpClientUtil;
 import com.icanpay.utils.Utility;
@@ -23,10 +25,12 @@ import com.icanpay.utils.Utility;
  *
  */
 public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
-		WapPaymentUrl, AppParams, QueryNow {
+		WapPaymentUrl, AppParams, QueryNow, RefundReq {
 
 	final String payGatewayUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 	final String queryGatewayUrl = "https://api.mch.weixin.qq.com/pay/orderquery";
+	final String refundGatewayUrl = "https://api.mch.weixin.qq.com/secapi/pay/refund";
+	final String refundqueryGatewayUrl = "https://api.mch.weixin.qq.com/pay/refundquery";
 
 	/**
 	 * 初始化微信支付网关
@@ -118,6 +122,65 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 		String resultXml = HttpClientUtil.doPost(queryGatewayUrl, xmlString,
 				"text/xml");
 		return checkQueryResult(resultXml);
+	}
+
+	@Override
+	public Refund buildRefund(Refund refund) throws Exception {
+		// TODO Auto-generated method stub
+		setGatewayParameterValue("appid", getMerchant().getAppId());
+		setGatewayParameterValue("mch_id", getMerchant().getPartner());
+		setGatewayParameterValue("nonce_str", Utility.generateUUID());
+		setGatewayParameterValue("sign_type", "MD5");
+		if (!Utility.isBlankOrEmpty(refund.getTradeNo())) {
+			setGatewayParameterValue("transaction_id", refund.getTradeNo());
+		} else {
+			setGatewayParameterValue("out_trade_no", refund.getOrderNo());
+		}
+		setGatewayParameterValue("out_refund_no", refund.getRefoundNo());
+		setGatewayParameterValue("total_fee",
+				(int) (refund.getOrderAmount() * 100));
+		setGatewayParameterValue("refund_fee",
+				(int) (refund.getRefundAmount() * 100));
+		if (!Utility.isBlankOrEmpty(refund.getRefundDes())) {
+			setGatewayParameterValue("refund_desc", refund.getRefundDes());
+		}
+		setGatewayParameterValue("sign", getSign()); // 签名需要在最后设置，以免缺少参数。
+		String xmlString = convertGatewayParameterDataToXml();
+		String resultString = HttpClientUtil.doPost(refundGatewayUrl,
+				xmlString, "text/xml");
+		getWeixinPaymentUrl(resultString);
+		if (getGatewayParameterValue("result_code") == "SUCCESS") {
+			refund.setTradeNo(getGatewayParameterValue("transaction_id"));
+			refund.setRefoundId(getGatewayParameterValue("refund_id"));
+			refund.setStatus(true);
+		}
+		return refund;
+	}
+
+	@Override
+	public Refund buildRefundQuery(Refund refund) throws Exception {
+		// TODO Auto-generated method stub
+		setGatewayParameterValue("appid", getMerchant().getAppId());
+		setGatewayParameterValue("mch_id", getMerchant().getPartner());
+		setGatewayParameterValue("nonce_str", Utility.generateUUID());
+		setGatewayParameterValue("sign_type", "MD5");
+		setGatewayParameterValue("out_refund_no", refund.getRefoundNo());
+		setGatewayParameterValue("sign", getSign()); // 签名需要在最后设置，以免缺少参数。
+		String xmlString = convertGatewayParameterDataToXml();
+		String resultString = HttpClientUtil.doPost(refundqueryGatewayUrl,
+				xmlString, "text/xml");
+		getWeixinPaymentUrl(resultString);
+		if (getGatewayParameterValue("result_code") == "SUCCESS") {
+			refund.setTradeNo(getGatewayParameterValue("transaction_id"));
+			refund.setRefoundId(getGatewayParameterValue("refund_id"));
+			refund.setRefoundNo(getGatewayParameterValue("out_refund_no"));
+			refund.setOrderAmount(Double
+					.parseDouble(getGatewayParameterValue("total_fee")) * 0.01);
+			refund.setRefundAmount(Double
+					.parseDouble(getGatewayParameterValue("refund_fee")) * 0.01);
+			refund.setStatus(true);
+		}
+		return refund;
 	}
 
 	private boolean checkQueryResult(String resultXml) throws Exception {

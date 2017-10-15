@@ -9,28 +9,36 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.domain.AlipayTradeFastpayRefundQueryModel;
 import com.alipay.api.domain.AlipayTradePagePayModel;
 import com.alipay.api.domain.AlipayTradeQueryModel;
+import com.alipay.api.domain.AlipayTradeRefundModel;
 import com.alipay.api.domain.AlipayTradeWapPayModel;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.request.AlipayTradeFastpayRefundQueryRequest;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
+import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
+import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
+import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.icanpay.GatewayBase;
 import com.icanpay.GatewayParameter;
+import com.icanpay.Refund;
 import com.icanpay.enums.GatewayType;
 import com.icanpay.enums.PaymentNotifyMethod;
 import com.icanpay.enums.ProductSet;
 import com.icanpay.interfaces.AppParams;
 import com.icanpay.interfaces.PaymentForm;
 import com.icanpay.interfaces.QueryNow;
+import com.icanpay.interfaces.RefundReq;
 import com.icanpay.interfaces.WapPaymentUrl;
 import com.icanpay.utils.Utility;
 
 public class AlipayGateway extends GatewayBase implements PaymentForm,
-		WapPaymentUrl, AppParams, QueryNow {
+		WapPaymentUrl, AppParams, QueryNow, RefundReq {
 
 	final String payGatewayUrl = "https://mapi.alipay.com/gateway.do";
 	final String openapiGatewayUrl = "https://openapi.alipay.com/gateway.do";
@@ -62,9 +70,7 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 	@Override
 	public String buildPaymentForm() throws Exception {
 		// TODO Auto-generated method stub
-		AlipayClient alipayClient = new DefaultAlipayClient(openapiGatewayUrl,
-				getMerchant().getAppId(), getMerchant().getPrivateKeyPem(),
-				"json", getCharset(), getMerchant().getPublicKeyPem(), "RSA"); // 获得初始化的AlipayClient
+		AlipayClient alipayClient = getAopClient(); // 获得初始化的AlipayClient
 
 		AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();// 创建API对应的request
 		alipayRequest.setReturnUrl(getMerchant().getReturnUrl().toString());
@@ -81,20 +87,11 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 		return alipayClient.pageExecute(alipayRequest).getBody(); // 调用SDK生成表单
 	}
 
-	/*
-	 * @Override public String buildPaymentUrl() throws Exception { // TODO
-	 * Auto-generated method stub initOrderParameter("MD5");
-	 * validatePaymentOrderParameter(); return String.format("%s?%s",
-	 * payGatewayUrl, getPaymentQueryString()); }
-	 */
-
 	@Override
 	public String buildWapPaymentUrl(Map<String, String> map)
 			throws AlipayApiException {
 		// TODO Auto-generated method stub
-		AlipayClient alipayClient = new DefaultAlipayClient(openapiGatewayUrl,
-				getMerchant().getAppId(), getMerchant().getPrivateKeyPem(),
-				"json", getCharset(), getMerchant().getPublicKeyPem(), "RSA"); // 获得初始化的AlipayClient
+		AlipayClient alipayClient = getAopClient(); // 获得初始化的AlipayClient
 
 		AlipayTradeWapPayRequest alipayRequest = new AlipayTradeWapPayRequest();// 创建API对应的request
 		alipayRequest.setReturnUrl(getMerchant().getReturnUrl().toString());
@@ -114,9 +111,7 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 	@Override
 	public Map<String, String> buildPayParams() throws AlipayApiException {
 		// TODO Auto-generated method stub
-		AlipayClient alipayClient = new DefaultAlipayClient(openapiGatewayUrl,
-				getMerchant().getAppId(), getMerchant().getPrivateKeyPem(),
-				"json", getCharset(), getMerchant().getPublicKeyPem(), "RSA"); // 获得初始化的AlipayClient
+		AlipayClient alipayClient = getAopClient(); // 获得初始化的AlipayClient
 
 		AlipayTradeAppPayRequest alipayRequest = new AlipayTradeAppPayRequest();// 创建API对应的request
 		alipayRequest.setReturnUrl(getMerchant().getReturnUrl().toString());
@@ -138,9 +133,7 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 	@Override
 	public boolean queryNow(ProductSet productSet) throws AlipayApiException {
 		// TODO Auto-generated method stub
-		AlipayClient alipayClient = new DefaultAlipayClient(openapiGatewayUrl,
-				getMerchant().getAppId(), getMerchant().getPrivateKeyPem(),
-				"json", getCharset(), getMerchant().getPrivateKeyPem(), "RSA"); // 获得初始化的AlipayClient
+		AlipayClient alipayClient = getAopClient(); // 获得初始化的AlipayClient
 
 		AlipayTradeQueryRequest alipayRequest = new AlipayTradeQueryRequest();// 创建API对应的request类
 
@@ -164,6 +157,56 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 	}
 
 	@Override
+	public Refund buildRefund(Refund refund) throws AlipayApiException {
+		// TODO Auto-generated method stub
+		AlipayClient alipayClient = getAopClient();
+		AlipayTradeRefundRequest alipayRequest = new AlipayTradeRefundRequest();
+		AlipayTradeRefundModel model = new AlipayTradeRefundModel();
+		model.setOutTradeNo(refund.getOrderNo());
+		if (!Utility.isBlankOrEmpty(refund.getTradeNo())) {
+			model.setTradeNo(refund.getTradeNo());
+		}
+		model.setOutRequestNo(refund.getRefoundNo());
+		model.setRefundAmount(String.valueOf(refund.getOrderAmount()));
+		if (!Utility.isBlankOrEmpty(refund.getRefundDes())) {
+			model.setRefundReason(refund.getRefundDes());
+		}
+		alipayRequest.setBizModel(model);
+		AlipayTradeRefundResponse response = alipayClient
+				.execute(alipayRequest);
+		if (response.getCode() == "10000") {
+			refund.setTradeNo(response.getTradeNo());
+			refund.setStatus(true);
+		}
+		return refund;
+	}
+
+	@Override
+	public Refund buildRefundQuery(Refund refund) throws AlipayApiException {
+		// TODO Auto-generated method stub
+		AlipayClient alipayClient = getAopClient();
+		AlipayTradeFastpayRefundQueryRequest alipayRequest = new AlipayTradeFastpayRefundQueryRequest();
+		AlipayTradeFastpayRefundQueryModel model = new AlipayTradeFastpayRefundQueryModel();
+		model.setOutTradeNo(refund.getOrderNo());
+		if (!Utility.isBlankOrEmpty(refund.getTradeNo())) {
+			model.setTradeNo(refund.getTradeNo());
+		}
+		model.setOutRequestNo(refund.getRefoundNo());
+		alipayRequest.setBizModel(model);
+		AlipayTradeFastpayRefundQueryResponse response = alipayClient
+				.execute(alipayRequest);
+		if (response.getCode() == "10000"
+				&& !Utility.isBlankOrEmpty(response.getRefundAmount())) {
+			double refundAmount = Double
+					.parseDouble(response.getRefundAmount());
+			refund.setRefundAmount(refundAmount);
+			refund.setTradeNo(response.getTradeNo());
+			refund.setStatus(true);
+		}
+		return refund;
+	}
+
+	@Override
 	protected boolean checkNotifyData() throws AlipayApiException {
 		// TODO Auto-generated method stub
 		if (validateAlipayNotifyRSASign()) {
@@ -180,93 +223,10 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 		}
 	}
 
-	@SuppressWarnings("unused")
-	private void initOrderParameter(String sign_type) throws Exception {
-		setGatewayParameterValue("seller_email", getMerchant().getEmail());
-		setGatewayParameterValue("service", "create_direct_pay_by_user");
-		setGatewayParameterValue("partner", getMerchant().getPartner());
-		setGatewayParameterValue("notify_url", getMerchant().getNotifyUrl()
-				.toString());
-		setGatewayParameterValue("return_url", getMerchant().getReturnUrl()
-				.toString());
-		setGatewayParameterValue("sign_type", sign_type);
-		setGatewayParameterValue("subject", getOrder().getSubject());
-		setGatewayParameterValue("out_trade_no", getOrder().getOrderNo());
-		setGatewayParameterValue("total_fee", getOrder().getOrderAmount());
-		setGatewayParameterValue("payment_type", "1");
-		setGatewayParameterValue("_input_charset", getCharset());
-		setGatewayParameterValue("sign", getOrderSign()); // 签名需要在最后设置，以免缺少参数。
-	}
-
-	/**
-	 * 获得订单的签名
-	 * 
-	 * @return
-	 * @throws Exception
-	 */
-	private String getOrderSign() throws Exception {
-		// TODO Auto-generated method stub
-		return Utility.getMD5(getSignParameter() + getMerchant().getKey(),
-				pageEncoding).toLowerCase();
-	}
-
-	/**
-	 * 获得用于签名的参数字符串
-	 * 
-	 * @return
-	 */
-	private String getSignParameter() {
-		// TODO Auto-generated method stub
-		StringBuilder signBuilder = new StringBuilder();
-		getSortedGatewayParameter().forEach((key, val) -> {
-			if (!key.equals("sign") && !key.equals("sign")) {
-				signBuilder.append(String.format("%s=%s&", key, val));
-			}
-		});
-		String text = signBuilder.toString();
-		return text.substring(0, text.length() - 1);
-	}
-
-	@SuppressWarnings("unused")
-	private String getPaymentQueryString() {
-		// TODO Auto-generated method stub
-		StringBuilder signBuilder = new StringBuilder();
-		getSortedGatewayParameter().forEach((key, val) -> {
-			if (!key.equals("sign") && !key.equals("sign")) {
-				signBuilder.append(String.format("%s=%s&", key, val));
-			}
-		});
-		String text = signBuilder.toString();
-		return text.substring(0, text.length() - 1);
-	}
-
-	/**
-	 * 验证支付订单的参数设置
-	 */
-	@SuppressWarnings("unused")
-	private void validatePaymentOrderParameter() {
-		if (Utility.isBlankOrEmpty(getGatewayParameterValue("seller_email"))) {
-			throw new IllegalArgumentException(
-					"订单缺少seller_email参数，seller_email是卖家支付宝账号的邮箱。");
-		}
-		// TODO Auto-generated method stub
-		if (!isEmail(getGatewayParameterValue("seller_email"))) {
-			throw new IllegalArgumentException("Email格式不正确-seller_email");
-		}
-	}
-
-	/**
-	 * 是否是正确格式的Email地址
-	 * 
-	 * @param emailAddress
-	 * @return
-	 */
-	public boolean isEmail(String emailAddress) {
-		if (Utility.isBlankOrEmpty(emailAddress)) {
-			return false;
-		}
-
-		return emailAddress.matches(emailRegexString);
+	public AlipayClient getAopClient() {
+		return new DefaultAlipayClient(openapiGatewayUrl, getMerchant()
+				.getAppId(), getMerchant().getPrivateKeyPem(), "json",
+				getCharset(), getMerchant().getPrivateKeyPem(), "RSA");
 	}
 
 	/**
@@ -286,6 +246,11 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 		return false;
 	}
 
+	/**
+	 * 验证支付状态
+	 * 
+	 * @return
+	 */
 	private boolean validateTrade() {
 		// TODO Auto-generated method stub
 		// 支付状态是否为成功。TRADE_FINISHED（普通即时到账的交易成功状态，TRADE_SUCCESS（开通了高级即时到账或机票分销产品后的交易成功状态）
