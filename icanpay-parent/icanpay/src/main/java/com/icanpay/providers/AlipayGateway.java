@@ -29,7 +29,6 @@ import com.icanpay.GatewayParameter;
 import com.icanpay.Refund;
 import com.icanpay.enums.GatewayType;
 import com.icanpay.enums.PaymentNotifyMethod;
-import com.icanpay.enums.ProductSet;
 import com.icanpay.interfaces.AppParams;
 import com.icanpay.interfaces.PaymentForm;
 import com.icanpay.interfaces.QueryNow;
@@ -131,7 +130,7 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 	}
 
 	@Override
-	public boolean queryNow(ProductSet productSet) throws AlipayApiException {
+	public boolean queryNow() throws AlipayApiException {
 		// TODO Auto-generated method stub
 		AlipayClient alipayClient = getAopClient(); // 获得初始化的AlipayClient
 
@@ -168,15 +167,15 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 		}
 		model.setOutRequestNo(refund.getRefoundNo());
 		model.setRefundAmount(String.valueOf(refund.getOrderAmount()));
-		if (!Utility.isBlankOrEmpty(refund.getRefundDes())) {
-			model.setRefundReason(refund.getRefundDes());
+		if (!Utility.isBlankOrEmpty(refund.getRefundDesc())) {
+			model.setRefundReason(refund.getRefundDesc());
 		}
 		alipayRequest.setBizModel(model);
 		AlipayTradeRefundResponse response = alipayClient
 				.execute(alipayRequest);
 		if (response.getCode() == "10000") {
 			refund.setTradeNo(response.getTradeNo());
-			refund.setStatus(true);
+			refund.setRefoundStatus(true);
 		}
 		return refund;
 	}
@@ -201,7 +200,7 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 					.parseDouble(response.getRefundAmount());
 			refund.setRefundAmount(refundAmount);
 			refund.setTradeNo(response.getTradeNo());
-			refund.setStatus(true);
+			refund.setRefoundStatus(true);
 		}
 		return refund;
 	}

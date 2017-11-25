@@ -72,7 +72,7 @@ public class RefundController {
 		}
 
 		Refund refund = new Refund();
-		refund.setRefoundNo("0000000000");
+		refund.setOutRefoundNo("0000000000");
 		if (querySetting.isCanRefund()) {
 			querySetting.buildRefund(refund);
 			querySetting.buildRefundQuery(refund);

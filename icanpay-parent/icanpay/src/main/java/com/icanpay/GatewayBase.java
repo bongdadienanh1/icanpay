@@ -9,7 +9,7 @@ import com.alipay.api.AlipayApiException;
 import com.icanpay.enums.GatewayParameterRequestMethod;
 import com.icanpay.enums.GatewayType;
 import com.icanpay.enums.PaymentNotifyMethod;
-import com.icanpay.enums.ProductSet;
+import com.icanpay.enums.GatewayTradeType;
 
 /**
  * 支付网关的抽象基类
@@ -37,7 +37,7 @@ public abstract class GatewayBase {
 	/**
 	 * 支付类型
 	 */
-	ProductSet productSet;
+	GatewayTradeType productSet;
 
 	/**
 	 * 支付网关的类型
@@ -99,11 +99,11 @@ public abstract class GatewayBase {
 		this.charset = charset;
 	}
 
-	public ProductSet getProductSet() {
+	public GatewayTradeType getProductSet() {
 		return productSet;
 	}
 
-	public void setProductSet(ProductSet productSet) {
+	public void setProductSet(GatewayTradeType productSet) {
 		this.productSet = productSet;
 	}
 

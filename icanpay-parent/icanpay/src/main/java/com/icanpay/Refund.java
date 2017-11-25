@@ -10,11 +10,11 @@ public class Refund {
 	double refundAmount;
 	String orderNo;
 	String tradeNo;
+	String outRefoundNo;
+	String refundDesc;
 	String refoundNo;
-	String refundDes;
-	String refoundId;
 	Date paymentDate;
-	boolean status;
+	boolean refoundStatus;
 
 	public double getOrderAmount() {
 		if (orderAmount < 0.01) {
@@ -66,34 +66,34 @@ public class Refund {
 		this.tradeNo = tradeNo;
 	}
 
-	public String getRefoundNo() {
-		if (Utility.isBlankOrEmpty(refoundNo)) {
-			throw new IllegalArgumentException("RefoundNo-商户退款单号没有设置");
+	public String getOutRefoundNo() {
+		if (Utility.isBlankOrEmpty(outRefoundNo)) {
+			throw new IllegalArgumentException("outRefoundNo-商户退款单号没有设置");
 		}
+		return outRefoundNo;
+	}
+
+	public void setOutRefoundNo(String outRefoundNo) {
+		if (Utility.isBlankOrEmpty(outRefoundNo)) {
+			throw new IllegalArgumentException("outRefoundNo-商户退款单号不能为空");
+		}
+		this.outRefoundNo = outRefoundNo;
+	}
+
+	public String getRefundDesc() {
+		return refundDesc;
+	}
+
+	public void setRefundDesc(String refundDesc) {
+		this.refundDesc = refundDesc;
+	}
+
+	public String getRefoundNo() {
 		return refoundNo;
 	}
 
 	public void setRefoundNo(String refoundNo) {
-		if (Utility.isBlankOrEmpty(refoundNo)) {
-			throw new IllegalArgumentException("RefoundNo-商户退款单号不能为空");
-		}
 		this.refoundNo = refoundNo;
-	}
-
-	public String getRefundDes() {
-		return refundDes;
-	}
-
-	public void setRefundDes(String refundDes) {
-		this.refundDes = refundDes;
-	}
-
-	public String getRefoundId() {
-		return refoundId;
-	}
-
-	public void setRefoundId(String refoundId) {
-		this.refoundId = refoundId;
 	}
 
 	public Date getPaymentDate() {
@@ -110,11 +110,12 @@ public class Refund {
 		this.paymentDate = paymentDate;
 	}
 
-	public boolean isStatus() {
-		return status;
+	public boolean isRefoundStatus() {
+		return refoundStatus;
 	}
 
-	public void setStatus(boolean status) {
-		this.status = status;
+	public void setRefoundStatus(boolean refoundStatus) {
+		this.refoundStatus = refoundStatus;
 	}
+
 }

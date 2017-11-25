@@ -14,7 +14,6 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.icanpay.enums.GatewayType;
-import com.icanpay.enums.ProductSet;
 import com.icanpay.interfaces.AppParams;
 import com.icanpay.interfaces.PaymentForm;
 import com.icanpay.interfaces.PaymentQRCode;
@@ -198,14 +197,10 @@ public class PaymentSetting {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean queryNow(ProductSet productSet) throws Exception {
-		if (productSet == null) {
-			productSet = ProductSet.APP;
-		}
-
+	public boolean queryNow() throws Exception {
 		if (gateway instanceof QueryNow) {
 			QueryNow queryNow = (QueryNow) gateway;
-			return queryNow.queryNow(productSet);
+			return queryNow.queryNow();
 		}
 
 		throw new NotImplementedException(gateway.getGatewayType()

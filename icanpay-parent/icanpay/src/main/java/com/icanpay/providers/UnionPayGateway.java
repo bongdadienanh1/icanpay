@@ -18,7 +18,6 @@ import com.icanpay.GatewayBase;
 import com.icanpay.GatewayParameter;
 import com.icanpay.Refund;
 import com.icanpay.enums.PaymentNotifyMethod;
-import com.icanpay.enums.ProductSet;
 import com.icanpay.interfaces.AppParams;
 import com.icanpay.interfaces.PaymentForm;
 import com.icanpay.interfaces.QueryNow;
@@ -182,7 +181,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 	}
 
 	@Override
-	public boolean queryNow(ProductSet productSet) throws Exception {
+	public boolean queryNow() throws Exception {
 		// TODO Auto-generated method stub
 		Map<String, String> data = new HashMap<String, String>();
 
@@ -303,8 +302,8 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 					// 交易已受理，等待接收后台通知更新订单状态,也可以主动发起 查询交易确定交易状态。
 					// TODO
 					refund.setTradeNo(rspData.get("origQryId"));
-					refund.setRefoundId(rspData.get("queryId"));
-					refund.setStatus(true);
+					refund.setRefoundNo(rspData.get("queryId"));
+					refund.setRefoundStatus(true);
 				} else if ("03".equals(respCode) || "04".equals(respCode)
 						|| "05".equals(respCode)) {
 					// 后续需发起交易状态查询交易确定交易状态
@@ -370,8 +369,8 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 					if ("00".equals(origRespCode)) {
 						// 交易成功，更新商户订单状态
 						// TODO
-						refund.setRefoundId(rspData.get("queryId"));
-						refund.setStatus(true);
+						refund.setRefoundNo(rspData.get("queryId"));
+						refund.setRefoundStatus(true);
 					} else if ("03".equals(origRespCode)
 							|| "04".equals(origRespCode)
 							|| "05".equals(origRespCode)) {

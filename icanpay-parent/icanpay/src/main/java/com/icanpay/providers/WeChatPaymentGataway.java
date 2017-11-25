@@ -9,7 +9,6 @@ import com.icanpay.GatewayBase;
 import com.icanpay.GatewayParameter;
 import com.icanpay.Refund;
 import com.icanpay.enums.GatewayType;
-import com.icanpay.enums.ProductSet;
 import com.icanpay.interfaces.AppParams;
 import com.icanpay.interfaces.PaymentQRCode;
 import com.icanpay.interfaces.QueryNow;
@@ -115,7 +114,7 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 	}
 
 	@Override
-	public boolean queryNow(ProductSet productSet) throws Exception {
+	public boolean queryNow() throws Exception {
 		// TODO Auto-generated method stub
 		initQueryOrderParameter();
 		String xmlString = convertGatewayParameterDataToXml();
@@ -141,8 +140,8 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 				(int) (refund.getOrderAmount() * 100));
 		setGatewayParameterValue("refund_fee",
 				(int) (refund.getRefundAmount() * 100));
-		if (!Utility.isBlankOrEmpty(refund.getRefundDes())) {
-			setGatewayParameterValue("refund_desc", refund.getRefundDes());
+		if (!Utility.isBlankOrEmpty(refund.getRefundDesc())) {
+			setGatewayParameterValue("refund_desc", refund.getRefundDesc());
 		}
 		setGatewayParameterValue("sign", getSign()); // 签名需要在最后设置，以免缺少参数。
 		String xmlString = convertGatewayParameterDataToXml();
@@ -151,8 +150,8 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 		getWeixinPaymentUrl(resultString);
 		if (getGatewayParameterValue("result_code") == "SUCCESS") {
 			refund.setTradeNo(getGatewayParameterValue("transaction_id"));
-			refund.setRefoundId(getGatewayParameterValue("refund_id"));
-			refund.setStatus(true);
+			refund.setRefoundNo(getGatewayParameterValue("refund_id"));
+			refund.setRefoundStatus(true);
 		}
 		return refund;
 	}
@@ -172,13 +171,13 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 		getWeixinPaymentUrl(resultString);
 		if (getGatewayParameterValue("result_code") == "SUCCESS") {
 			refund.setTradeNo(getGatewayParameterValue("transaction_id"));
-			refund.setRefoundId(getGatewayParameterValue("refund_id"));
+			refund.setRefoundNo(getGatewayParameterValue("refund_id"));
 			refund.setRefoundNo(getGatewayParameterValue("out_refund_no"));
 			refund.setOrderAmount(Double
 					.parseDouble(getGatewayParameterValue("total_fee")) * 0.01);
 			refund.setRefundAmount(Double
 					.parseDouble(getGatewayParameterValue("refund_fee")) * 0.01);
-			refund.setStatus(true);
+			refund.setRefoundStatus(true);
 		}
 		return refund;
 	}

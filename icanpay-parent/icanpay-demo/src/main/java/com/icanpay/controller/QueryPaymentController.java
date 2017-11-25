@@ -88,7 +88,7 @@ public class QueryPaymentController {
 		querySetting.getOrder().setOrderAmount(0.01);
 		querySetting.getOrder().setOrderNo("yourorderno");
 
-		if (querySetting.isCanQueryNow() && querySetting.queryNow(null)) {
+		if (querySetting.isCanQueryNow() && querySetting.queryNow()) {
 			// 订单已支付
 		}
 	}
