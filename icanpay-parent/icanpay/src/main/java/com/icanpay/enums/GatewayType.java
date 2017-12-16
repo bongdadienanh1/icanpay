@@ -14,7 +14,7 @@ public enum GatewayType {
 	/**
 	 * 微信支付
 	 */
-	WeChatPayment(2),
+	WeChatPay(2),
 
 	/**
 	 * 中国银联

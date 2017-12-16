@@ -24,11 +24,11 @@ import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
-import com.icanpay.GatewayBase;
-import com.icanpay.GatewayParameter;
 import com.icanpay.Refund;
 import com.icanpay.enums.GatewayType;
 import com.icanpay.enums.PaymentNotifyMethod;
+import com.icanpay.gateways.GatewayBase;
+import com.icanpay.gateways.GatewayParameter;
 import com.icanpay.interfaces.AppParams;
 import com.icanpay.interfaces.PaymentForm;
 import com.icanpay.interfaces.QueryNow;
@@ -62,6 +62,7 @@ public class AlipayGateway extends GatewayBase implements PaymentForm,
 		pageEncoding = getCharset();
 	}
 
+	@Override
 	public GatewayType getGatewayType() {
 		return GatewayType.Alipay;
 	}

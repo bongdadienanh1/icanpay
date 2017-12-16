@@ -3,11 +3,11 @@ package com.icanpay.events;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.icanpay.GatewayBase;
 import com.icanpay.Merchant;
 import com.icanpay.NotifyProcess;
 import com.icanpay.enums.GatewayType;
 import com.icanpay.enums.PaymentNotifyMethod;
+import com.icanpay.gateways.GatewayBase;
 
 /**
  * 网关返回的支付通知数据的接受

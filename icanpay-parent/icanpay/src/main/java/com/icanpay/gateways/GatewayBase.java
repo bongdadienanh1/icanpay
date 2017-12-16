@@ -1,4 +1,4 @@
-package com.icanpay;
+package com.icanpay.gateways;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,10 +6,12 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import com.alipay.api.AlipayApiException;
+import com.icanpay.Merchant;
+import com.icanpay.Order;
 import com.icanpay.enums.GatewayParameterRequestMethod;
+import com.icanpay.enums.GatewayTradeType;
 import com.icanpay.enums.GatewayType;
 import com.icanpay.enums.PaymentNotifyMethod;
-import com.icanpay.enums.GatewayTradeType;
 
 /**
  * 支付网关的抽象基类
@@ -37,7 +39,7 @@ public abstract class GatewayBase {
 	/**
 	 * 支付类型
 	 */
-	GatewayTradeType productSet;
+	GatewayTradeType gatewayTradeType = GatewayTradeType.None;
 
 	/**
 	 * 支付网关的类型
@@ -99,17 +101,7 @@ public abstract class GatewayBase {
 		this.charset = charset;
 	}
 
-	public GatewayTradeType getProductSet() {
-		return productSet;
-	}
-
-	public void setProductSet(GatewayTradeType productSet) {
-		this.productSet = productSet;
-	}
-
-	public GatewayType getGatewayType() {
-		return gatewayType;
-	}
+	public abstract GatewayType getGatewayType();
 
 	public PaymentNotifyMethod getPaymentNotifyMethod() {
 		return paymentNotifyMethod;
@@ -322,4 +314,12 @@ public abstract class GatewayBase {
 	 * @throws Exception
 	 */
 	public abstract void writeSucceedFlag() throws Exception;
+
+	public GatewayTradeType getGatewayTradeType() {
+		return gatewayTradeType;
+	}
+
+	public void setGatewayTradeType(GatewayTradeType gatewayTradeType) {
+		this.gatewayTradeType = gatewayTradeType;
+	}
 }

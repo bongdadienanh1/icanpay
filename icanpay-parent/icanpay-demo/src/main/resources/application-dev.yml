@@ -8,8 +8,8 @@ alipay:
   notifyurl: http://yourwebsite.com/notify/servernotify
   returnurl: http://yourwebsite.com/notify/autoreturn
 wechatpayment: 
-  appid: wx44b8c5da138d63f7
-  mch_id: 1417175002
+  appid: appid000000000000000
+  mch_id: 000000000000000
   key: sjOI23409nFSDnowmqp93772oqUEHx9o
   notifyurl: http://yourwebsite.com/notify/servernotify
   returnurl: http://yourwebsite.com/notify/autoreturn

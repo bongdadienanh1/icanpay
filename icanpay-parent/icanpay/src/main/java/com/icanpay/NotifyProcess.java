@@ -9,10 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.IOUtils;
 
 import com.icanpay.enums.GatewayParameterRequestMethod;
+import com.icanpay.gateways.GatewayBase;
+import com.icanpay.gateways.GatewayParameter;
 import com.icanpay.providers.AlipayGateway;
 import com.icanpay.providers.NullGateway;
 import com.icanpay.providers.UnionPayGateway;
-import com.icanpay.providers.WeChatPaymentGataway;
+import com.icanpay.providers.WeChatPayGataway;
 import com.icanpay.utils.Utility;
 
 /**
@@ -48,7 +50,7 @@ public class NotifyProcess {
 		}
 
 		if (isWeixinpayGateway(gatewayParameterData)) {
-			return new WeChatPaymentGataway(gatewayParameterData);
+			return new WeChatPayGataway(gatewayParameterData);
 		}
 
 		if (isUnionPayGateway(gatewayParameterData)) {
@@ -114,7 +116,8 @@ public class NotifyProcess {
 		int compareCount = 0;
 		for (String item : parmaName) {
 			GatewayParameter existsParam = gatewayParameterData.stream()
-					.filter(p -> p.name.equals(item)).findFirst().orElse(null);
+					.filter(p -> p.getName().equals(item)).findFirst()
+					.orElse(null);
 
 			if (existsParam != null) {
 				compareCount++;
@@ -161,8 +164,8 @@ public class NotifyProcess {
 			GatewayParameterRequestMethod gatewayParameterRequestMethod) {
 
 		GatewayParameter existsParam = gatewayParameterList.stream()
-				.filter(p -> p.name.equals(gatewayParameterName)).findFirst()
-				.orElse(null);
+				.filter(p -> p.getName().equals(gatewayParameterName))
+				.findFirst().orElse(null);
 
 		if (existsParam == null) {
 			GatewayParameter param = new GatewayParameter(gatewayParameterName,

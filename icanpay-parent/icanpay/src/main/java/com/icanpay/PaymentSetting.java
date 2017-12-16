@@ -1,6 +1,7 @@
 package com.icanpay;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -13,7 +14,9 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.icanpay.enums.GatewayTradeType;
 import com.icanpay.enums.GatewayType;
+import com.icanpay.gateways.GatewayBase;
 import com.icanpay.interfaces.AppParams;
 import com.icanpay.interfaces.PaymentForm;
 import com.icanpay.interfaces.PaymentQRCode;
@@ -27,7 +30,7 @@ import com.icanpay.interfaces.WapPaymentUrl;
 import com.icanpay.providers.AlipayGateway;
 import com.icanpay.providers.NullGateway;
 import com.icanpay.providers.UnionPayGateway;
-import com.icanpay.providers.WeChatPaymentGataway;
+import com.icanpay.providers.WeChatPayGataway;
 import com.icanpay.utils.MatrixToImageWriter;
 import com.icanpay.utils.Utility;
 
@@ -41,10 +44,10 @@ public class PaymentSetting {
 	GatewayBase gateway;
 	Merchant merchant;
 	Order order;
-	boolean canQueryNotify;
-	boolean canQueryNow;
-	boolean canBuildAppParams;
-	boolean canRefund;
+
+	public PaymentSetting(GatewayBase gateway) {
+		this.gateway = gateway;
+	}
 
 	public PaymentSetting(GatewayType gatewayType) {
 		gateway = createGateway(gatewayType);
@@ -70,28 +73,13 @@ public class PaymentSetting {
 		return gateway.getOrder();
 	}
 
-	public boolean isCanQueryNotify() {
-		if (gateway instanceof QueryUrl || gateway instanceof QueryForm) {
-			return true;
-		}
-		return false;
-	}
-
-	public boolean isCanQueryNow() {
-		return gateway instanceof QueryNow;
-	}
-
-	public boolean isCanRefund() {
-		return gateway instanceof RefundReq;
-	}
-
 	private GatewayBase createGateway(GatewayType gatewayType) {
 		switch (gatewayType) {
 		case Alipay: {
 			return new AlipayGateway();
 		}
-		case WeChatPayment: {
-			return new WeChatPaymentGataway();
+		case WeChatPay: {
+			return new WeChatPayGataway();
 		}
 		case UnionPay: {
 			return new UnionPayGateway();
@@ -102,13 +90,53 @@ public class PaymentSetting {
 		}
 	}
 
+	public Map<String, String> payment(GatewayTradeType gatewayTradeType,
+			HashMap<String, String> map) throws IOException, Exception {
+		gateway.setGatewayTradeType(gatewayTradeType);
+		return payment(map);
+	}
+
+	public Map<String, String> payment(HashMap<String, String> map)
+			throws IOException, Exception {
+		switch (gateway.getGatewayTradeType()) {
+		case APP: {
+			return buildPayParams();
+		}
+		case Wap: {
+			wapPayment(map);
+		}
+			break;
+		case Web: {
+			webPayment();
+		}
+			break;
+		case QRCode: {
+			qRCodePayment();
+		}
+			break;
+		case Public:
+			break;
+		case BarCode:
+			break;
+		case Applet:
+			break;
+		case None: {
+			throw new NotImplementedException(gateway.getGatewayType()
+					+ " 没有实现+ " + gateway.getGatewayTradeType() + "接口");
+		}
+		default:
+			break;
+		}
+		return null;
+	}
+
 	/**
 	 * 创建订单的支付Url、Form表单、二维码。 如果创建的是订单的Url或Form表单将跳转到相应网关支付，如果是二维码将输出二维码图片。
 	 * 
 	 * @throws IOException
 	 * @throws Exception
 	 */
-	public void payment() throws IOException, Exception {
+	private void webPayment() throws IOException, Exception {
 		HttpServletResponse response = Utility.getHttpServletResponse();
 		response.setCharacterEncoding(gateway.getCharset());
 		if (gateway instanceof PaymentUrl) {
@@ -123,12 +151,6 @@ public class PaymentSetting {
 			return;
 		}
 
-		if (gateway instanceof PaymentQRCode) {
-			PaymentQRCode paymentQRCode = (PaymentQRCode) gateway;
-			buildQRCodeImage(paymentQRCode.getPaymentQRCodeContent());
-			return;
-		}
-
 		throw new NotImplementedException(gateway.getGatewayType()
 				+ " 没有实现支付接口");
 	}
@@ -139,12 +161,12 @@ public class PaymentSetting {
 	 * @param map
 	 * @throws Exception
 	 */
-	public void wapPayment(Map<String, String> map) throws Exception {
+	private void wapPayment(Map<String, String> map) throws Exception {
 		HttpServletResponse response = Utility.getHttpServletResponse();
 		response.setCharacterEncoding(gateway.getCharset());
 		if (gateway instanceof WapPaymentUrl) {
 			WapPaymentUrl paymentUrl = (WapPaymentUrl) gateway;
-			if (gateway.getGatewayType() == GatewayType.WeChatPayment) {
+			if (gateway.getGatewayType() == GatewayType.WeChatPay) {
 				response.getWriter()
 						.write(String
 								.format("<script language='javascript'>window.location='%s'</script>",
@@ -163,6 +185,41 @@ public class PaymentSetting {
 
 		throw new NotImplementedException(gateway.getGatewayType()
 				+ " 没有实现支付接口");
+	}
+
+	/**
+	 * 二维码支付
+	 * 
+	 * @throws IOException
+	 * @throws WriterException
+	 * @throws Exception
+	 */
+	private void qRCodePayment() throws IOException, WriterException, Exception {
+		// TODO Auto-generated method stub
+		if (gateway instanceof PaymentQRCode) {
+			PaymentQRCode paymentQRCode = (PaymentQRCode) gateway;
+			buildQRCodeImage(paymentQRCode.getPaymentQRCodeContent());
+			return;
+		}
+
+		throw new NotImplementedException(gateway.getGatewayType()
+				+ " 没有实现支付接口");
+	}
+
+	/**
+	 * 创建APP端SDK支付需要的参数
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	private Map<String, String> buildPayParams() throws Exception {
+		if (gateway instanceof AppParams) {
+			AppParams appParams = (AppParams) gateway;
+			return appParams.buildPayParams();
+		}
+
+		throw new NotImplementedException(gateway.getGatewayType()
+				+ " 没有实现 AppParams 查询接口");
 	}
 
 	/**
@@ -205,22 +262,6 @@ public class PaymentSetting {
 
 		throw new NotImplementedException(gateway.getGatewayType()
 				+ " 没有实现 QueryNow 查询接口");
-	}
-
-	/**
-	 * 创建APP端SDK支付需要的参数
-	 * 
-	 * @return
-	 * @throws Exception
-	 */
-	public Map<String, String> buildPayParams() throws Exception {
-		if (gateway instanceof AppParams) {
-			AppParams appParams = (AppParams) gateway;
-			return appParams.buildPayParams();
-		}
-
-		throw new NotImplementedException(gateway.getGatewayType()
-				+ " 没有实现 AppParams 查询接口");
 	}
 
 	/**

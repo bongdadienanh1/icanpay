@@ -9,6 +9,11 @@ package com.icanpay.enums;
 public enum GatewayTradeType {
 
 	/**
+	 * 未知交易类型
+	 */
+	None(-1),
+
+	/**
 	 * 电脑网站支付
 	 */
 	Web(0),
@@ -24,9 +29,9 @@ public enum GatewayTradeType {
 	APP(2),
 
 	/**
-	 * 扫码支付
+	 * 二维码支付
 	 */
-	Scan(3),
+	QRCode(3),
 
 	/**
 	 * 公众号支付
@@ -36,7 +41,7 @@ public enum GatewayTradeType {
 	/**
 	 * 条码支付
 	 */
-	Barcode(5),
+	BarCode(5),
 
 	/**
 	 * 小程序支付

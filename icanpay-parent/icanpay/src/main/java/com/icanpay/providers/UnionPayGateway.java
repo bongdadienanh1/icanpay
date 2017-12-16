@@ -14,10 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.IOUtils;
 
-import com.icanpay.GatewayBase;
-import com.icanpay.GatewayParameter;
 import com.icanpay.Refund;
+import com.icanpay.enums.GatewayType;
 import com.icanpay.enums.PaymentNotifyMethod;
+import com.icanpay.gateways.GatewayBase;
+import com.icanpay.gateways.GatewayParameter;
 import com.icanpay.interfaces.AppParams;
 import com.icanpay.interfaces.PaymentForm;
 import com.icanpay.interfaces.QueryNow;
@@ -52,6 +53,11 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 	 */
 	public UnionPayGateway(List<GatewayParameter> gatewayParameterData) {
 		super(gatewayParameterData);
+	}
+
+	@Override
+	public GatewayType getGatewayType() {
+		return GatewayType.UnionPay;
 	}
 
 	@Override

@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.icanpay.GatewayBase;
-import com.icanpay.GatewayParameter;
 import com.icanpay.Refund;
 import com.icanpay.enums.GatewayType;
+import com.icanpay.gateways.GatewayBase;
+import com.icanpay.gateways.GatewayParameter;
 import com.icanpay.interfaces.AppParams;
 import com.icanpay.interfaces.PaymentQRCode;
 import com.icanpay.interfaces.QueryNow;
@@ -23,7 +23,7 @@ import com.icanpay.utils.Utility;
  * @author milanyangbo
  *
  */
-public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
+public class WeChatPayGataway extends GatewayBase implements PaymentQRCode,
 		WapPaymentUrl, AppParams, QueryNow, RefundReq {
 
 	final String payGatewayUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
@@ -34,7 +34,7 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 	/**
 	 * 初始化微信支付网关
 	 */
-	public WeChatPaymentGataway() {
+	public WeChatPayGataway() {
 	}
 
 	/**
@@ -43,12 +43,13 @@ public class WeChatPaymentGataway extends GatewayBase implements PaymentQRCode,
 	 * @param gatewayParameterData
 	 *            网关通知的数据集合
 	 */
-	public WeChatPaymentGataway(List<GatewayParameter> gatewayParameterData) {
+	public WeChatPayGataway(List<GatewayParameter> gatewayParameterData) {
 		super(gatewayParameterData);
 	}
 
+	@Override
 	public GatewayType getGatewayType() {
-		return GatewayType.WeChatPayment;
+		return GatewayType.WeChatPay;
 	}
 
 	@Override

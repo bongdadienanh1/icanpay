@@ -3,9 +3,9 @@ package com.icanpay.events;
 import java.util.EventObject;
 import java.util.List;
 
-import com.icanpay.GatewayBase;
-import com.icanpay.GatewayParameter;
 import com.icanpay.enums.GatewayParameterRequestMethod;
+import com.icanpay.gateways.GatewayBase;
+import com.icanpay.gateways.GatewayParameter;
 import com.icanpay.utils.Utility;
 
 public class PaymentEventArgs extends EventObject {

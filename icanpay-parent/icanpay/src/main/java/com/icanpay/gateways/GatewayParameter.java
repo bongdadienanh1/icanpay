@@ -1,4 +1,4 @@
-package com.icanpay;
+package com.icanpay.gateways;
 
 import org.apache.commons.lang3.StringUtils;
 
