@@ -21,8 +21,7 @@ public class Order {
 	public Order() {
 	}
 
-	public Order(String orderNo, double orderAmount, String subject,
-			Date paymentDate) {
+	public Order(String orderNo, double orderAmount, String subject, Date paymentDate) {
 		this.orderNo = orderNo;
 		this.orderAmount = orderAmount;
 		this.subject = subject;

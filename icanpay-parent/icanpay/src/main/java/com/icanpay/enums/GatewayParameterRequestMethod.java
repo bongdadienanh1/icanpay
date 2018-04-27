@@ -7,7 +7,7 @@ package com.icanpay.enums;
  *
  */
 public enum GatewayParameterRequestMethod {
-	Get(0), Post(1), Both(2), ;
+	Get(0), Post(1), Both(2),;
 
 	private Integer code;
 

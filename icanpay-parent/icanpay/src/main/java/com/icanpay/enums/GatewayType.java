@@ -29,7 +29,7 @@ public enum GatewayType {
 	/**
 	 * PayPal
 	 */
-	PayPal(5), ;
+	PayPal(5),;
 
 	private int code;
 

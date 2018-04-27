@@ -20,7 +20,7 @@ public enum PaymentNotifyMethod {
 	/**
 	 * 服务器异步通知
 	 */
-	ServerNotify(2), ;
+	ServerNotify(2),;
 
 	private Integer code;
 

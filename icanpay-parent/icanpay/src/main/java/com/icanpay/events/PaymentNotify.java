@@ -82,8 +82,7 @@ public class PaymentNotify {
 	 * @param paymentNotifyMethod
 	 * @throws Exception
 	 */
-	public void received(PaymentNotifyMethod paymentNotifyMethod)
-			throws Exception {
+	public void received(PaymentNotifyMethod paymentNotifyMethod) throws Exception {
 		GatewayBase gateway = NotifyProcess.getGateway();
 		gateway.setPaymentNotifyMethod(paymentNotifyMethod);
 		if (gateway.getGatewayType() != GatewayType.None) {
@@ -119,9 +118,7 @@ public class PaymentNotify {
 	 * @return 网关存在多个商户数据时返回第一个，无法找到返回null
 	 */
 	public Merchant getMerchant(GatewayType gatewayType) {
-		return merchantList.stream()
-				.filter(m -> m.getGatewayType() == gatewayType).findFirst()
-				.get();
+		return merchantList.stream().filter(m -> m.getGatewayType() == gatewayType).findFirst().get();
 	}
 
 	/**
@@ -131,9 +128,7 @@ public class PaymentNotify {
 	 *            网关类型
 	 */
 	public void removeMerchant(GatewayType gatewayType) {
-		Merchant removeMerchant = merchantList.stream()
-				.filter(m -> m.getGatewayType() == gatewayType).findFirst()
-				.get();
+		Merchant removeMerchant = merchantList.stream().filter(m -> m.getGatewayType() == gatewayType).findFirst().get();
 		if (removeMerchant != null) {
 			merchantList.remove(removeMerchant);
 		}

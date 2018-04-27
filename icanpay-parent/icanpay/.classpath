@@ -23,7 +23,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/works/projects/java/icanpay/repository/alipay/alipay-sdk-JAVA-20170829142651/alipay-sdk-java20170829142630.jar" sourcepath="D:/works/projects/java/icanpay/repository/alipay/alipay-sdk-JAVA-20170829142651/alipay-sdk-java20170829142630-source.jar"/>
-	<classpathentry kind="lib" path="D:/works/projects/java/icanpay/repository/unionpay/acp-sdk-java5.0.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

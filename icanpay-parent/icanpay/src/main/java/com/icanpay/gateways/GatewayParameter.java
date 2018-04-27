@@ -32,8 +32,7 @@ public class GatewayParameter {
 	public GatewayParameter() {
 	}
 
-	public GatewayParameter(String parameterName, String parameterValue,
-			GatewayParameterRequestMethod parameterType) {
+	public GatewayParameter(String parameterName, String parameterValue, GatewayParameterRequestMethod parameterType) {
 		this.name = parameterName;
 		this.value = parameterValue;
 		this.requestMethod = parameterType;

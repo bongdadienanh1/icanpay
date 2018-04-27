@@ -2,6 +2,16 @@ package com.icanpay.controller;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.icanpay.PaymentSetting;
+import com.icanpay.enums.GatewayType;
+import com.icanpay.gateways.GatewayBase;
+import com.icanpay.gateways.Gateways;
+
 @RestController
 @RequestMapping("/querypayment")
 public class QueryPaymentController {
@@ -14,18 +24,8 @@ public class QueryPaymentController {
 	}
 
 	@GetMapping("/createquery")
-	public void createQuery(Integer type) throws IOException, Exception {
-		GatewayType gatewayType = GatewayType.Alipay;
-		if (type == 0) {
-			gatewayType = GatewayType.Alipay;
-		}
-		if (type == 1) {
-			gatewayType = GatewayType.WeChatPay;
-		}
-		if (type == 2) {
-			gatewayType = GatewayType.UnionPay;
-		}
-
+	public void createQuery(int type) throws IOException, Exception {
+		GatewayType gatewayType = GatewayType.getGatewayType(type);
 		GatewayBase gateway = gateways.get(gatewayType);
 		PaymentSetting paymentSetting = new PaymentSetting(gateway);
 

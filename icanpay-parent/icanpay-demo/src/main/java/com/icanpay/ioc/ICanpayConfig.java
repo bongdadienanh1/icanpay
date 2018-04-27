@@ -17,10 +17,15 @@ import com.icanpay.properties.WeChatPaymentProperties;
 import com.icanpay.providers.AlipayGateway;
 import com.icanpay.providers.UnionPayGateway;
 import com.icanpay.providers.WeChatPayGataway;
+import com.unionpay.acp.sdk.SDKConfig;
 
 @Configuration
 @Component
 public class ICanpayConfig {
+
+	static {
+		SDKConfig.getConfig().loadPropertiesFromSrc();
+	}
 
 	@Autowired
 	private AlipayProperties alipayProperties;
@@ -37,38 +42,27 @@ public class ICanpayConfig {
 		Gateways gateways = new GatewaysImpl();
 		AlipayGateway alipayGateway = new AlipayGateway();
 		alipayGateway.getMerchant().setAppId(alipayProperties.getAppid());
-		alipayGateway.getMerchant()
-				.setEmail(alipayProperties.getSeller_email());
+		alipayGateway.getMerchant().setEmail(alipayProperties.getSeller_email());
 		alipayGateway.getMerchant().setPartner(alipayProperties.getPartner());
 		alipayGateway.getMerchant().setKey(alipayProperties.getKey());
-		alipayGateway.getMerchant().setPrivateKeyPem(
-				alipayProperties.getPrivatekeypem());
-		alipayGateway.getMerchant().setPublicKeyPem(
-				alipayProperties.getPublicKeypem());
-		alipayGateway.getMerchant().setNotifyUrl(
-				new URI(alipayProperties.getNotifyurl()));
-		alipayGateway.getMerchant().setReturnUrl(
-				new URI(alipayProperties.getReturnurl()));
+		alipayGateway.getMerchant().setPrivateKeyPem(alipayProperties.getPrivatekeypem());
+		alipayGateway.getMerchant().setPublicKeyPem(alipayProperties.getPublicKeypem());
+		alipayGateway.getMerchant().setNotifyUrl(new URI(alipayProperties.getNotifyurl()));
+		alipayGateway.getMerchant().setReturnUrl(new URI(alipayProperties.getReturnurl()));
 		gateways.add(alipayGateway);
 
 		WeChatPayGataway weChatPayGataway = new WeChatPayGataway();
-		weChatPayGataway.getMerchant().setAppId(
-				weChatPaymentProperties.getAppid());
-		weChatPayGataway.getMerchant().setPartner(
-				weChatPaymentProperties.getMch_id());
+		weChatPayGataway.getMerchant().setAppId(weChatPaymentProperties.getAppid());
+		weChatPayGataway.getMerchant().setPartner(weChatPaymentProperties.getMch_id());
 		weChatPayGataway.getMerchant().setKey(weChatPaymentProperties.getKey());
-		weChatPayGataway.getMerchant().setNotifyUrl(
-				new URI(weChatPaymentProperties.getNotifyurl()));
-		weChatPayGataway.getMerchant().setReturnUrl(
-				new URI(weChatPaymentProperties.getReturnurl()));
+		weChatPayGataway.getMerchant().setNotifyUrl(new URI(weChatPaymentProperties.getNotifyurl()));
+		weChatPayGataway.getMerchant().setReturnUrl(new URI(weChatPaymentProperties.getReturnurl()));
 		gateways.add(weChatPayGataway);
 
 		UnionPayGateway unionPayGateway = new UnionPayGateway();
 		unionPayGateway.getMerchant().setPartner(unionPayProperties.getMerid());
-		unionPayGateway.getMerchant().setNotifyUrl(
-				new URI(unionPayProperties.getNotifyurl()));
-		unionPayGateway.getMerchant().setReturnUrl(
-				new URI(unionPayProperties.getReturnurl()));
+		unionPayGateway.getMerchant().setNotifyUrl(new URI(unionPayProperties.getNotifyurl()));
+		unionPayGateway.getMerchant().setReturnUrl(new URI(unionPayProperties.getReturnurl()));
 		gateways.add(unionPayGateway);
 		return gateways;
 

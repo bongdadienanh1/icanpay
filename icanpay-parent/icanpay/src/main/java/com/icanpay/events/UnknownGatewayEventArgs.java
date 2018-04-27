@@ -1,6 +1,5 @@
 package com.icanpay.events;
 
-
 /**
  * 未知网关事件数据
  * 

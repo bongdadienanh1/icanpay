@@ -30,26 +30,18 @@ public class HttpClientUtil {
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 */
-	public static String doPost(String url, String data, String contentType)
-			throws ClientProtocolException, IOException {
+	public static String doPost(String url, String data, String contentType) throws ClientProtocolException, IOException {
 		BasicHttpClientConnectionManager connManager;
-		connManager = new BasicHttpClientConnectionManager(RegistryBuilder
-				.<ConnectionSocketFactory> create()
-				.register("http",
-						PlainConnectionSocketFactory.getSocketFactory())
-				.register("https",
-						SSLConnectionSocketFactory.getSocketFactory()).build(),
-				null, null, null);
+		connManager = new BasicHttpClientConnectionManager(RegistryBuilder.<ConnectionSocketFactory>create()
+				.register("http", PlainConnectionSocketFactory.getSocketFactory()).register("https", SSLConnectionSocketFactory.getSocketFactory()).build(), null, null,
+				null);
 
-		HttpClient httpClient = HttpClientBuilder.create()
-				.setConnectionManager(connManager).build();
+		HttpClient httpClient = HttpClientBuilder.create().setConnectionManager(connManager).build();
 
 		HttpPost httpPost = new HttpPost(url);
 
-		RequestConfig requestConfig = RequestConfig.custom()
-				.setSocketTimeout(ICanPayConfig.getHttpReadTimeoutMs())
-				.setConnectTimeout(ICanPayConfig.getHttpConnectTimeoutMs())
-				.build();
+		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(ICanPayConfig.getHttpReadTimeoutMs())
+				.setConnectTimeout(ICanPayConfig.getHttpConnectTimeoutMs()).build();
 		httpPost.setConfig(requestConfig);
 
 		StringEntity postEntity = new StringEntity(data, "UTF-8");
@@ -71,26 +63,18 @@ public class HttpClientUtil {
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 */
-	public static String doGet(String url) throws ClientProtocolException,
-			IOException {
+	public static String doGet(String url) throws ClientProtocolException, IOException {
 		BasicHttpClientConnectionManager connManager;
-		connManager = new BasicHttpClientConnectionManager(RegistryBuilder
-				.<ConnectionSocketFactory> create()
-				.register("http",
-						PlainConnectionSocketFactory.getSocketFactory())
-				.register("https",
-						SSLConnectionSocketFactory.getSocketFactory()).build(),
-				null, null, null);
+		connManager = new BasicHttpClientConnectionManager(RegistryBuilder.<ConnectionSocketFactory>create()
+				.register("http", PlainConnectionSocketFactory.getSocketFactory()).register("https", SSLConnectionSocketFactory.getSocketFactory()).build(), null, null,
+				null);
 
-		HttpClient httpClient = HttpClientBuilder.create()
-				.setConnectionManager(connManager).build();
+		HttpClient httpClient = HttpClientBuilder.create().setConnectionManager(connManager).build();
 
 		HttpGet httpget = new HttpGet(url);
 
-		RequestConfig requestConfig = RequestConfig.custom()
-				.setSocketTimeout(ICanPayConfig.getHttpReadTimeoutMs())
-				.setConnectTimeout(ICanPayConfig.getHttpConnectTimeoutMs())
-				.build();
+		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(ICanPayConfig.getHttpReadTimeoutMs())
+				.setConnectTimeout(ICanPayConfig.getHttpConnectTimeoutMs()).build();
 		httpget.setConfig(requestConfig);
 
 		HttpResponse httpResponse = httpClient.execute(httpget);

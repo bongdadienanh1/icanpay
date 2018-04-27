@@ -35,8 +35,7 @@ public interface Gateways {
 	 * @return
 	 * @throws GatewayException
 	 */
-	GatewayBase get(GatewayType gatewayType, GatewayTradeType gatewayTradeType)
-			throws GatewayException;
+	GatewayBase get(GatewayType gatewayType, GatewayTradeType gatewayTradeType) throws GatewayException;
 
 	/**
 	 * 获取网关列表

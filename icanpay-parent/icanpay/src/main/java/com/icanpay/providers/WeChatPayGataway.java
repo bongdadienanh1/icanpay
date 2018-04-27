@@ -23,8 +23,7 @@ import com.icanpay.utils.Utility;
  * @author milanyangbo
  *
  */
-public class WeChatPayGataway extends GatewayBase implements PaymentQRCode,
-		WapPaymentUrl, AppParams, QueryNow, RefundReq {
+public class WeChatPayGataway extends GatewayBase implements PaymentQRCode, WapPaymentUrl, AppParams, QueryNow, RefundReq {
 
 	final String payGatewayUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 	final String queryGatewayUrl = "https://api.mch.weixin.qq.com/pay/orderquery";
@@ -57,8 +56,7 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode,
 		// TODO Auto-generated method stub
 		initPaymentOrderParameter("NATIVE", "127.0.0.1");
 		String xmlString = convertGatewayParameterDataToXml();
-		String resultXml = HttpClientUtil.doPost(payGatewayUrl, xmlString,
-				"text/xml");
+		String resultXml = HttpClientUtil.doPost(payGatewayUrl, xmlString, "text/xml");
 		return getWeixinPaymentUrl(resultXml);
 	}
 
@@ -71,11 +69,9 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode,
 		String redirect_url = map.getOrDefault("redirect_url", "");
 		initPaymentOrderParameter("MWEB", Utility.getClientIP());
 		String xmlString = convertGatewayParameterDataToXml();
-		String resultXml = HttpClientUtil.doPost(payGatewayUrl, xmlString,
-				"text/xml");
+		String resultXml = HttpClientUtil.doPost(payGatewayUrl, xmlString, "text/xml");
 		String url = getWeixinPaymentUrl(resultXml);
-		redirect_url = Utility.isBlankOrEmpty(redirect_url) ? getMerchant()
-				.getReturnUrl().toString() : redirect_url;
+		redirect_url = Utility.isBlankOrEmpty(redirect_url) ? getMerchant().getReturnUrl().toString() : redirect_url;
 		redirect_url = URLEncoder.encode(redirect_url, "UTF-8");
 		if (Utility.isBlankOrEmpty(redirect_url)) {
 			return url;
@@ -90,8 +86,7 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode,
 		// TODO Auto-generated method stub
 		initPaymentOrderParameter("APP", "127.0.0.1");
 		String xmlString = convertGatewayParameterDataToXml();
-		String resultString = HttpClientUtil.doPost(payGatewayUrl, xmlString,
-				"text/xml");
+		String resultString = HttpClientUtil.doPost(payGatewayUrl, xmlString, "text/xml");
 		getWeixinPaymentUrl(resultString);
 
 		String prepayid = getGatewayParameterValue("prepay_id");
@@ -119,8 +114,7 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode,
 		// TODO Auto-generated method stub
 		initQueryOrderParameter();
 		String xmlString = convertGatewayParameterDataToXml();
-		String resultXml = HttpClientUtil.doPost(queryGatewayUrl, xmlString,
-				"text/xml");
+		String resultXml = HttpClientUtil.doPost(queryGatewayUrl, xmlString, "text/xml");
 		return checkQueryResult(resultXml);
 	}
 
@@ -137,17 +131,14 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode,
 			setGatewayParameterValue("out_trade_no", refund.getOrderNo());
 		}
 		setGatewayParameterValue("out_refund_no", refund.getRefoundNo());
-		setGatewayParameterValue("total_fee",
-				(int) (refund.getOrderAmount() * 100));
-		setGatewayParameterValue("refund_fee",
-				(int) (refund.getRefundAmount() * 100));
+		setGatewayParameterValue("total_fee", (int) (refund.getOrderAmount() * 100));
+		setGatewayParameterValue("refund_fee", (int) (refund.getRefundAmount() * 100));
 		if (!Utility.isBlankOrEmpty(refund.getRefundDesc())) {
 			setGatewayParameterValue("refund_desc", refund.getRefundDesc());
 		}
 		setGatewayParameterValue("sign", getSign()); // 签名需要在最后设置，以免缺少参数。
 		String xmlString = convertGatewayParameterDataToXml();
-		String resultString = HttpClientUtil.doPost(refundGatewayUrl,
-				xmlString, "text/xml");
+		String resultString = HttpClientUtil.doPost(refundGatewayUrl, xmlString, "text/xml");
 		getWeixinPaymentUrl(resultString);
 		if (getGatewayParameterValue("result_code") == "SUCCESS") {
 			refund.setTradeNo(getGatewayParameterValue("transaction_id"));
@@ -167,17 +158,14 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode,
 		setGatewayParameterValue("out_refund_no", refund.getRefoundNo());
 		setGatewayParameterValue("sign", getSign()); // 签名需要在最后设置，以免缺少参数。
 		String xmlString = convertGatewayParameterDataToXml();
-		String resultString = HttpClientUtil.doPost(refundqueryGatewayUrl,
-				xmlString, "text/xml");
+		String resultString = HttpClientUtil.doPost(refundqueryGatewayUrl, xmlString, "text/xml");
 		getWeixinPaymentUrl(resultString);
 		if (getGatewayParameterValue("result_code") == "SUCCESS") {
 			refund.setTradeNo(getGatewayParameterValue("transaction_id"));
 			refund.setRefoundNo(getGatewayParameterValue("refund_id"));
 			refund.setRefoundNo(getGatewayParameterValue("out_refund_no"));
-			refund.setOrderAmount(Double
-					.parseDouble(getGatewayParameterValue("total_fee")) * 0.01);
-			refund.setRefundAmount(Double
-					.parseDouble(getGatewayParameterValue("refund_fee")) * 0.01);
+			refund.setOrderAmount(Double.parseDouble(getGatewayParameterValue("total_fee")) * 0.01);
+			refund.setRefundAmount(Double.parseDouble(getGatewayParameterValue("refund_fee")) * 0.01);
 			refund.setRefoundStatus(true);
 		}
 		return refund;
@@ -190,10 +178,8 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode,
 		readResultXml(resultXml);
 		if (isSuccessResult()) {
 			if (!Utility.isBlankOrEmpty(getGatewayParameterValue("total_fee"))) {
-				if (getOrder().getOrderNo().equalsIgnoreCase(
-						getGatewayParameterValue("out_trade_no"))
-						&& getOrder().getOrderAmount() == Integer
-								.parseInt(getGatewayParameterValue("total_fee")) / 100.0) {
+				if (getOrder().getOrderNo().equalsIgnoreCase(getGatewayParameterValue("out_trade_no"))
+						&& getOrder().getOrderAmount() == Integer.parseInt(getGatewayParameterValue("total_fee")) / 100.0) {
 					return true;
 				}
 			}
@@ -216,8 +202,7 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode,
 		// TODO Auto-generated method stub
 		clearGatewayParameterData();
 		initProcessSuccessParameter();
-		Utility.getHttpServletResponse().getWriter()
-				.write(convertGatewayParameterDataToXml());
+		Utility.getHttpServletResponse().getWriter().write(convertGatewayParameterDataToXml());
 	}
 
 	/**
@@ -231,8 +216,7 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode,
 	private void readNotifyOrderParameter() {
 		// TODO Auto-generated method stub
 		getOrder().setOrderNo(getGatewayParameterValue("out_trade_no"));
-		getOrder().setOrderAmount(
-				Integer.parseInt(getGatewayParameterValue("total_fee")) * 0.01);
+		getOrder().setOrderAmount(Integer.parseInt(getGatewayParameterValue("total_fee")) * 0.01);
 		getOrder().setTradeNo(getGatewayParameterValue("transaction_id"));
 	}
 
@@ -263,8 +247,7 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode,
 		clearGatewayParameterData();
 		readResultXml(resultXml);
 		if (isSuccessResult()) {
-			return Utility.isBlankOrEmpty(getGatewayParameterValue("code_url")) ? getGatewayParameterValue("mweb_url")
-					: getGatewayParameterValue("code_url");
+			return Utility.isBlankOrEmpty(getGatewayParameterValue("code_url")) ? getGatewayParameterValue("mweb_url") : getGatewayParameterValue("code_url");
 		}
 
 		return null;
@@ -292,9 +275,7 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode,
 	 */
 	private boolean validateResult() {
 		// TODO Auto-generated method stub
-		if (getGatewayParameterValue("return_code").equalsIgnoreCase("SUCCESS")
-				&& getGatewayParameterValue("result_code").equalsIgnoreCase(
-						"SUCCESS")) {
+		if (getGatewayParameterValue("return_code").equalsIgnoreCase("SUCCESS") && getGatewayParameterValue("result_code").equalsIgnoreCase("SUCCESS")) {
 			return true;
 		}
 
@@ -355,19 +336,16 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode,
 	 * @param spbill_create_ip
 	 * @throws Exception
 	 */
-	private void initPaymentOrderParameter(String trade_type,
-			String spbill_create_ip) throws Exception {
+	private void initPaymentOrderParameter(String trade_type, String spbill_create_ip) throws Exception {
 
 		setGatewayParameterValue("appid", getMerchant().getAppId());
 		setGatewayParameterValue("mch_id", getMerchant().getPartner());
 		setGatewayParameterValue("nonce_str", Utility.generateUUID());
 		setGatewayParameterValue("body", getOrder().getSubject());
 		setGatewayParameterValue("out_trade_no", getOrder().getOrderNo());
-		setGatewayParameterValue("total_fee", (int) (getOrder()
-				.getOrderAmount() * 100));
+		setGatewayParameterValue("total_fee", (int) (getOrder().getOrderAmount() * 100));
 		setGatewayParameterValue("spbill_create_ip", spbill_create_ip);
-		setGatewayParameterValue("notify_url", getMerchant().getNotifyUrl()
-				.toString());
+		setGatewayParameterValue("notify_url", getMerchant().getNotifyUrl().toString());
 		setGatewayParameterValue("trade_type", trade_type);
 		setGatewayParameterValue("sign", getSign()); // 签名需要在最后设置，以免缺少参数。
 	}

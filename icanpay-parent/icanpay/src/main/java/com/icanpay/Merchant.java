@@ -27,8 +27,7 @@ public class Merchant {
 	public Merchant() {
 	}
 
-	public Merchant(String userName, String key, URI notifyUrl,
-			GatewayType gatewayType) {
+	public Merchant(String userName, String key, URI notifyUrl, GatewayType gatewayType) {
 		this.partner = userName;
 		this.key = key;
 		this.notifyUrl = notifyUrl;

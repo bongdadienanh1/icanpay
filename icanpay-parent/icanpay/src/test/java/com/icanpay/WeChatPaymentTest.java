@@ -42,11 +42,9 @@ public class WeChatPaymentTest {
 		Hashtable<EncodeHintType, String> hints = new Hashtable<EncodeHintType, String>();
 		hints.put(EncodeHintType.CHARACTER_SET, "utf-8"); // 内容所使用字符集编码
 
-		BitMatrix bitMatrix = new MultiFormatWriter().encode("www.baidu.com",
-				BarcodeFormat.QR_CODE, width, height, hints);
+		BitMatrix bitMatrix = new MultiFormatWriter().encode("www.baidu.com", BarcodeFormat.QR_CODE, width, height, hints);
 		// 生成二维码
-		File outputFile = new File("d:" + File.separator
-				+ "TestBuildQRCodeImage.png");
+		File outputFile = new File("d:" + File.separator + "TestBuildQRCodeImage.png");
 		MatrixToImageWriter.writeToFile(bitMatrix, format, outputFile);
 	}
 

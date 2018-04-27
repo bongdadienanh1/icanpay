@@ -53,8 +53,7 @@ public class PaymentSetting {
 		gateway = createGateway(gatewayType);
 	}
 
-	public PaymentSetting(GatewayType gatewayType, Merchant merchant,
-			Order order) {
+	public PaymentSetting(GatewayType gatewayType, Merchant merchant, Order order) {
 		this(gatewayType);
 		gateway.setMerchant(merchant);
 		gateway.setOrder(order);
@@ -90,14 +89,12 @@ public class PaymentSetting {
 		}
 	}
 
-	public Map<String, String> payment(GatewayTradeType gatewayTradeType,
-			HashMap<String, String> map) throws IOException, Exception {
+	public Map<String, String> payment(GatewayTradeType gatewayTradeType, HashMap<String, String> map) throws IOException, Exception {
 		gateway.setGatewayTradeType(gatewayTradeType);
 		return payment(map);
 	}
 
-	public Map<String, String> payment(HashMap<String, String> map)
-			throws IOException, Exception {
+	public Map<String, String> payment(HashMap<String, String> map) throws IOException, Exception {
 		switch (gateway.getGatewayTradeType()) {
 		case APP: {
 			return buildPayParams();
@@ -121,8 +118,7 @@ public class PaymentSetting {
 		case Applet:
 			break;
 		case None: {
-			throw new NotImplementedException(gateway.getGatewayType()
-					+ " 没有实现+ " + gateway.getGatewayTradeType() + "接口");
+			throw new NotImplementedException(gateway.getGatewayType() + " 没有实现+ " + gateway.getGatewayTradeType() + "接口");
 		}
 		default:
 			break;
@@ -151,8 +147,7 @@ public class PaymentSetting {
 			return;
 		}
 
-		throw new NotImplementedException(gateway.getGatewayType()
-				+ " 没有实现支付接口");
+		throw new NotImplementedException(gateway.getGatewayType() + " 没有实现支付接口");
 	}
 
 	/**
@@ -167,10 +162,7 @@ public class PaymentSetting {
 		if (gateway instanceof WapPaymentUrl) {
 			WapPaymentUrl paymentUrl = (WapPaymentUrl) gateway;
 			if (gateway.getGatewayType() == GatewayType.WeChatPay) {
-				response.getWriter()
-						.write(String
-								.format("<script language='javascript'>window.location='%s'</script>",
-										paymentUrl.buildWapPaymentUrl(map)));
+				response.getWriter().write(String.format("<script language='javascript'>window.location='%s'</script>", paymentUrl.buildWapPaymentUrl(map)));
 			} else {
 				response.sendRedirect(paymentUrl.buildWapPaymentUrl(map));
 			}
@@ -183,8 +175,7 @@ public class PaymentSetting {
 			return;
 		}
 
-		throw new NotImplementedException(gateway.getGatewayType()
-				+ " 没有实现支付接口");
+		throw new NotImplementedException(gateway.getGatewayType() + " 没有实现支付接口");
 	}
 
 	/**
@@ -202,8 +193,7 @@ public class PaymentSetting {
 			return;
 		}
 
-		throw new NotImplementedException(gateway.getGatewayType()
-				+ " 没有实现支付接口");
+		throw new NotImplementedException(gateway.getGatewayType() + " 没有实现支付接口");
 	}
 
 	/**
@@ -218,8 +208,7 @@ public class PaymentSetting {
 			return appParams.buildPayParams();
 		}
 
-		throw new NotImplementedException(gateway.getGatewayType()
-				+ " 没有实现 AppParams 查询接口");
+		throw new NotImplementedException(gateway.getGatewayType() + " 没有实现 AppParams 查询接口");
 	}
 
 	/**
@@ -243,8 +232,7 @@ public class PaymentSetting {
 			return;
 		}
 
-		throw new NotImplementedException(gateway.getGatewayType()
-				+ " 没有实现 QueryUrl 或 QueryForm 查询接口");
+		throw new NotImplementedException(gateway.getGatewayType() + " 没有实现 QueryUrl 或 QueryForm 查询接口");
 	}
 
 	/**
@@ -260,8 +248,7 @@ public class PaymentSetting {
 			return queryNow.queryNow();
 		}
 
-		throw new NotImplementedException(gateway.getGatewayType()
-				+ " 没有实现 QueryNow 查询接口");
+		throw new NotImplementedException(gateway.getGatewayType() + " 没有实现 QueryNow 查询接口");
 	}
 
 	/**
@@ -277,8 +264,7 @@ public class PaymentSetting {
 			return appParams.buildRefund(refund);
 		}
 
-		throw new NotImplementedException(gateway.getGatewayType()
-				+ " 没有实现 RefundReq 查询接口");
+		throw new NotImplementedException(gateway.getGatewayType() + " 没有实现 RefundReq 查询接口");
 	}
 
 	/**
@@ -295,8 +281,7 @@ public class PaymentSetting {
 			return appParams.buildRefundQuery(refund);
 		}
 
-		throw new NotImplementedException(gateway.getGatewayType()
-				+ " 没有实现 RefundReq 查询接口");
+		throw new NotImplementedException(gateway.getGatewayType() + " 没有实现 RefundReq 查询接口");
 	}
 
 	/**
@@ -305,10 +290,8 @@ public class PaymentSetting {
 	 * @param gatewayParameterName
 	 * @param gatewayParameterValue
 	 */
-	public void setGatewayParameterValue(String gatewayParameterName,
-			String gatewayParameterValue) {
-		gateway.setGatewayParameterValue(gatewayParameterName,
-				gatewayParameterValue);
+	public void setGatewayParameterValue(String gatewayParameterName, String gatewayParameterValue) {
+		gateway.setGatewayParameterValue(gatewayParameterName, gatewayParameterValue);
 	}
 
 	/**
@@ -318,8 +301,7 @@ public class PaymentSetting {
 	 * @throws IOException
 	 * @throws WriterException
 	 */
-	private void buildQRCodeImage(String paymentQRCodeContent)
-			throws IOException, WriterException {
+	private void buildQRCodeImage(String paymentQRCodeContent) throws IOException, WriterException {
 		HttpServletResponse response = Utility.getHttpServletResponse();
 		response.setContentType("image/x-png");
 		// TODO Auto-generated method stub
@@ -330,12 +312,9 @@ public class PaymentSetting {
 		Hashtable<EncodeHintType, String> hints = new Hashtable<EncodeHintType, String>();
 		hints.put(EncodeHintType.CHARACTER_SET, gateway.getCharset()); // 内容所使用字符集编码
 
-		BitMatrix bitMatrix = new MultiFormatWriter().encode(
-				paymentQRCodeContent, BarcodeFormat.QR_CODE, width, height,
-				hints);
+		BitMatrix bitMatrix = new MultiFormatWriter().encode(paymentQRCodeContent, BarcodeFormat.QR_CODE, width, height, hints);
 		// 生成二维码
 
-		MatrixToImageWriter.writeToStream(bitMatrix, format,
-				response.getOutputStream());
+		MatrixToImageWriter.writeToStream(bitMatrix, format, response.getOutputStream());
 	}
 }

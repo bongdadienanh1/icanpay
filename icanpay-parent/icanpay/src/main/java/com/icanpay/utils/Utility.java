@@ -46,14 +46,12 @@ public class Utility {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String getMD5(String text, String textEncoding)
-			throws Exception {
+	public static String getMD5(String text, String textEncoding) throws Exception {
 		java.security.MessageDigest md = MessageDigest.getInstance("MD5");
 		byte[] array = md.digest(text.getBytes(textEncoding));
 		StringBuilder sb = new StringBuilder();
 		for (byte item : array) {
-			sb.append(Integer.toHexString((item & 0xFF) | 0x100)
-					.substring(1, 3));
+			sb.append(Integer.toHexString((item & 0xFF) | 0x100).substring(1, 3));
 		}
 		return sb.toString().toUpperCase();
 	}
@@ -69,12 +67,9 @@ public class Utility {
 	public static Map<String, String> xmlToMap(String strXML) throws Exception {
 		try {
 			Map<String, String> data = new HashMap<String, String>();
-			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory
-					.newInstance();
-			DocumentBuilder documentBuilder = documentBuilderFactory
-					.newDocumentBuilder();
-			InputStream stream = new ByteArrayInputStream(
-					strXML.getBytes("UTF-8"));
+			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+			InputStream stream = new ByteArrayInputStream(strXML.getBytes("UTF-8"));
 			org.w3c.dom.Document doc = documentBuilder.parse(stream);
 			doc.getDocumentElement().normalize();
 			NodeList nodeList = doc.getDocumentElement().getChildNodes();
@@ -92,9 +87,7 @@ public class Utility {
 			}
 			return data;
 		} catch (Exception ex) {
-			Utility.getLogger()
-					.warn("Invalid XML, can not convert to map. Error message: {}. XML content: {}",
-							ex.getMessage(), strXML);
+			Utility.getLogger().warn("Invalid XML, can not convert to map. Error message: {}. XML content: {}", ex.getMessage(), strXML);
 			throw ex;
 		}
 
@@ -109,10 +102,8 @@ public class Utility {
 	 * @throws Exception
 	 */
 	public static String mapToXml(Map<String, String> data) throws Exception {
-		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory
-				.newInstance();
-		DocumentBuilder documentBuilder = documentBuilderFactory
-				.newDocumentBuilder();
+		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 		org.w3c.dom.Document document = documentBuilder.newDocument();
 		org.w3c.dom.Element root = document.createElement("xml");
 		document.appendChild(root);
@@ -177,8 +168,7 @@ public class Utility {
 	 * @return
 	 */
 	public static String generateUUID() {
-		return UUID.randomUUID().toString().replaceAll("-", "")
-				.substring(0, 32);
+		return UUID.randomUUID().toString().replaceAll("-", "").substring(0, 32);
 	}
 
 	/**
@@ -219,14 +209,12 @@ public class Utility {
 	}
 
 	public static HttpServletRequest getHttpServletRequest() {
-		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
-				.getRequestAttributes();
+		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 		return attributes.getRequest();
 	}
 
 	public static HttpServletResponse getHttpServletResponse() {
-		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
-				.getRequestAttributes();
+		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 		return attributes.getResponse();
 	}
 }

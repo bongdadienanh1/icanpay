@@ -25,18 +25,8 @@ public class RefundController {
 	}
 
 	@GetMapping("/createrefund")
-	public void createRefund(Integer type) throws IOException, Exception {
-		GatewayType gatewayType = GatewayType.Alipay;
-		if (type == 0) {
-			gatewayType = GatewayType.Alipay;
-		}
-		if (type == 1) {
-			gatewayType = GatewayType.WeChatPay;
-		}
-		if (type == 2) {
-			gatewayType = GatewayType.UnionPay;
-		}
-
+	public void createRefund(int type) throws IOException, Exception {
+		GatewayType gatewayType = GatewayType.getGatewayType(type);
 		GatewayBase gateway = gateways.get(gatewayType);
 		PaymentSetting paymentSetting = new PaymentSetting(gateway);
 

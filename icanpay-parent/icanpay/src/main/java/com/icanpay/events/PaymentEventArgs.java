@@ -20,8 +20,7 @@ public class PaymentEventArgs extends EventObject {
 		super(source);
 		// TODO Auto-generated constructor stub
 		gateway = (GatewayBase) source;
-		notifyServerHostAddress = Utility.getHttpServletRequest()
-				.getRemoteHost();
+		notifyServerHostAddress = Utility.getHttpServletRequest().getRemoteHost();
 	}
 
 	public GatewayBase getGateway() {
@@ -55,9 +54,7 @@ public class PaymentEventArgs extends EventObject {
 	 *            网关的数据的请求方法的类型
 	 * @return
 	 */
-	public String getGatewayParameterValue(String gatewayParameterName,
-			GatewayParameterRequestMethod gatewayParameterRequestMethod) {
-		return gateway.getGatewayParameterValue(gatewayParameterName,
-				gatewayParameterRequestMethod);
+	public String getGatewayParameterValue(String gatewayParameterName, GatewayParameterRequestMethod gatewayParameterRequestMethod) {
+		return gateway.getGatewayParameterValue(gatewayParameterName, gatewayParameterRequestMethod);
 	}
 }

@@ -36,8 +36,7 @@ import com.unionpay.acp.sdk.SDKConstants;
  * @author milanyangbo
  *
  */
-public class UnionPayGateway extends GatewayBase implements PaymentForm,
-		WapPaymentForm, AppParams, QueryNow, RefundReq {
+public class UnionPayGateway extends GatewayBase implements PaymentForm, WapPaymentForm, AppParams, QueryNow, RefundReq {
 
 	/**
 	 * 初始化中国银联网关
@@ -80,8 +79,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 		requestData.put("merId", getMerchant().getPartner()); // 商户号码，请改成自己申请的正式商户号或者open上注册得来的777测试商户号
 		requestData.put("accessType", "0"); // 接入类型，0：直连商户
 		requestData.put("orderId", getOrder().getOrderNo()); // 商户订单号，8-40位数字字母，不能含“-”或“_”，可以自行定制规则
-		requestData.put("txnTime", new SimpleDateFormat("yyyyMMddHHmmss")
-				.format(getOrder().getPaymentDate())); // 订单发送时间，取系统时间，格式为YYYYMMDDhhmmss，必须取当前时间，否则会报txnTime无效
+		requestData.put("txnTime", new SimpleDateFormat("yyyyMMddHHmmss").format(getOrder().getPaymentDate())); // 订单发送时间，取系统时间，格式为YYYYMMDDhhmmss，必须取当前时间，否则会报txnTime无效
 		requestData.put("currencyCode", "156"); // 交易币种（境内商户一般是156 人民币）
 		double txnAmt = getOrder().getOrderAmount() * 100;
 		requestData.put("txnAmt", String.valueOf((int) txnAmt)); // 交易金额，单位分，不要带小数点
@@ -107,8 +105,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 		// 跳转银行网银交易如果超时后交易成功，会自动退款，大约5个工作日金额返还到持卡人账户。
 		// 此时间建议取支付时的北京时间加15分钟。
 		// 超过超时时间调查询接口应答origRespCode不是A6或者00的就可以判断为失败。
-		requestData.put("payTimeout", new SimpleDateFormat("yyyyMMddHHmmss")
-				.format(new Date().getTime() + 15 * 60 * 1000));
+		requestData.put("payTimeout", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date().getTime() + 15 * 60 * 1000));
 
 		// ////////////////////////////////////////////////
 		//
@@ -117,12 +114,10 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 		// ////////////////////////////////////////////////
 
 		/** 请求参数设置完毕，以下对请求参数进行签名并生成html表单，将表单写入浏览器跳转打开银联页面 **/
-		Map<String, String> submitFromData = AcpService.sign(requestData,
-				getCharset()); // 报文中certId,signature的值是在signData方法中获取并自动赋值的，只要证书配置正确即可。
+		Map<String, String> submitFromData = AcpService.sign(requestData, getCharset()); // 报文中certId,signature的值是在signData方法中获取并自动赋值的，只要证书配置正确即可。
 
 		String requestFrontUrl = SDKConfig.getConfig().getFrontRequestUrl(); // 获取请求银联的前台地址：对应属性文件acp_sdk.properties文件中的acpsdk.frontTransUrl
-		String html = AcpService.createAutoFormHtml(requestFrontUrl,
-				submitFromData, getCharset()); // 生成自动跳转的Html表单
+		String html = AcpService.createAutoFormHtml(requestFrontUrl, submitFromData, getCharset()); // 生成自动跳转的Html表单
 
 		LogUtil.writeLog("打印请求HTML，此为请求报文，为联调排查问题的依据：" + html);
 		// 将生成的html写到浏览器中完成自动跳转打开银联支付页面；这里调用signData之后，将html写到浏览器跳转到银联页面之前均不能对html中的表单项的名称和值进行修改，如果修改会导致验签不通过
@@ -165,8 +160,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 		// 商户订单号，8-40位数字字母
 		param.put("orderId", getOrder().getOrderNo());
 		// 订单发送时间，取系统时间
-		param.put("txnTime", new SimpleDateFormat("yyyyMMddHHmmss")
-				.format(getOrder().getPaymentDate()));
+		param.put("txnTime", new SimpleDateFormat("yyyyMMddHHmmss").format(getOrder().getPaymentDate()));
 		// 交易金额，单位分
 		double txnAmt = getOrder().getOrderAmount() * 100;
 		param.put("txnAmt", String.valueOf((int) txnAmt));
@@ -179,8 +173,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 
 		param = AcpService.sign(param, getCharset());
 
-		Map<String, String> resmap = AcpService.post(param, SDKConfig
-				.getConfig().getAppRequestUrl(), getCharset());
+		Map<String, String> resmap = AcpService.post(param, SDKConfig.getConfig().getAppRequestUrl(), getCharset());
 		Map<String, String> resParam = new HashMap<String, String>();
 		resParam.put("tn", resmap.get("tn"));
 		return resParam;
@@ -206,8 +199,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 
 		/*** 要调通交易以下字段必须修改 ***/
 		data.put("orderId", getOrder().getOrderNo()); // ****商户订单号，每次发交易测试需修改为被查询的交易的订单号
-		data.put("txnTime", new SimpleDateFormat("yyyyMMddHHmmss")
-				.format(getOrder().getPaymentDate())); // ****订单发送时间，每次发交易测试需修改为被查询的交易的订单发送时间
+		data.put("txnTime", new SimpleDateFormat("yyyyMMddHHmmss").format(getOrder().getPaymentDate())); // ****订单发送时间，每次发交易测试需修改为被查询的交易的订单发送时间
 
 		/** 请求参数设置完毕，以下对请求参数进行签名并发送http post请求，接收同步应答报文-------------> **/
 
@@ -216,8 +208,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 		String url = SDKConfig.getConfig().getSingleQueryUrl();// 交易请求url从配置文件读取对应属性文件acp_sdk.properties中的
 																// acpsdk.singleQueryUrl
 		// 这里调用signData之后，调用submitUrl之前不能对submitFromData中的键值对做任何修改，如果修改会导致验签不通过
-		Map<String, String> rspData = AcpService.post(reqData, url,
-				getCharset());
+		Map<String, String> rspData = AcpService.post(reqData, url, getCharset());
 
 		/** 对应答码的处理，请根据您的业务逻辑来编写程序,以下应答码处理逻辑仅供参考-------------> **/
 		// 应答码规范参考open.unionpay.com帮助中心 下载 产品接口规范 《平台接入接口规范-第5部分-附录》
@@ -231,9 +222,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 						// 交易成功，更新商户订单状态
 						// TODO
 						return true;
-					} else if ("03".equals(origRespCode)
-							|| "04".equals(origRespCode)
-							|| "05".equals(origRespCode)) {
+					} else if ("03".equals(origRespCode) || "04".equals(origRespCode) || "05".equals(origRespCode)) {
 						// 需再次发起交易状态查询交易
 						// TODO
 						return false;
@@ -276,8 +265,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 		data.put("merId", getMerchant().getPartner()); // 商户号码，请改成自己申请的商户号或者open上注册得来的777商户号测试
 		data.put("accessType", "0"); // 接入类型，商户接入固定填0，不需修改
 		data.put("orderId", refund.getRefoundNo()); // 商户订单号，8-40位数字字母，不能含“-”或“_”，可以自行定制规则，重新产生，不同于原消费
-		data.put("txnTime", new SimpleDateFormat("yyyyMMddHHmmss")
-				.format(refund.getPaymentDate())); // 订单发送时间，格式为YYYYMMDDhhmmss，必须取当前时间，否则会报txnTime无效
+		data.put("txnTime", new SimpleDateFormat("yyyyMMddHHmmss").format(refund.getPaymentDate())); // 订单发送时间，格式为YYYYMMDDhhmmss，必须取当前时间，否则会报txnTime无效
 		data.put("currencyCode", "156"); // 交易币种（境内商户一般是156 人民币）
 		double txnAmt = refund.getRefundAmount() * 100;
 		data.put("txnAmt", String.valueOf((int) txnAmt)); // ****退货金额，单位分，不要带小数点。退货金额小于等于原消费金额，当小于的时候可以多次退货至退货累计金额等于原消费金额
@@ -295,8 +283,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 		String url = SDKConfig.getConfig().getBackRequestUrl();// 交易请求url从配置文件读取对应属性文件acp_sdk.properties中的
 																// acpsdk.backTransUrl
 
-		Map<String, String> rspData = AcpService.post(reqData, url,
-				getCharset());// 这里调用signData之后，调用submitUrl之前不能对submitFromData中的键值对做任何修改，如果修改会导致验签不通过
+		Map<String, String> rspData = AcpService.post(reqData, url, getCharset());// 这里调用signData之后，调用submitUrl之前不能对submitFromData中的键值对做任何修改，如果修改会导致验签不通过
 
 		/** 对应答码的处理，请根据您的业务逻辑来编写程序,以下应答码处理逻辑仅供参考-------------> **/
 		// 应答码规范参考open.unionpay.com帮助中心 下载 产品接口规范 《平台接入接口规范-第5部分-附录》
@@ -310,8 +297,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 					refund.setTradeNo(rspData.get("origQryId"));
 					refund.setRefoundNo(rspData.get("queryId"));
 					refund.setRefoundStatus(true);
-				} else if ("03".equals(respCode) || "04".equals(respCode)
-						|| "05".equals(respCode)) {
+				} else if ("03".equals(respCode) || "04".equals(respCode) || "05".equals(respCode)) {
 					// 后续需发起交易状态查询交易确定交易状态
 					// TODO
 				} else {
@@ -351,8 +337,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 
 		/*** 要调通交易以下字段必须修改 ***/
 		data.put("orderId", refund.getRefoundNo()); // 商户订单号，8-40位数字字母，不能含“-”或“_”，可以自行定制规则，重新产生，不同于原消费
-		data.put("txnTime", new SimpleDateFormat("yyyyMMddHHmmss")
-				.format(refund.getPaymentDate())); // 订单发送时间，格式为YYYYMMDDhhmmss，必须取当前时间，否则会报txnTime无效
+		data.put("txnTime", new SimpleDateFormat("yyyyMMddHHmmss").format(refund.getPaymentDate())); // 订单发送时间，格式为YYYYMMDDhhmmss，必须取当前时间，否则会报txnTime无效
 
 		/** 请求参数设置完毕，以下对请求参数进行签名并发送http post请求，接收同步应答报文-------------> **/
 
@@ -361,8 +346,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 		String url = SDKConfig.getConfig().getSingleQueryUrl();// 交易请求url从配置文件读取对应属性文件acp_sdk.properties中的
 																// acpsdk.singleQueryUrl
 		// 这里调用signData之后，调用submitUrl之前不能对submitFromData中的键值对做任何修改，如果修改会导致验签不通过
-		Map<String, String> rspData = AcpService.post(reqData, url,
-				getCharset());
+		Map<String, String> rspData = AcpService.post(reqData, url, getCharset());
 
 		/** 对应答码的处理，请根据您的业务逻辑来编写程序,以下应答码处理逻辑仅供参考-------------> **/
 		// 应答码规范参考open.unionpay.com帮助中心 下载 产品接口规范 《平台接入接口规范-第5部分-附录》
@@ -377,9 +361,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 						// TODO
 						refund.setRefoundNo(rspData.get("queryId"));
 						refund.setRefoundStatus(true);
-					} else if ("03".equals(origRespCode)
-							|| "04".equals(origRespCode)
-							|| "05".equals(origRespCode)) {
+					} else if ("03".equals(origRespCode) || "04".equals(origRespCode) || "05".equals(origRespCode)) {
 						// 需再次发起交易状态查询交易
 						// TODO
 					} else {
@@ -408,8 +390,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 	 * @param request
 	 * @return
 	 */
-	public Map<String, String> getAllRequestParam(
-			final HttpServletRequest request) {
+	public Map<String, String> getAllRequestParam(final HttpServletRequest request) {
 		Map<String, String> res = new HashMap<String, String>();
 		Enumeration<?> temp = request.getParameterNames();
 		if (null != temp) {
@@ -428,8 +409,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 	}
 
 	/**
-	 * 获取请求参数中所有的信息。
-	 * 非struts可以改用此方法获取，好处是可以过滤掉request.getParameter方法过滤不掉的url中的参数。
+	 * 获取请求参数中所有的信息。 非struts可以改用此方法获取，好处是可以过滤掉request.getParameter方法过滤不掉的url中的参数。
 	 * struts可能对某些content
 	 * -type会提前读取参数导致从inputstream读不到信息，所以可能用不了这个方法。理论应该可以调整struts配置使不影响，但请自己去研究。
 	 * 调用本方法之前不能调用req.getParameter("key");这种方法，否则会导致request取不到输入流。
@@ -437,12 +417,10 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 	 * @param request
 	 * @return
 	 */
-	public Map<String, String> getAllRequestParamStream(
-			final HttpServletRequest request) {
+	public Map<String, String> getAllRequestParamStream(final HttpServletRequest request) {
 		Map<String, String> res = new HashMap<String, String>();
 		try {
-			String notifyStr = new String(IOUtils.toByteArray(request
-					.getInputStream()), getCharset());
+			String notifyStr = new String(IOUtils.toByteArray(request.getInputStream()), getCharset());
 			LogUtil.writeLog("收到通知报文：" + notifyStr);
 			String[] kvs = notifyStr.split("&");
 			for (String kv : kvs) {
@@ -454,11 +432,9 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 				}
 			}
 		} catch (UnsupportedEncodingException e) {
-			LogUtil.writeLog("getAllRequestParamStream.UnsupportedEncodingException error: "
-					+ e.getClass() + ":" + e.getMessage());
+			LogUtil.writeLog("getAllRequestParamStream.UnsupportedEncodingException error: " + e.getClass() + ":" + e.getMessage());
 		} catch (IOException e) {
-			LogUtil.writeLog("getAllRequestParamStream.IOException error: "
-					+ e.getClass() + ":" + e.getMessage());
+			LogUtil.writeLog("getAllRequestParamStream.IOException error: " + e.getClass() + ":" + e.getMessage());
 		}
 		return res;
 	}
@@ -466,11 +442,9 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 	@Override
 	protected boolean checkNotifyData() throws Exception {
 		// TODO Auto-generated method stub
-		String encoding = Utility.getHttpServletRequest().getParameter(
-				SDKConstants.param_encoding);
+		String encoding = Utility.getHttpServletRequest().getParameter(SDKConstants.param_encoding);
 		// 获取银联通知服务器发送的后台通知参数
-		Map<String, String> reqParam = getAllRequestParamStream(Utility
-				.getHttpServletRequest());
+		Map<String, String> reqParam = getAllRequestParamStream(Utility.getHttpServletRequest());
 		LogUtil.printRequestLog(reqParam);
 
 		// 重要！验证签名前不要修改reqParam中的键值对的内容，否则会验签不过
@@ -480,8 +454,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm,
 			return false;
 		} else {
 			getOrder().setOrderNo(reqParam.getOrDefault("orderId", ""));
-			double txnAmt = Double.parseDouble(reqParam.getOrDefault("txnAmt",
-					"0.0")) * 0.01;
+			double txnAmt = Double.parseDouble(reqParam.getOrDefault("txnAmt", "0.0")) * 0.01;
 			getOrder().setOrderAmount(txnAmt);
 			getOrder().setTradeNo(reqParam.getOrDefault("queryId", ""));
 

@@ -46,7 +46,7 @@ public enum GatewayTradeType {
 	/**
 	 * 小程序支付
 	 */
-	Applet(6), ;
+	Applet(6),;
 
 	private Integer code;
 

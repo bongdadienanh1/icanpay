@@ -115,8 +115,7 @@ public abstract class GatewayBase {
 		return gatewayParameterData;
 	}
 
-	public void setGatewayParameterData(
-			List<GatewayParameter> gatewayParameterData) {
+	public void setGatewayParameterData(List<GatewayParameter> gatewayParameterData) {
 		this.gatewayParameterData = gatewayParameterData;
 	}
 
@@ -131,19 +130,14 @@ public abstract class GatewayBase {
 
 		StringBuilder html = new StringBuilder();
 		html.append("<body>").append(" \r\n");
-		html.append("<form name='Gateway' method='post' action ='" + url + "'>")
-				.append(" \r\n");
+		html.append("<form name='Gateway' method='post' action ='" + url + "'>").append(" \r\n");
 		for (GatewayParameter item : gatewayParameterData) {
-			if (item.requestMethod == GatewayParameterRequestMethod.Post
-					|| item.requestMethod == GatewayParameterRequestMethod.Both) {
-				html.append(
-						String.format(formItem, item.getName(), item.getValue()))
-						.append(" \r\n");
+			if (item.requestMethod == GatewayParameterRequestMethod.Post || item.requestMethod == GatewayParameterRequestMethod.Both) {
+				html.append(String.format(formItem, item.getName(), item.getValue())).append(" \r\n");
 			}
 		}
 		html.append("</form>").append(" \r\n");
-		html.append("<script language='javascript' type='text/javascript'>")
-				.append(" \r\n");
+		html.append("<script language='javascript' type='text/javascript'>").append(" \r\n");
 		html.append("document.Gateway.submit();").append(" \r\n");
 		html.append("</script>").append(" \r\n");
 		html.append("</body>").append(" \r\n");
@@ -187,10 +181,8 @@ public abstract class GatewayBase {
 	 * @param gatewayParameterValue
 	 *            网关的参数值
 	 */
-	public void setGatewayParameterValue(String gatewayParameterName,
-			Object gatewayParameterValue) {
-		setGatewayParameterValue(gatewayParameterName, gatewayParameterValue,
-				GatewayParameterRequestMethod.Both);
+	public void setGatewayParameterValue(String gatewayParameterName, Object gatewayParameterValue) {
+		setGatewayParameterValue(gatewayParameterName, gatewayParameterValue, GatewayParameterRequestMethod.Both);
 	}
 
 	/**
@@ -203,10 +195,8 @@ public abstract class GatewayBase {
 	 * @param gatewayParameterValue
 	 *            网关的参数值
 	 */
-	public void setGatewayParameterValue(String gatewayParameterName,
-			String gatewayParameterValue) {
-		setGatewayParameterValue(gatewayParameterName, gatewayParameterValue,
-				GatewayParameterRequestMethod.Both);
+	public void setGatewayParameterValue(String gatewayParameterName, String gatewayParameterValue) {
+		setGatewayParameterValue(gatewayParameterName, gatewayParameterValue, GatewayParameterRequestMethod.Both);
 	}
 
 	/**
@@ -221,11 +211,8 @@ public abstract class GatewayBase {
 	 * @param gatewayParameterRequestMethod
 	 *            网关的参数的请求方法的类型
 	 */
-	public void setGatewayParameterValue(String gatewayParameterName,
-			Object gatewayParameterValue,
-			GatewayParameterRequestMethod gatewayParameterRequestMethod) {
-		setGatewayParameterValue(gatewayParameterName,
-				gatewayParameterValue.toString(), gatewayParameterRequestMethod);
+	public void setGatewayParameterValue(String gatewayParameterName, Object gatewayParameterValue, GatewayParameterRequestMethod gatewayParameterRequestMethod) {
+		setGatewayParameterValue(gatewayParameterName, gatewayParameterValue.toString(), gatewayParameterRequestMethod);
 	}
 
 	/**
@@ -240,22 +227,16 @@ public abstract class GatewayBase {
 	 * @param gatewayParameterRequestMethod
 	 *            网关的参数的请求方法的类型
 	 */
-	public void setGatewayParameterValue(String gatewayParameterName,
-			String gatewayParameterValue,
-			GatewayParameterRequestMethod gatewayParameterRequestMethod) {
-		GatewayParameter existsParam = gatewayParameterData.stream()
-				.filter(p -> p.name.equals(gatewayParameterName)).findFirst()
-				.orElse(null);
+	public void setGatewayParameterValue(String gatewayParameterName, String gatewayParameterValue, GatewayParameterRequestMethod gatewayParameterRequestMethod) {
+		GatewayParameter existsParam = gatewayParameterData.stream().filter(p -> p.name.equals(gatewayParameterName)).findFirst().orElse(null);
 
 		if (existsParam == null) {
-			GatewayParameter param = new GatewayParameter(gatewayParameterName,
-					gatewayParameterValue, gatewayParameterRequestMethod);
+			GatewayParameter param = new GatewayParameter(gatewayParameterName, gatewayParameterValue, gatewayParameterRequestMethod);
 			gatewayParameterData.add(param);
 		} else {
 			if (existsParam.getValue().equals(gatewayParameterValue)) {
 				if (existsParam.getRequestMethod() != gatewayParameterRequestMethod) {
-					existsParam
-							.setRequestMethod(GatewayParameterRequestMethod.Both);
+					existsParam.setRequestMethod(GatewayParameterRequestMethod.Both);
 				}
 
 			} else {
@@ -272,8 +253,7 @@ public abstract class GatewayBase {
 	 * @return
 	 */
 	public String getGatewayParameterValue(String gatewayParameterName) {
-		return getGatewayParameterValue(gatewayParameterName,
-				GatewayParameterRequestMethod.Both);
+		return getGatewayParameterValue(gatewayParameterName, GatewayParameterRequestMethod.Both);
 	}
 
 	/**
@@ -285,13 +265,9 @@ public abstract class GatewayBase {
 	 *            网关的数据的请求方法的类型
 	 * @return
 	 */
-	public String getGatewayParameterValue(String gatewayParameterName,
-			GatewayParameterRequestMethod gatewayParameterRequestMethod) {
-		GatewayParameter parameter = gatewayParameterData
-				.stream()
-				.filter(p -> p.getName().equals(gatewayParameterName)
-						&& (gatewayParameterRequestMethod.getCode() == 3 ? true
-								: p.getRequestMethod() == gatewayParameterRequestMethod))
+	public String getGatewayParameterValue(String gatewayParameterName, GatewayParameterRequestMethod gatewayParameterRequestMethod) {
+		GatewayParameter parameter = gatewayParameterData.stream().filter(
+				p -> p.getName().equals(gatewayParameterName) && (gatewayParameterRequestMethod.getCode() == 3 ? true : p.getRequestMethod() == gatewayParameterRequestMethod))
 				.findFirst().orElse(null);
 		if (parameter != null) {
 			return parameter.getValue();

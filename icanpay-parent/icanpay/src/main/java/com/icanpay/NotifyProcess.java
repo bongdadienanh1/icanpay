@@ -28,14 +28,10 @@ public class NotifyProcess {
 	// 需要验证的参数名称数组，用于识别不同的网关类型。
 	// 检查是否在发回的数据中，需要保证参数名称跟其他各个网关验证的参数名称不重复。
 	// 建议使用网关中返回的不为空的参数名，并使用尽可能多的参数名。
-	static String[] alipayGatewayVerifyParmaNames = { "notify_type",
-			"notify_id", "notify_time", "sign", "sign_type" };
-	static String[] alipayWapGatewayVerifyParmaNames = { "auth_app_id",
-			"method", "seller_id", "sign", "sign_type" };
-	static String[] weixinpayGatewayVerifyParmaNames = { "return_code",
-			"appid", "mch_id", "nonce_str", "result_code" };
-	static String[] unionpayGatewayVerifyParmaNames = { "respMsg", "merId",
-			"respCode", "orderId", "queryId" };
+	static String[] alipayGatewayVerifyParmaNames = { "notify_type", "notify_id", "notify_time", "sign", "sign_type" };
+	static String[] alipayWapGatewayVerifyParmaNames = { "auth_app_id", "method", "seller_id", "sign", "sign_type" };
+	static String[] weixinpayGatewayVerifyParmaNames = { "return_code", "appid", "mch_id", "nonce_str", "result_code" };
+	static String[] unionpayGatewayVerifyParmaNames = { "respMsg", "merId", "respCode", "orderId", "queryId" };
 
 	/**
 	 * 验证网关的类型
@@ -66,13 +62,9 @@ public class NotifyProcess {
 	 * @param gatewayParameterData
 	 * @return
 	 */
-	private static boolean isAlipayGateway(
-			List<GatewayParameter> gatewayParameterData) {
+	private static boolean isAlipayGateway(List<GatewayParameter> gatewayParameterData) {
 		// TODO Auto-generated method stub
-		return existParameter(alipayGatewayVerifyParmaNames,
-				gatewayParameterData)
-				|| existParameter(alipayWapGatewayVerifyParmaNames,
-						gatewayParameterData);
+		return existParameter(alipayGatewayVerifyParmaNames, gatewayParameterData) || existParameter(alipayWapGatewayVerifyParmaNames, gatewayParameterData);
 	}
 
 	/**
@@ -81,11 +73,9 @@ public class NotifyProcess {
 	 * @param gatewayParameterData
 	 * @return
 	 */
-	private static boolean isWeixinpayGateway(
-			List<GatewayParameter> gatewayParameterData) {
+	private static boolean isWeixinpayGateway(List<GatewayParameter> gatewayParameterData) {
 		// TODO Auto-generated method stub
-		return existParameter(weixinpayGatewayVerifyParmaNames,
-				gatewayParameterData);
+		return existParameter(weixinpayGatewayVerifyParmaNames, gatewayParameterData);
 	}
 
 	/**
@@ -94,11 +84,9 @@ public class NotifyProcess {
 	 * @param gatewayParameterData
 	 * @return
 	 */
-	private static boolean isUnionPayGateway(
-			List<GatewayParameter> gatewayParameterData) {
+	private static boolean isUnionPayGateway(List<GatewayParameter> gatewayParameterData) {
 		// TODO Auto-generated method stub
-		return existParameter(unionpayGatewayVerifyParmaNames,
-				gatewayParameterData);
+		return existParameter(unionpayGatewayVerifyParmaNames, gatewayParameterData);
 	}
 
 	/**
@@ -110,14 +98,11 @@ public class NotifyProcess {
 	 *            数据项
 	 * @return
 	 */
-	private static boolean existParameter(String[] parmaName,
-			List<GatewayParameter> gatewayParameterData) {
+	private static boolean existParameter(String[] parmaName, List<GatewayParameter> gatewayParameterData) {
 		// TODO Auto-generated method stub
 		int compareCount = 0;
 		for (String item : parmaName) {
-			GatewayParameter existsParam = gatewayParameterData.stream()
-					.filter(p -> p.getName().equals(item)).findFirst()
-					.orElse(null);
+			GatewayParameter existsParam = gatewayParameterData.stream().filter(p -> p.getName().equals(item)).findFirst().orElse(null);
 
 			if (existsParam != null) {
 				compareCount++;
@@ -158,23 +143,17 @@ public class NotifyProcess {
 	 * @param gatewayParameterRequestMethod
 	 *            网关的参数的请求方式的类型
 	 */
-	private static void setGatewayParameterValue(
-			List<GatewayParameter> gatewayParameterList,
-			String gatewayParameterName, String gatewayParameterValue,
+	private static void setGatewayParameterValue(List<GatewayParameter> gatewayParameterList, String gatewayParameterName, String gatewayParameterValue,
 			GatewayParameterRequestMethod gatewayParameterRequestMethod) {
 
-		GatewayParameter existsParam = gatewayParameterList.stream()
-				.filter(p -> p.getName().equals(gatewayParameterName))
-				.findFirst().orElse(null);
+		GatewayParameter existsParam = gatewayParameterList.stream().filter(p -> p.getName().equals(gatewayParameterName)).findFirst().orElse(null);
 
 		if (existsParam == null) {
-			GatewayParameter param = new GatewayParameter(gatewayParameterName,
-					gatewayParameterValue, gatewayParameterRequestMethod);
+			GatewayParameter param = new GatewayParameter(gatewayParameterName, gatewayParameterValue, gatewayParameterRequestMethod);
 			gatewayParameterList.add(param);
 		} else {
 			if (existsParam.getValue().equals(gatewayParameterValue)) {
-				existsParam
-						.setRequestMethod(GatewayParameterRequestMethod.Both);
+				existsParam.setRequestMethod(GatewayParameterRequestMethod.Both);
 			} else {
 				existsParam.setRequestMethod(gatewayParameterRequestMethod);
 				existsParam.setValue(gatewayParameterValue);
@@ -187,8 +166,7 @@ public class NotifyProcess {
 	 * 
 	 * @param gatewayParameterList
 	 */
-	private static void readQueryString(
-			List<GatewayParameter> gatewayParameterList) {
+	private static void readQueryString(List<GatewayParameter> gatewayParameterList) {
 		// TODO Auto-generated method stub
 		HttpServletRequest request = Utility.getHttpServletRequest();
 		String queryString = request.getQueryString();
@@ -196,8 +174,7 @@ public class NotifyProcess {
 		for (String kv : kvs) {
 			String[] tmp = kv.split("=");
 			if (tmp.length >= 2) {
-				setGatewayParameterValue(gatewayParameterList, tmp[0], tmp[1],
-						GatewayParameterRequestMethod.Get);
+				setGatewayParameterValue(gatewayParameterList, tmp[0], tmp[1], GatewayParameterRequestMethod.Get);
 			}
 		}
 	}
@@ -215,8 +192,7 @@ public class NotifyProcess {
 			String[] values = params.get(key);
 			for (int i = 0; i < values.length; i++) {
 				String value = values[i];
-				setGatewayParameterValue(gatewayParameterList, key, value,
-						GatewayParameterRequestMethod.Post);
+				setGatewayParameterValue(gatewayParameterList, key, value, GatewayParameterRequestMethod.Post);
 			}
 		}
 	}
@@ -227,19 +203,15 @@ public class NotifyProcess {
 	 * @param gatewayParameterList
 	 * @throws Exception
 	 */
-	private static void readWeixinpayXml(
-			List<GatewayParameter> gatewayParameterList) throws Exception {
+	private static void readWeixinpayXml(List<GatewayParameter> gatewayParameterList) throws Exception {
 		// TODO Auto-generated method stub
 
 		if (isWeixinpayNotify()) {
-			String resultXml = new String(IOUtils.toByteArray(Utility
-					.getHttpServletRequest().getInputStream()));
+			String resultXml = new String(IOUtils.toByteArray(Utility.getHttpServletRequest().getInputStream()));
 
-			Utility.xmlToMap(resultXml).forEach(
-					(key, val) -> {
-						setGatewayParameterValue(gatewayParameterList, key,
-								val, GatewayParameterRequestMethod.Post);
-					});
+			Utility.xmlToMap(resultXml).forEach((key, val) -> {
+				setGatewayParameterValue(gatewayParameterList, key, val, GatewayParameterRequestMethod.Post);
+			});
 		}
 	}
 
@@ -253,9 +225,7 @@ public class NotifyProcess {
 		String requestType = request.getMethod();
 		String contentType = request.getContentType();
 		String userAgent = request.getHeader("User-Agent");
-		if (requestType.equalsIgnoreCase("POST")
-				&& contentType.equalsIgnoreCase("text/xml")
-				&& userAgent.equalsIgnoreCase("Mozilla/4.0")) {
+		if (requestType.equalsIgnoreCase("POST") && contentType.equalsIgnoreCase("text/xml") && userAgent.equalsIgnoreCase("Mozilla/4.0")) {
 			return true;
 		}
 		return false;
