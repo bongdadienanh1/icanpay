@@ -7,22 +7,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.icanpay.enums.PaymentNotifyMethod;
 import com.icanpay.events.PaymentNotify;
-import com.icanpay.gateways.Gateways;
 
 @RestController
 @RequestMapping("/notify")
 public class NotifyController {
 
+	@Autowired
 	PaymentNotify notify;
 
-	@Autowired
-	Gateways gateways;
-
-	public NotifyController(Gateways gateways) {
-		this.gateways = gateways;
-
-		// 添加到商户数据集合
-		notify = new PaymentNotify(gateways.getMerchants());
+	public NotifyController() {
 
 		notify.setPaymentFailed(event -> {
 
@@ -46,13 +39,13 @@ public class NotifyController {
 	}
 
 	@GetMapping("/servernotify")
-	public void ServerNotify() throws Exception {
+	public void ServerNotify() {
 		// 接收并处理支付通知
 		notify.received(PaymentNotifyMethod.ServerNotify);
 	}
 
 	@GetMapping("/autoreturn")
-	public void AutoReturn() throws Exception {
+	public void AutoReturn() {
 		// 接收并处理支付通知
 		notify.received(PaymentNotifyMethod.AutoReturn);
 	}

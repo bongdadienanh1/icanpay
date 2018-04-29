@@ -163,7 +163,7 @@ public abstract class GatewayBase {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean validateNotify() throws Exception {
+	public boolean validateNotify() {
 		if (checkNotifyData()) {
 			return true;
 		}
@@ -266,9 +266,8 @@ public abstract class GatewayBase {
 	 * @return
 	 */
 	public String getGatewayParameterValue(String gatewayParameterName, GatewayParameterRequestMethod gatewayParameterRequestMethod) {
-		GatewayParameter parameter = gatewayParameterData.stream().filter(
-				p -> p.getName().equals(gatewayParameterName) && (gatewayParameterRequestMethod.getCode() == 3 ? true : p.getRequestMethod() == gatewayParameterRequestMethod))
-				.findFirst().orElse(null);
+		GatewayParameter parameter = gatewayParameterData.stream().filter(p -> p.getName().equals(gatewayParameterName)
+				&& (gatewayParameterRequestMethod.getCode() == 3 ? true : p.getRequestMethod() == gatewayParameterRequestMethod)).findFirst().orElse(null);
 		if (parameter != null) {
 			return parameter.getValue();
 		}
@@ -281,7 +280,7 @@ public abstract class GatewayBase {
 	 * @return
 	 * @throws AlipayApiException
 	 */
-	protected abstract boolean checkNotifyData() throws Exception;
+	protected abstract boolean checkNotifyData();
 
 	/**
 	 * 当接收到支付网关通知并验证无误时按照支付网关要求格式输出表示成功接收到网关通知的字符串
@@ -289,7 +288,7 @@ public abstract class GatewayBase {
 	 * @return
 	 * @throws Exception
 	 */
-	public abstract void writeSucceedFlag() throws Exception;
+	public abstract void writeSucceedFlag();
 
 	public GatewayTradeType getGatewayTradeType() {
 		return gatewayTradeType;

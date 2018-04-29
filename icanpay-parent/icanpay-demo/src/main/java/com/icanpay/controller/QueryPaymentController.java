@@ -1,7 +1,5 @@
 package com.icanpay.controller;
 
-import java.io.IOException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +17,8 @@ public class QueryPaymentController {
 	@Autowired
 	Gateways gateways;
 
-	public QueryPaymentController(Gateways gateways) {
-		this.gateways = gateways;
-	}
-
 	@GetMapping("/createquery")
-	public void createQuery(int type) throws IOException, Exception {
+	public void createQuery(int type) {
 		GatewayType gatewayType = GatewayType.getGatewayType(type);
 		GatewayBase gateway = gateways.get(gatewayType);
 		PaymentSetting paymentSetting = new PaymentSetting(gateway);

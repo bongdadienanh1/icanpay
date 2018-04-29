@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.icanpay.events.PaymentNotify;
 import com.icanpay.gateways.Gateways;
 import com.icanpay.gateways.GatewaysImpl;
 import com.icanpay.properties.AlipayProperties;
@@ -78,5 +79,10 @@ public class ICanpayConfig {
 		gateways.add(unionPayGateway);
 		return gateways;
 
+	}
+
+	@Bean("prototype")
+	public PaymentNotify notify(Gateways gateways) {
+		return new PaymentNotify(gateways.getMerchants());
 	}
 }

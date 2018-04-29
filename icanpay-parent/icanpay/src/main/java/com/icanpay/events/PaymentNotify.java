@@ -3,6 +3,9 @@ package com.icanpay.events;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.icanpay.Merchant;
 import com.icanpay.NotifyProcess;
 import com.icanpay.enums.GatewayType;
@@ -16,6 +19,8 @@ import com.icanpay.gateways.GatewayBase;
  *
  */
 public class PaymentNotify {
+
+	static Logger logger = LoggerFactory.getLogger(PaymentNotify.class);
 
 	List<Merchant> merchantList;
 
@@ -82,7 +87,7 @@ public class PaymentNotify {
 	 * @param paymentNotifyMethod
 	 * @throws Exception
 	 */
-	public void received(PaymentNotifyMethod paymentNotifyMethod) throws Exception {
+	public void received(PaymentNotifyMethod paymentNotifyMethod) {
 		GatewayBase gateway = NotifyProcess.getGateway();
 		gateway.setPaymentNotifyMethod(paymentNotifyMethod);
 		if (gateway.getGatewayType() != GatewayType.None) {

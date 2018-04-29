@@ -1,5 +1,6 @@
 package com.icanpay;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class NotifyProcess {
 	 * @return
 	 * @throws Exception
 	 */
-	public static GatewayBase getGateway() throws Exception {
+	public static GatewayBase getGateway() {
 		List<GatewayParameter> gatewayParameterData = readNotifyData();
 		if (isAlipayGateway(gatewayParameterData)) {
 			return new AlipayGateway(gatewayParameterData);
@@ -122,7 +123,7 @@ public class NotifyProcess {
 	 * @return
 	 * @throws Exception
 	 */
-	private static List<GatewayParameter> readNotifyData() throws Exception {
+	private static List<GatewayParameter> readNotifyData() {
 		// TODO Auto-generated method stub
 		List<GatewayParameter> gatewayParameters = new ArrayList<GatewayParameter>();
 		readQueryString(gatewayParameters);
@@ -203,11 +204,17 @@ public class NotifyProcess {
 	 * @param gatewayParameterList
 	 * @throws Exception
 	 */
-	private static void readWeixinpayXml(List<GatewayParameter> gatewayParameterList) throws Exception {
+	private static void readWeixinpayXml(List<GatewayParameter> gatewayParameterList) {
 		// TODO Auto-generated method stub
 
 		if (isWeixinpayNotify()) {
-			String resultXml = new String(IOUtils.toByteArray(Utility.getHttpServletRequest().getInputStream()));
+			String resultXml = null;
+			try {
+				resultXml = new String(IOUtils.toByteArray(Utility.getHttpServletRequest().getInputStream()));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			Utility.xmlToMap(resultXml).forEach((key, val) -> {
 				setGatewayParameterValue(gatewayParameterList, key, val, GatewayParameterRequestMethod.Post);

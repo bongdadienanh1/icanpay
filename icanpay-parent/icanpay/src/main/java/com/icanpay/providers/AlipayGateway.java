@@ -239,7 +239,7 @@ public class AlipayGateway extends GatewayBase implements PaymentForm, WapPaymen
 	}
 
 	@Override
-	protected boolean checkNotifyData() throws AlipayApiException {
+	protected boolean checkNotifyData() {
 		// TODO Auto-generated method stub
 		if (validateAlipayNotifyRSASign()) {
 			return validateTrade();
@@ -271,9 +271,15 @@ public class AlipayGateway extends GatewayBase implements PaymentForm, WapPaymen
 	 * @return
 	 * @throws AlipayApiException
 	 */
-	private boolean validateAlipayNotifyRSASign() throws AlipayApiException {
+	private boolean validateAlipayNotifyRSASign() {
 		// TODO Auto-generated method stub
-		boolean checkSign = AlipaySignature.rsaCheckV1(getSortedGatewayParameter(), getMerchant().getPublicKeyPem(), getCharset());
+		boolean checkSign = false;
+		try {
+			checkSign = AlipaySignature.rsaCheckV1(getSortedGatewayParameter(), getMerchant().getPublicKeyPem(), getCharset());
+		} catch (AlipayApiException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage(), e);
+		}
 		if (checkSign) {
 			return true;
 		}

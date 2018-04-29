@@ -1,6 +1,5 @@
 package com.icanpay.controller;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -23,12 +22,8 @@ public class AppPaymentController {
 	@Autowired
 	Gateways gateways;
 
-	public AppPaymentController(Gateways gateways) {
-		this.gateways = gateways;
-	}
-
 	@GetMapping("/createorder")
-	public Map<String, String> createOrder(int type) throws IOException, Exception {
+	public Map<String, String> createOrder(int type) {
 		GatewayType gatewayType = GatewayType.getGatewayType(type);
 		GatewayBase gateway = gateways.get(gatewayType, GatewayTradeType.APP);
 		PaymentSetting paymentSetting = new PaymentSetting(gateway);

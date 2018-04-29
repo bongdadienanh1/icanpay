@@ -290,7 +290,7 @@ public class PaymentSetting {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean queryNow() throws Exception {
+	public boolean queryNow() {
 		if (gateway instanceof QueryNow) {
 			QueryNow queryNow = (QueryNow) gateway;
 			return queryNow.queryNow();
@@ -306,7 +306,7 @@ public class PaymentSetting {
 	 * @return
 	 * @throws Exception
 	 */
-	public Refund buildRefund(Refund refund) throws Exception {
+	public Refund buildRefund(Refund refund) {
 		if (gateway instanceof RefundReq) {
 			RefundReq appParams = (RefundReq) gateway;
 			return appParams.buildRefund(refund);
@@ -323,7 +323,7 @@ public class PaymentSetting {
 	 * @throws Exception
 	 */
 
-	public Refund buildRefundQuery(Refund refund) throws Exception {
+	public Refund buildRefundQuery(Refund refund) {
 		if (gateway instanceof RefundReq) {
 			RefundReq appParams = (RefundReq) gateway;
 			return appParams.buildRefundQuery(refund);

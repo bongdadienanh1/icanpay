@@ -1,6 +1,5 @@
 package com.icanpay.controller;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -22,12 +21,8 @@ public class WebPaymentController {
 	@Autowired
 	Gateways gateways;
 
-	public WebPaymentController(Gateways gateways) {
-		this.gateways = gateways;
-	}
-
 	@GetMapping("/createorder")
-	public void createOrder(int type) throws IOException, Exception {
+	public void createOrder(int type) {
 		GatewayType gatewayType = GatewayType.getGatewayType(type);
 		GatewayBase gateway = gateways.get(gatewayType, GatewayTradeType.Web);
 		PaymentSetting paymentSetting = new PaymentSetting(gateway);

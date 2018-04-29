@@ -440,7 +440,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm, WapPaym
 	}
 
 	@Override
-	protected boolean checkNotifyData() throws Exception {
+	protected boolean checkNotifyData() {
 		// TODO Auto-generated method stub
 		String encoding = Utility.getHttpServletRequest().getParameter(SDKConstants.param_encoding);
 		// 获取银联通知服务器发送的后台通知参数
@@ -470,10 +470,14 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm, WapPaym
 	}
 
 	@Override
-	public void writeSucceedFlag() throws Exception {
+	public void writeSucceedFlag() {
 		// TODO Auto-generated method stub
 		if (getPaymentNotifyMethod() == PaymentNotifyMethod.ServerNotify) {
-			Utility.getHttpServletResponse().getWriter().write("ok");
+			try {
+				Utility.getHttpServletResponse().getWriter().write("ok");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+			}
 		}
 	}
 
