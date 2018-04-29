@@ -17,8 +17,12 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HttpClientUtil {
+
+	static Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
 
 	/**
 	 * Post请求
@@ -30,7 +34,7 @@ public class HttpClientUtil {
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 */
-	public static String doPost(String url, String data, String contentType) throws ClientProtocolException, IOException {
+	public static String doPost(String url, String data, String contentType) {
 		BasicHttpClientConnectionManager connManager;
 		connManager = new BasicHttpClientConnectionManager(RegistryBuilder.<ConnectionSocketFactory>create()
 				.register("http", PlainConnectionSocketFactory.getSocketFactory()).register("https", SSLConnectionSocketFactory.getSocketFactory()).build(), null, null,
@@ -49,10 +53,16 @@ public class HttpClientUtil {
 
 		httpPost.setEntity(postEntity);
 
-		HttpResponse httpResponse = httpClient.execute(httpPost);
-		HttpEntity httpEntity = httpResponse.getEntity();
-		return EntityUtils.toString(httpEntity, "UTF-8");
-
+		HttpResponse httpResponse;
+		try {
+			httpResponse = httpClient.execute(httpPost);
+			HttpEntity httpEntity = httpResponse.getEntity();
+			return EntityUtils.toString(httpEntity, "UTF-8");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage(), e);
+		}
+		return null;
 	}
 
 	/**
@@ -63,7 +73,7 @@ public class HttpClientUtil {
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 */
-	public static String doGet(String url) throws ClientProtocolException, IOException {
+	public static String doGet(String url) {
 		BasicHttpClientConnectionManager connManager;
 		connManager = new BasicHttpClientConnectionManager(RegistryBuilder.<ConnectionSocketFactory>create()
 				.register("http", PlainConnectionSocketFactory.getSocketFactory()).register("https", SSLConnectionSocketFactory.getSocketFactory()).build(), null, null,
@@ -77,9 +87,15 @@ public class HttpClientUtil {
 				.setConnectTimeout(ICanPayConfig.getHttpConnectTimeoutMs()).build();
 		httpget.setConfig(requestConfig);
 
-		HttpResponse httpResponse = httpClient.execute(httpget);
-		HttpEntity httpEntity = httpResponse.getEntity();
-		return EntityUtils.toString(httpEntity, "UTF-8");
-
+		HttpResponse httpResponse;
+		try {
+			httpResponse = httpClient.execute(httpget);
+			HttpEntity httpEntity = httpResponse.getEntity();
+			return EntityUtils.toString(httpEntity, "UTF-8");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage(), e);
+		}
+		return null;
 	}
 }

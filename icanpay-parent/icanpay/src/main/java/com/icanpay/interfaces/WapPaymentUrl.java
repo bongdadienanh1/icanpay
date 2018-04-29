@@ -2,6 +2,8 @@ package com.icanpay.interfaces;
 
 import java.util.Map;
 
+import com.alipay.api.AlipayApiException;
+
 /**
  * 支付订单通过url提交
  * 
@@ -16,7 +18,8 @@ public interface WapPaymentUrl {
 	 * @param redirect_url
 	 *            微信自定义跳转路径
 	 * @return
+	 * @throws AlipayApiException
 	 * @throws Exception
 	 */
-	String buildWapPaymentUrl(Map<String, String> map) throws Exception;
+	String buildWapPaymentUrl(Map<String, String> map);
 }

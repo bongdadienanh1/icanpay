@@ -12,7 +12,7 @@ public interface RefundReq {
 	 * @throws AlipayApiException
 	 * @throws Exception
 	 */
-	Refund buildRefund(Refund refund) throws AlipayApiException, Exception;
+	Refund buildRefund(Refund refund);
 
 	/**
 	 * 查询退款结果
@@ -22,5 +22,5 @@ public interface RefundReq {
 	 * @throws AlipayApiException
 	 * @throws Exception
 	 */
-	Refund buildRefundQuery(Refund refund) throws AlipayApiException, Exception;
+	Refund buildRefundQuery(Refund refund);
 }

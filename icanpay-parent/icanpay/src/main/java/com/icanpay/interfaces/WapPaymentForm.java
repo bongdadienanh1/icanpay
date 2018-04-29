@@ -14,5 +14,5 @@ public interface WapPaymentForm {
 	 * @return
 	 * @throws Exception
 	 */
-	String buildWapPaymentForm() throws Exception;
+	String buildWapPaymentForm();
 }

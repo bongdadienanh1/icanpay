@@ -14,5 +14,5 @@ public interface PaymentQRCode {
 	 * @return 订单的支付二维码内容
 	 * @throws Exception
 	 */
-	String getPaymentQRCodeContent() throws Exception;
+	String getPaymentQRCodeContent();
 }

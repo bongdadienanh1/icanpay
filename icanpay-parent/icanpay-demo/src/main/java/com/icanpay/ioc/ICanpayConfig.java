@@ -6,9 +6,7 @@ import java.net.URISyntaxException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
-import com.icanpay.exceptions.GatewayException;
 import com.icanpay.gateways.Gateways;
 import com.icanpay.gateways.GatewaysImpl;
 import com.icanpay.properties.AlipayProperties;
@@ -20,7 +18,6 @@ import com.icanpay.providers.WeChatPayGataway;
 import com.unionpay.acp.sdk.SDKConfig;
 
 @Configuration
-@Component
 public class ICanpayConfig {
 
 	static {
@@ -37,7 +34,7 @@ public class ICanpayConfig {
 	private UnionPayProperties unionPayProperties;
 
 	@Bean("prototype")
-	public Gateways gateways() throws GatewayException, URISyntaxException {
+	public Gateways gateways() {
 
 		Gateways gateways = new GatewaysImpl();
 		AlipayGateway alipayGateway = new AlipayGateway();
@@ -47,22 +44,37 @@ public class ICanpayConfig {
 		alipayGateway.getMerchant().setKey(alipayProperties.getKey());
 		alipayGateway.getMerchant().setPrivateKeyPem(alipayProperties.getPrivatekeypem());
 		alipayGateway.getMerchant().setPublicKeyPem(alipayProperties.getPublicKeypem());
-		alipayGateway.getMerchant().setNotifyUrl(new URI(alipayProperties.getNotifyurl()));
-		alipayGateway.getMerchant().setReturnUrl(new URI(alipayProperties.getReturnurl()));
+		try {
+			alipayGateway.getMerchant().setNotifyUrl(new URI(alipayProperties.getNotifyurl()));
+			alipayGateway.getMerchant().setReturnUrl(new URI(alipayProperties.getReturnurl()));
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		gateways.add(alipayGateway);
 
 		WeChatPayGataway weChatPayGataway = new WeChatPayGataway();
 		weChatPayGataway.getMerchant().setAppId(weChatPaymentProperties.getAppid());
 		weChatPayGataway.getMerchant().setPartner(weChatPaymentProperties.getMch_id());
 		weChatPayGataway.getMerchant().setKey(weChatPaymentProperties.getKey());
-		weChatPayGataway.getMerchant().setNotifyUrl(new URI(weChatPaymentProperties.getNotifyurl()));
-		weChatPayGataway.getMerchant().setReturnUrl(new URI(weChatPaymentProperties.getReturnurl()));
+		try {
+			weChatPayGataway.getMerchant().setNotifyUrl(new URI(weChatPaymentProperties.getNotifyurl()));
+			weChatPayGataway.getMerchant().setReturnUrl(new URI(weChatPaymentProperties.getReturnurl()));
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		gateways.add(weChatPayGataway);
 
 		UnionPayGateway unionPayGateway = new UnionPayGateway();
 		unionPayGateway.getMerchant().setPartner(unionPayProperties.getMerid());
-		unionPayGateway.getMerchant().setNotifyUrl(new URI(unionPayProperties.getNotifyurl()));
-		unionPayGateway.getMerchant().setReturnUrl(new URI(unionPayProperties.getReturnurl()));
+		try {
+			unionPayGateway.getMerchant().setNotifyUrl(new URI(unionPayProperties.getNotifyurl()));
+			unionPayGateway.getMerchant().setReturnUrl(new URI(unionPayProperties.getReturnurl()));
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		gateways.add(unionPayGateway);
 		return gateways;
 

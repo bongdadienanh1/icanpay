@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -41,6 +43,9 @@ import com.icanpay.utils.Utility;
  *
  */
 public class PaymentSetting {
+
+	static Logger logger = LoggerFactory.getLogger(PaymentSetting.class);
+
 	GatewayBase gateway;
 	Merchant merchant;
 	Order order;
@@ -89,12 +94,12 @@ public class PaymentSetting {
 		}
 	}
 
-	public Map<String, String> payment(GatewayTradeType gatewayTradeType, HashMap<String, String> map) throws IOException, Exception {
+	public Map<String, String> payment(GatewayTradeType gatewayTradeType, HashMap<String, String> map) {
 		gateway.setGatewayTradeType(gatewayTradeType);
 		return payment(map);
 	}
 
-	public Map<String, String> payment(HashMap<String, String> map) throws IOException, Exception {
+	public Map<String, String> payment(HashMap<String, String> map) {
 		switch (gateway.getGatewayTradeType()) {
 		case APP: {
 			return buildPayParams();
@@ -132,18 +137,28 @@ public class PaymentSetting {
 	 * @throws IOException
 	 * @throws Exception
 	 */
-	private void webPayment() throws IOException, Exception {
+	private void webPayment() {
 		HttpServletResponse response = Utility.getHttpServletResponse();
 		response.setCharacterEncoding(gateway.getCharset());
 		if (gateway instanceof PaymentUrl) {
 			PaymentUrl paymentUrl = (PaymentUrl) gateway;
-			response.sendRedirect(paymentUrl.buildPaymentUrl());
+			try {
+				response.sendRedirect(paymentUrl.buildPaymentUrl());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				logger.error(e.getMessage(), e);
+			}
 			return;
 		}
 
 		if (gateway instanceof PaymentForm) {
 			PaymentForm paymentForm = (PaymentForm) gateway;
-			response.getWriter().write(paymentForm.buildPaymentForm());
+			try {
+				response.getWriter().write(paymentForm.buildPaymentForm());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				logger.error(e.getMessage(), e);
+			}
 			return;
 		}
 
@@ -156,22 +171,37 @@ public class PaymentSetting {
 	 * @param map
 	 * @throws Exception
 	 */
-	private void wapPayment(Map<String, String> map) throws Exception {
+	private void wapPayment(Map<String, String> map) {
 		HttpServletResponse response = Utility.getHttpServletResponse();
 		response.setCharacterEncoding(gateway.getCharset());
 		if (gateway instanceof WapPaymentUrl) {
 			WapPaymentUrl paymentUrl = (WapPaymentUrl) gateway;
 			if (gateway.getGatewayType() == GatewayType.WeChatPay) {
-				response.getWriter().write(String.format("<script language='javascript'>window.location='%s'</script>", paymentUrl.buildWapPaymentUrl(map)));
+				try {
+					response.getWriter().write(String.format("<script language='javascript'>window.location='%s'</script>", paymentUrl.buildWapPaymentUrl(map)));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					logger.error(e.getMessage(), e);
+				}
 			} else {
-				response.sendRedirect(paymentUrl.buildWapPaymentUrl(map));
+				try {
+					response.sendRedirect(paymentUrl.buildWapPaymentUrl(map));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					logger.error(e.getMessage(), e);
+				}
 			}
 			return;
 		}
 
 		if (gateway instanceof WapPaymentForm) {
 			WapPaymentForm paymentForm = (WapPaymentForm) gateway;
-			response.getWriter().write(paymentForm.buildWapPaymentForm());
+			try {
+				response.getWriter().write(paymentForm.buildWapPaymentForm());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				logger.error(e.getMessage(), e);
+			}
 			return;
 		}
 
@@ -185,11 +215,19 @@ public class PaymentSetting {
 	 * @throws WriterException
 	 * @throws Exception
 	 */
-	private void qRCodePayment() throws IOException, WriterException, Exception {
+	private void qRCodePayment() {
 		// TODO Auto-generated method stub
 		if (gateway instanceof PaymentQRCode) {
 			PaymentQRCode paymentQRCode = (PaymentQRCode) gateway;
-			buildQRCodeImage(paymentQRCode.getPaymentQRCodeContent());
+			try {
+				buildQRCodeImage(paymentQRCode.getPaymentQRCodeContent());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				logger.error(e.getMessage(), e);
+			} catch (WriterException e) {
+				// TODO Auto-generated catch block
+				logger.error(e.getMessage(), e);
+			}
 			return;
 		}
 
@@ -202,7 +240,7 @@ public class PaymentSetting {
 	 * @return
 	 * @throws Exception
 	 */
-	private Map<String, String> buildPayParams() throws Exception {
+	private Map<String, String> buildPayParams() {
 		if (gateway instanceof AppParams) {
 			AppParams appParams = (AppParams) gateway;
 			return appParams.buildPayParams();
@@ -216,19 +254,29 @@ public class PaymentSetting {
 	 * 
 	 * @throws Exception
 	 */
-	public void queryNotify() throws Exception {
+	public void queryNotify() {
 		HttpServletResponse response = Utility.getHttpServletResponse();
 		response.setCharacterEncoding(gateway.getCharset());
 
 		if (gateway instanceof QueryUrl) {
 			QueryUrl queryUrl = (QueryUrl) gateway;
-			response.sendRedirect(queryUrl.buildQueryUrl());
+			try {
+				response.sendRedirect(queryUrl.buildQueryUrl());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				logger.error(e.getMessage(), e);
+			}
 			return;
 		}
 
 		if (gateway instanceof QueryForm) {
 			QueryForm queryForm = (QueryForm) gateway;
-			response.sendRedirect(queryForm.buildQueryForm());
+			try {
+				response.sendRedirect(queryForm.buildQueryForm());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				logger.error(e.getMessage(), e);
+			}
 			return;
 		}
 

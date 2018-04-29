@@ -1,6 +1,6 @@
 package com.icanpay.exceptions;
 
-public class GatewayException extends Exception {
+public class GatewayException extends RuntimeException {
 
 	private static final long serialVersionUID = -4102205870968374470L;
 

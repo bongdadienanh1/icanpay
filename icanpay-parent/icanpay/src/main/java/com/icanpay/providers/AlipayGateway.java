@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
@@ -38,6 +41,8 @@ import com.icanpay.utils.Utility;
 
 public class AlipayGateway extends GatewayBase implements PaymentForm, WapPaymentUrl, AppParams, QueryNow, RefundReq {
 
+	static Logger logger = LoggerFactory.getLogger(AlipayGateway.class);
+
 	final String payGatewayUrl = "https://mapi.alipay.com/gateway.do";
 	final String openapiGatewayUrl = "https://openapi.alipay.com/gateway.do";
 	final String emailRegexString = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
@@ -67,7 +72,7 @@ public class AlipayGateway extends GatewayBase implements PaymentForm, WapPaymen
 	}
 
 	@Override
-	public String buildPaymentForm() throws Exception {
+	public String buildPaymentForm() {
 		// TODO Auto-generated method stub
 		AlipayClient alipayClient = getAopClient(); // 获得初始化的AlipayClient
 
@@ -83,11 +88,17 @@ public class AlipayGateway extends GatewayBase implements PaymentForm, WapPaymen
 		model.setProductCode("FAST_INSTANT_TRADE_PAY");
 		alipayRequest.setBizModel(model);
 
-		return alipayClient.pageExecute(alipayRequest).getBody(); // 调用SDK生成表单
+		try {
+			return alipayClient.pageExecute(alipayRequest).getBody();
+		} catch (AlipayApiException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage(), e);
+		} // 调用SDK生成表单
+		return null;
 	}
 
 	@Override
-	public String buildWapPaymentUrl(Map<String, String> map) throws AlipayApiException {
+	public String buildWapPaymentUrl(Map<String, String> map) {
 		// TODO Auto-generated method stub
 		AlipayClient alipayClient = getAopClient(); // 获得初始化的AlipayClient
 
@@ -103,11 +114,17 @@ public class AlipayGateway extends GatewayBase implements PaymentForm, WapPaymen
 		model.setProductCode("QUICK_WAP_PAY");
 		alipayRequest.setBizModel(model);
 
-		return alipayClient.pageExecute(alipayRequest).getBody(); // 调用SDK生成表单
+		try {
+			return alipayClient.pageExecute(alipayRequest).getBody();
+		} catch (AlipayApiException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage(), e);
+		} // 调用SDK生成表单
+		return null;
 	}
 
 	@Override
-	public Map<String, String> buildPayParams() throws AlipayApiException {
+	public Map<String, String> buildPayParams() {
 		// TODO Auto-generated method stub
 		AlipayClient alipayClient = getAopClient(); // 获得初始化的AlipayClient
 
@@ -124,12 +141,17 @@ public class AlipayGateway extends GatewayBase implements PaymentForm, WapPaymen
 		alipayRequest.setBizModel(model);
 
 		Map<String, String> resParam = new HashMap<String, String>();
-		resParam.put("body", alipayClient.pageExecute(alipayRequest).getBody());
+		try {
+			resParam.put("body", alipayClient.pageExecute(alipayRequest).getBody());
+		} catch (AlipayApiException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage(), e);
+		}
 		return resParam;
 	}
 
 	@Override
-	public boolean queryNow() throws AlipayApiException {
+	public boolean queryNow() {
 		// TODO Auto-generated method stub
 		AlipayClient alipayClient = getAopClient(); // 获得初始化的AlipayClient
 
@@ -139,7 +161,13 @@ public class AlipayGateway extends GatewayBase implements PaymentForm, WapPaymen
 		model.setOutTradeNo(getOrder().getOrderNo());
 		alipayRequest.setBizModel(model);
 
-		AlipayTradeQueryResponse response = alipayClient.execute(alipayRequest);// 通过alipayClient调用API，获得对应的response类
+		AlipayTradeQueryResponse response = null;
+		try {
+			response = alipayClient.execute(alipayRequest);
+		} catch (AlipayApiException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage(), e);
+		} // 通过alipayClient调用API，获得对应的response类
 
 		if (((response.getTradeStatus().equalsIgnoreCase("TRADE_FINISHED") || response.getTradeStatus().equalsIgnoreCase("TRADE_SUCCESS")))) {
 			double orderAmount = Double.parseDouble(response.getTotalAmount());
@@ -153,7 +181,7 @@ public class AlipayGateway extends GatewayBase implements PaymentForm, WapPaymen
 	}
 
 	@Override
-	public Refund buildRefund(Refund refund) throws AlipayApiException {
+	public Refund buildRefund(Refund refund) {
 		// TODO Auto-generated method stub
 		AlipayClient alipayClient = getAopClient();
 		AlipayTradeRefundRequest alipayRequest = new AlipayTradeRefundRequest();
@@ -168,7 +196,13 @@ public class AlipayGateway extends GatewayBase implements PaymentForm, WapPaymen
 			model.setRefundReason(refund.getRefundDesc());
 		}
 		alipayRequest.setBizModel(model);
-		AlipayTradeRefundResponse response = alipayClient.execute(alipayRequest);
+		AlipayTradeRefundResponse response = null;
+		try {
+			response = alipayClient.execute(alipayRequest);
+		} catch (AlipayApiException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage(), e);
+		}
 		if (response.getCode() == "10000") {
 			refund.setTradeNo(response.getTradeNo());
 			refund.setRefoundStatus(true);
@@ -177,7 +211,7 @@ public class AlipayGateway extends GatewayBase implements PaymentForm, WapPaymen
 	}
 
 	@Override
-	public Refund buildRefundQuery(Refund refund) throws AlipayApiException {
+	public Refund buildRefundQuery(Refund refund) {
 		// TODO Auto-generated method stub
 		AlipayClient alipayClient = getAopClient();
 		AlipayTradeFastpayRefundQueryRequest alipayRequest = new AlipayTradeFastpayRefundQueryRequest();
@@ -188,7 +222,13 @@ public class AlipayGateway extends GatewayBase implements PaymentForm, WapPaymen
 		}
 		model.setOutRequestNo(refund.getRefoundNo());
 		alipayRequest.setBizModel(model);
-		AlipayTradeFastpayRefundQueryResponse response = alipayClient.execute(alipayRequest);
+		AlipayTradeFastpayRefundQueryResponse response = null;
+		try {
+			response = alipayClient.execute(alipayRequest);
+		} catch (AlipayApiException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage(), e);
+		}
 		if (response.getCode() == "10000" && !Utility.isBlankOrEmpty(response.getRefundAmount())) {
 			double refundAmount = Double.parseDouble(response.getRefundAmount());
 			refund.setRefundAmount(refundAmount);
@@ -208,10 +248,15 @@ public class AlipayGateway extends GatewayBase implements PaymentForm, WapPaymen
 	}
 
 	@Override
-	public void writeSucceedFlag() throws IOException {
+	public void writeSucceedFlag() {
 		// TODO Auto-generated method stub
 		if (getPaymentNotifyMethod() == PaymentNotifyMethod.ServerNotify) {
-			Utility.getHttpServletResponse().getWriter().write("success");
+			try {
+				Utility.getHttpServletResponse().getWriter().write("success");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				logger.error(e.getMessage(), e);
+			}
 		}
 	}
 

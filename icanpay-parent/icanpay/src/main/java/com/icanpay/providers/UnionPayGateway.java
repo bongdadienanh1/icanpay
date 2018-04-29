@@ -60,7 +60,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm, WapPaym
 	}
 
 	@Override
-	public String buildPaymentForm() throws Exception {
+	public String buildPaymentForm() {
 		// TODO Auto-generated method stub
 		Map<String, String> requestData = new HashMap<String, String>();
 
@@ -125,13 +125,13 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm, WapPaym
 	}
 
 	@Override
-	public String buildWapPaymentForm() throws Exception {
+	public String buildWapPaymentForm() {
 		// TODO Auto-generated method stub
 		return buildPaymentForm();
 	}
 
 	@Override
-	public Map<String, String> buildPayParams() throws Exception {
+	public Map<String, String> buildPayParams() {
 		// TODO Auto-generated method stub
 		// 组装请求报文
 		Map<String, String> param = new HashMap<String, String>();
@@ -180,7 +180,7 @@ public class UnionPayGateway extends GatewayBase implements PaymentForm, WapPaym
 	}
 
 	@Override
-	public boolean queryNow() throws Exception {
+	public boolean queryNow() {
 		// TODO Auto-generated method stub
 		Map<String, String> data = new HashMap<String, String>();
 

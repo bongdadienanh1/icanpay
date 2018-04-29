@@ -16,7 +16,7 @@ public interface Gateways {
 	 * @return
 	 * @throws GatewayException
 	 */
-	boolean add(GatewayBase gateway) throws GatewayException;
+	boolean add(GatewayBase gateway);
 
 	/**
 	 * 通过网关类型获取网关
@@ -25,7 +25,7 @@ public interface Gateways {
 	 * @return
 	 * @throws GatewayException
 	 */
-	GatewayBase get(GatewayType gatewayType) throws GatewayException;
+	GatewayBase get(GatewayType gatewayType);
 
 	/**
 	 * 通过网关类型,交易类型获取网关
@@ -35,7 +35,7 @@ public interface Gateways {
 	 * @return
 	 * @throws GatewayException
 	 */
-	GatewayBase get(GatewayType gatewayType, GatewayTradeType gatewayTradeType) throws GatewayException;
+	GatewayBase get(GatewayType gatewayType, GatewayTradeType gatewayTradeType);
 
 	/**
 	 * 获取网关列表

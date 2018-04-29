@@ -20,7 +20,7 @@ public class GatewaysImpl implements Gateways {
 	}
 
 	@Override
-	public boolean add(GatewayBase gateway) throws GatewayException {
+	public boolean add(GatewayBase gateway) {
 		// TODO Auto-generated method stub
 		if (gateway != null) {
 			if (!_list.stream().anyMatch(g -> g.getMerchant().getAppId().equals(gateway.getMerchant().getAppId()))) {
@@ -36,7 +36,7 @@ public class GatewaysImpl implements Gateways {
 	}
 
 	@Override
-	public GatewayBase get(GatewayType gatewayType) throws GatewayException {
+	public GatewayBase get(GatewayType gatewayType) {
 		// TODO Auto-generated method stub
 		GatewayBase gateway = _list.stream().filter(a -> a.getGatewayType() == gatewayType).findFirst().orElse(null);
 
@@ -48,7 +48,7 @@ public class GatewaysImpl implements Gateways {
 	}
 
 	@Override
-	public GatewayBase get(GatewayType gatewayType, GatewayTradeType gatewayTradeType) throws GatewayException {
+	public GatewayBase get(GatewayType gatewayType, GatewayTradeType gatewayTradeType) {
 		// TODO Auto-generated method stub
 		GatewayBase gateway = _list.stream().filter(a -> a.getGatewayType() == gatewayType && a.getGatewayTradeType() == gatewayTradeType).findFirst().orElse(null);
 		if (gateway == null) {

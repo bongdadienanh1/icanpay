@@ -6,13 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.icanpay.enums.PaymentNotifyMethod;
-import com.icanpay.events.PaymentFailedEventArgs;
-import com.icanpay.events.PaymentFailedListener;
 import com.icanpay.events.PaymentNotify;
-import com.icanpay.events.PaymentSucceedEventArgs;
-import com.icanpay.events.PaymentSucceedListener;
-import com.icanpay.events.UnknownGatewayEventArgs;
-import com.icanpay.events.UnknownGatewayListener;
 import com.icanpay.gateways.Gateways;
 
 @RestController
@@ -30,38 +24,23 @@ public class NotifyController {
 		// 添加到商户数据集合
 		notify = new PaymentNotify(gateways.getMerchants());
 
-		notify.setPaymentSucceed(new PaymentSucceedListener() {
+		notify.setPaymentFailed(event -> {
 
-			@Override
-			public void handleEvent(PaymentSucceedEventArgs event) {
-				// TODO Auto-generated method stub
-				// 支付成功时时的处理代码
-				if (event.getPaymentNotifyMethod() == PaymentNotifyMethod.AutoReturn) {
-					// 当前是用户的浏览器自动返回时显示充值成功页面
-				} else {
-					// 支付结果的发送方式，以服务端接收为准
-				}
+			// 支付成功时时的处理代码
+			if (event.getPaymentNotifyMethod() == PaymentNotifyMethod.AutoReturn) {
+				// 当前是用户的浏览器自动返回时显示充值成功页面
+			} else {
+				// 支付结果的发送方式，以服务端接收为准
 			}
 
 		});
 
-		notify.setPaymentFailed(new PaymentFailedListener() {
-
-			@Override
-			public void handleEvent(PaymentFailedEventArgs event) {
-				// TODO Auto-generated method stub
-
-			}
+		notify.setPaymentFailed(event -> {
 
 		});
 
-		notify.setUnknownGateway(new UnknownGatewayListener() {
+		notify.setUnknownGateway(event -> {
 
-			@Override
-			public void handleEvent(UnknownGatewayEventArgs event) {
-				// TODO Auto-generated method stub
-
-			}
 		});
 
 	}

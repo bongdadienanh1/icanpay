@@ -3,7 +3,9 @@ package com.icanpay.utils;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -12,8 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -27,6 +32,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class Utility {
+
+	static Logger logger = LoggerFactory.getLogger(Utility.class);
+
 	/**
 	 * 获得字符串的MD5值，MD5值为大写
 	 * 
@@ -34,7 +42,7 @@ public class Utility {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String getMD5(String text) throws Exception {
+	public static String getMD5(String text) {
 		return getMD5(text, "UTF-8");
 	}
 
@@ -46,9 +54,21 @@ public class Utility {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String getMD5(String text, String textEncoding) throws Exception {
-		java.security.MessageDigest md = MessageDigest.getInstance("MD5");
-		byte[] array = md.digest(text.getBytes(textEncoding));
+	public static String getMD5(String text, String textEncoding) {
+		java.security.MessageDigest md = null;
+		try {
+			md = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		byte[] array = null;
+		try {
+			array = md.digest(text.getBytes(textEncoding));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		StringBuilder sb = new StringBuilder();
 		for (byte item : array) {
 			sb.append(Integer.toHexString((item & 0xFF) | 0x100).substring(1, 3));
@@ -64,7 +84,7 @@ public class Utility {
 	 * @return XML数据转换后的Map
 	 * @throws Exception
 	 */
-	public static Map<String, String> xmlToMap(String strXML) throws Exception {
+	public static Map<String, String> xmlToMap(String strXML) {
 		try {
 			Map<String, String> data = new HashMap<String, String>();
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -87,10 +107,9 @@ public class Utility {
 			}
 			return data;
 		} catch (Exception ex) {
-			Utility.getLogger().warn("Invalid XML, can not convert to map. Error message: {}. XML content: {}", ex.getMessage(), strXML);
-			throw ex;
+			logger.error(ex.getMessage(), strXML, ex);
 		}
-
+		return null;
 	}
 
 	/**
@@ -101,9 +120,15 @@ public class Utility {
 	 * @return XML格式的字符串
 	 * @throws Exception
 	 */
-	public static String mapToXml(Map<String, String> data) throws Exception {
+	public static String mapToXml(Map<String, String> data) {
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+		DocumentBuilder documentBuilder = null;
+		try {
+			documentBuilder = documentBuilderFactory.newDocumentBuilder();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage(), e);
+		}
 		org.w3c.dom.Document document = documentBuilder.newDocument();
 		org.w3c.dom.Element root = document.createElement("xml");
 		document.appendChild(root);
@@ -118,30 +143,32 @@ public class Utility {
 			root.appendChild(filed);
 		}
 		TransformerFactory tf = TransformerFactory.newInstance();
-		Transformer transformer = tf.newTransformer();
+		Transformer transformer = null;
+		try {
+			transformer = tf.newTransformer();
+		} catch (TransformerConfigurationException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage(), e);
+		}
 		DOMSource source = new DOMSource(document);
 		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		StringWriter writer = new StringWriter();
 		StreamResult result = new StreamResult(writer);
-		transformer.transform(source, result);
+		try {
+			transformer.transform(source, result);
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage(), e);
+		}
 		String output = writer.getBuffer().toString(); // .replaceAll("\n|\r",
 														// "");
 		try {
 			writer.close();
-		} catch (Exception ex) {
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
 		}
 		return output;
-	}
-
-	/**
-	 * 日志
-	 * 
-	 * @return
-	 */
-	public static Logger getLogger() {
-		Logger logger = LoggerFactory.getLogger("icanpay java sdk");
-		return logger;
 	}
 
 	/**

@@ -14,5 +14,5 @@ public interface PaymentUrl {
 	 * @return
 	 * @throws Exception
 	 */
-	String buildPaymentUrl() throws Exception;
+	String buildPaymentUrl();
 }

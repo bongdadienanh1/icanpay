@@ -17,6 +17,6 @@ public interface QueryNow {
 	 * @return 服务器在查询url页面输出返回查询数据
 	 * @throws AlipayApiException
 	 */
-	boolean queryNow() throws Exception;
+	boolean queryNow();
 
 }
