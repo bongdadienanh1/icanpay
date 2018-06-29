@@ -62,7 +62,7 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/commons/commons-lang3/3.6/commons-lang3-3.6.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/commons-io/commons-io/2.5/commons-io-2.5.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/google/zxing/core/3.3.0/core-3.3.0.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="EXTJAR" id="D:\work\java\projects\icanpay.java\icanpay-parent\icanpay\lib\alipay-sdk-java20170829142630.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/alipay/sdk/alipay-sdk-java/3.1.0/alipay-sdk-java-3.1.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="EXTJAR" id="D:\work\java\projects\icanpay.java\icanpay-parent\icanpay\lib\acp-sdk-java5.0.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/springframework/boot/spring-boot-starter-aop/2.0.0.RELEASE/spring-boot-starter-aop-2.0.0.RELEASE.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/aspectj/aspectjweaver/1.8.13/aspectjweaver-1.8.13.jar" enabled="true" runInBatchMode="false"/>

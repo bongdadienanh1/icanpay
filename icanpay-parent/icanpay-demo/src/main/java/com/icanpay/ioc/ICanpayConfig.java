@@ -3,9 +3,13 @@ package com.icanpay.ioc;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 import com.icanpay.events.PaymentNotify;
 import com.icanpay.gateways.Gateways;
@@ -21,6 +25,8 @@ import com.unionpay.acp.sdk.SDKConfig;
 @Configuration
 public class ICanpayConfig {
 
+	static Logger logger = LoggerFactory.getLogger(ICanpayConfig.class);
+
 	static {
 		SDKConfig.getConfig().loadPropertiesFromSrc();
 	}
@@ -34,7 +40,8 @@ public class ICanpayConfig {
 	@Autowired
 	private UnionPayProperties unionPayProperties;
 
-	@Bean("prototype")
+	@Bean()
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public Gateways gateways() {
 
 		Gateways gateways = new GatewaysImpl();
@@ -50,7 +57,7 @@ public class ICanpayConfig {
 			alipayGateway.getMerchant().setReturnUrl(new URI(alipayProperties.getReturnurl()));
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		gateways.add(alipayGateway);
 
@@ -63,7 +70,7 @@ public class ICanpayConfig {
 			weChatPayGataway.getMerchant().setReturnUrl(new URI(weChatPaymentProperties.getReturnurl()));
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		gateways.add(weChatPayGataway);
 
@@ -74,15 +81,16 @@ public class ICanpayConfig {
 			unionPayGateway.getMerchant().setReturnUrl(new URI(unionPayProperties.getReturnurl()));
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		gateways.add(unionPayGateway);
 		return gateways;
 
 	}
 
-	@Bean("prototype")
-	public PaymentNotify notify(Gateways gateways) {
-		return new PaymentNotify(gateways.getMerchants());
+	@Bean()
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public PaymentNotify paymentNotify() {
+		return new PaymentNotify(gateways().getMerchants());
 	}
 }

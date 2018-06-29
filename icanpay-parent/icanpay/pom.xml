@@ -56,12 +56,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>alipay</groupId>
-			<artifactId>alipay</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/alipay-sdk-java20170829142630.jar</systemPath>
-		</dependency>
+				<groupId>com.alipay.sdk</groupId>
+				<artifactId>alipay-sdk-java</artifactId>
+			</dependency>
 
 		<dependency>
 			<groupId>unionpay</groupId>

@@ -13,11 +13,11 @@ import com.icanpay.events.PaymentNotify;
 public class NotifyController {
 
 	@Autowired
-	PaymentNotify notify;
+	PaymentNotify paymentNotify;
 
 	public NotifyController() {
 
-		notify.setPaymentFailed(event -> {
+		paymentNotify.setPaymentSucceed(event -> {
 
 			// 支付成功时时的处理代码
 			if (event.getPaymentNotifyMethod() == PaymentNotifyMethod.AutoReturn) {
@@ -28,12 +28,12 @@ public class NotifyController {
 
 		});
 
-		notify.setPaymentFailed(event -> {
-
+		paymentNotify.setPaymentFailed(event -> {
+			// 支付失败时的处理代码
 		});
 
-		notify.setUnknownGateway(event -> {
-
+		paymentNotify.setUnknownGateway(event -> {
+			// 无法识别支付网关时的处理代码
 		});
 
 	}
@@ -41,12 +41,12 @@ public class NotifyController {
 	@GetMapping("/servernotify")
 	public void ServerNotify() {
 		// 接收并处理支付通知
-		notify.received(PaymentNotifyMethod.ServerNotify);
+		paymentNotify.received(PaymentNotifyMethod.ServerNotify);
 	}
 
 	@GetMapping("/autoreturn")
 	public void AutoReturn() {
 		// 接收并处理支付通知
-		notify.received(PaymentNotifyMethod.AutoReturn);
+		paymentNotify.received(PaymentNotifyMethod.AutoReturn);
 	}
 }
