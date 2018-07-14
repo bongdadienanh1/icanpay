@@ -294,7 +294,8 @@ public class AlipayGateway extends GatewayBase implements PaymentForm, WapPaymen
 	private boolean validateTrade() {
 		// TODO Auto-generated method stub
 		// 支付状态是否为成功。TRADE_FINISHED（普通即时到账的交易成功状态，TRADE_SUCCESS（开通了高级即时到账或机票分销产品后的交易成功状态）
-		if (getGatewayParameterValue("trade_status").equalsIgnoreCase("TRADE_FINISHED") || getGatewayParameterValue("trade_status").equalsIgnoreCase("TRADE_SUCCESS")) {
+		if (getGatewayParameterValue("trade_status").equalsIgnoreCase("TRADE_FINISHED")
+				|| getGatewayParameterValue("trade_status").equalsIgnoreCase("TRADE_SUCCESS")) {
 			String orderAmount = getGatewayParameterValue("total_amount");
 			orderAmount = Utility.isBlankOrEmpty(orderAmount) ? getGatewayParameterValue("total_fee") : orderAmount;
 			getOrder().setOrderAmount(Double.parseDouble(orderAmount));

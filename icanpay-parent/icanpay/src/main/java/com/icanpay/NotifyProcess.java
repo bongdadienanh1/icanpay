@@ -29,10 +29,10 @@ public class NotifyProcess {
 	// 需要验证的参数名称数组，用于识别不同的网关类型。
 	// 检查是否在发回的数据中，需要保证参数名称跟其他各个网关验证的参数名称不重复。
 	// 建议使用网关中返回的不为空的参数名，并使用尽可能多的参数名。
-	static String[] alipayGatewayVerifyParmaNames = { "notify_type", "notify_id", "notify_time", "sign", "sign_type" };
-	static String[] alipayWapGatewayVerifyParmaNames = { "auth_app_id", "method", "seller_id", "sign", "sign_type" };
-	static String[] weixinpayGatewayVerifyParmaNames = { "return_code", "appid", "mch_id", "nonce_str", "result_code" };
-	static String[] unionpayGatewayVerifyParmaNames = { "respMsg", "merId", "respCode", "orderId", "queryId" };
+	static String[] alipayGatewayVerifyParmaNames = {"notify_type", "notify_id", "notify_time", "sign", "sign_type"};
+	static String[] alipayWapGatewayVerifyParmaNames = {"auth_app_id", "method", "seller_id", "sign", "sign_type"};
+	static String[] weixinpayGatewayVerifyParmaNames = {"return_code", "appid", "mch_id", "nonce_str", "result_code"};
+	static String[] unionpayGatewayVerifyParmaNames = {"respMsg", "merId", "respCode", "orderId", "queryId"};
 
 	/**
 	 * 验证网关的类型
@@ -65,7 +65,8 @@ public class NotifyProcess {
 	 */
 	private static boolean isAlipayGateway(List<GatewayParameter> gatewayParameterData) {
 		// TODO Auto-generated method stub
-		return existParameter(alipayGatewayVerifyParmaNames, gatewayParameterData) || existParameter(alipayWapGatewayVerifyParmaNames, gatewayParameterData);
+		return existParameter(alipayGatewayVerifyParmaNames, gatewayParameterData)
+				|| existParameter(alipayWapGatewayVerifyParmaNames, gatewayParameterData);
 	}
 
 	/**
@@ -144,8 +145,8 @@ public class NotifyProcess {
 	 * @param gatewayParameterRequestMethod
 	 *            网关的参数的请求方式的类型
 	 */
-	private static void setGatewayParameterValue(List<GatewayParameter> gatewayParameterList, String gatewayParameterName, String gatewayParameterValue,
-			GatewayParameterRequestMethod gatewayParameterRequestMethod) {
+	private static void setGatewayParameterValue(List<GatewayParameter> gatewayParameterList, String gatewayParameterName,
+			String gatewayParameterValue, GatewayParameterRequestMethod gatewayParameterRequestMethod) {
 
 		GatewayParameter existsParam = gatewayParameterList.stream().filter(p -> p.getName().equals(gatewayParameterName)).findFirst().orElse(null);
 

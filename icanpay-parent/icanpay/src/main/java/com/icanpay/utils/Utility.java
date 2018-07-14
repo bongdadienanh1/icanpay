@@ -60,14 +60,14 @@ public class Utility {
 			md = MessageDigest.getInstance("MD5");
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		byte[] array = null;
 		try {
 			array = md.digest(text.getBytes(textEncoding));
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		StringBuilder sb = new StringBuilder();
 		for (byte item : array) {
@@ -100,11 +100,7 @@ public class Utility {
 					data.put(element.getNodeName(), element.getTextContent());
 				}
 			}
-			try {
-				stream.close();
-			} catch (Exception ex) {
-				// do nothing
-			}
+			stream.close();
 			return data;
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), strXML, ex);

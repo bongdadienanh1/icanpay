@@ -272,7 +272,8 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode, WapP
 		clearGatewayParameterData();
 		readResultXml(resultXml);
 		if (isSuccessResult()) {
-			return Utility.isBlankOrEmpty(getGatewayParameterValue("code_url")) ? getGatewayParameterValue("mweb_url") : getGatewayParameterValue("code_url");
+			return Utility.isBlankOrEmpty(getGatewayParameterValue("code_url")) ? getGatewayParameterValue("mweb_url")
+					: getGatewayParameterValue("code_url");
 		}
 
 		return null;
@@ -298,7 +299,8 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode, WapP
 	 */
 	private boolean validateResult() {
 		// TODO Auto-generated method stub
-		if (getGatewayParameterValue("return_code").equalsIgnoreCase("SUCCESS") && getGatewayParameterValue("result_code").equalsIgnoreCase("SUCCESS")) {
+		if (getGatewayParameterValue("return_code").equalsIgnoreCase("SUCCESS")
+				&& getGatewayParameterValue("result_code").equalsIgnoreCase("SUCCESS")) {
 			return true;
 		}
 		return false;

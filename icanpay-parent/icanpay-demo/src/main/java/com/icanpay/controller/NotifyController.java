@@ -12,11 +12,11 @@ import com.icanpay.events.PaymentNotify;
 @RequestMapping("/notify")
 public class NotifyController {
 
-	@Autowired
 	PaymentNotify paymentNotify;
 
-	public NotifyController() {
-
+	@Autowired
+	public NotifyController(PaymentNotify paymentNotify) {
+		this.paymentNotify = paymentNotify;
 		paymentNotify.setPaymentSucceed(event -> {
 
 			// 支付成功时时的处理代码

@@ -79,18 +79,18 @@ public class PaymentSetting {
 
 	private GatewayBase createGateway(GatewayType gatewayType) {
 		switch (gatewayType) {
-		case Alipay: {
-			return new AlipayGateway();
-		}
-		case WeChatPay: {
-			return new WeChatPayGataway();
-		}
-		case UnionPay: {
-			return new UnionPayGateway();
-		}
-		default: {
-			return new NullGateway();
-		}
+			case Alipay: {
+				return new AlipayGateway();
+			}
+			case WeChatPay: {
+				return new WeChatPayGataway();
+			}
+			case UnionPay: {
+				return new UnionPayGateway();
+			}
+			default: {
+				return new NullGateway();
+			}
 		}
 	}
 
@@ -101,32 +101,32 @@ public class PaymentSetting {
 
 	public Map<String, String> payment(HashMap<String, String> map) {
 		switch (gateway.getGatewayTradeType()) {
-		case APP: {
-			return buildPayParams();
-		}
-		case Wap: {
-			wapPayment(map);
-		}
-			break;
-		case Web: {
-			webPayment();
-		}
-			break;
-		case QRCode: {
-			qRCodePayment();
-		}
-			break;
-		case Public:
-			break;
-		case BarCode:
-			break;
-		case Applet:
-			break;
-		case None: {
-			throw new NotImplementedException(gateway.getGatewayType() + " 没有实现+ " + gateway.getGatewayTradeType() + "接口");
-		}
-		default:
-			break;
+			case APP: {
+				return buildPayParams();
+			}
+			case Wap: {
+				wapPayment(map);
+			}
+				break;
+			case Web: {
+				webPayment();
+			}
+				break;
+			case QRCode: {
+				qRCodePayment();
+			}
+				break;
+			case Public:
+				break;
+			case BarCode:
+				break;
+			case Applet:
+				break;
+			case None: {
+				throw new NotImplementedException(gateway.getGatewayType() + " 没有实现+ " + gateway.getGatewayTradeType() + "接口");
+			}
+			default:
+				break;
 		}
 		return null;
 	}
@@ -178,7 +178,8 @@ public class PaymentSetting {
 			WapPaymentUrl paymentUrl = (WapPaymentUrl) gateway;
 			if (gateway.getGatewayType() == GatewayType.WeChatPay) {
 				try {
-					response.getWriter().write(String.format("<script language='javascript'>window.location='%s'</script>", paymentUrl.buildWapPaymentUrl(map)));
+					response.getWriter()
+							.write(String.format("<script language='javascript'>window.location='%s'</script>", paymentUrl.buildWapPaymentUrl(map)));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					logger.error(e.getMessage(), e);
