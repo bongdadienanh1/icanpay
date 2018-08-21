@@ -1,26 +1,22 @@
 package com.icanpay.events;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.icanpay.Merchant;
 import com.icanpay.NotifyProcess;
 import com.icanpay.enums.GatewayType;
 import com.icanpay.enums.PaymentNotifyMethod;
 import com.icanpay.gateways.GatewayBase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 网关返回的支付通知数据的接受
- * 
+ *
  * @author milanyangbo
  *
  */
 public class PaymentNotify {
 
-	static Logger logger = LoggerFactory.getLogger(PaymentNotify.class);
 
 	List<Merchant> merchantList;
 
@@ -83,7 +79,7 @@ public class PaymentNotify {
 
 	/**
 	 * 接收并验证网关的支付通知
-	 * 
+	 *
 	 * @param paymentNotifyMethod
 	 * @throws Exception
 	 */
@@ -106,7 +102,7 @@ public class PaymentNotify {
 
 	/**
 	 * 添加商户数据。与添加的商户数据重复的网关将会被删除
-	 * 
+	 *
 	 * @param merchant
 	 *            商户数据
 	 */
@@ -117,7 +113,7 @@ public class PaymentNotify {
 
 	/**
 	 * 获得商户数据。网关存在多个商户数据时返回第一个，无法找到返回null
-	 * 
+	 *
 	 * @param gatewayType
 	 *            网关类型
 	 * @return 网关存在多个商户数据时返回第一个，无法找到返回null
@@ -128,7 +124,7 @@ public class PaymentNotify {
 
 	/**
 	 * 删除商户数据
-	 * 
+	 *
 	 * @param gatewayType
 	 *            网关类型
 	 */

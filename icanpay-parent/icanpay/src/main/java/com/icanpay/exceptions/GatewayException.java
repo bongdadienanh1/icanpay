@@ -9,4 +9,9 @@ public class GatewayException extends RuntimeException {
 		super(message);
 	}
 
+	public GatewayException(String message, Throwable cause) {
+		// TODO Auto-generated constructor stub
+		super(message, cause);
+	}
+
 }

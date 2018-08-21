@@ -1,16 +1,5 @@
 package com.icanpay;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang3.NotImplementedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -18,23 +7,22 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.icanpay.enums.GatewayTradeType;
 import com.icanpay.enums.GatewayType;
+import com.icanpay.exceptions.GatewayException;
 import com.icanpay.gateways.GatewayBase;
-import com.icanpay.interfaces.AppParams;
-import com.icanpay.interfaces.PaymentForm;
-import com.icanpay.interfaces.PaymentQRCode;
-import com.icanpay.interfaces.PaymentUrl;
-import com.icanpay.interfaces.QueryForm;
-import com.icanpay.interfaces.QueryNow;
-import com.icanpay.interfaces.QueryUrl;
-import com.icanpay.interfaces.RefundReq;
-import com.icanpay.interfaces.WapPaymentForm;
-import com.icanpay.interfaces.WapPaymentUrl;
+import com.icanpay.interfaces.*;
 import com.icanpay.providers.AlipayGateway;
 import com.icanpay.providers.NullGateway;
 import com.icanpay.providers.UnionPayGateway;
 import com.icanpay.providers.WeChatPayGataway;
 import com.icanpay.utils.MatrixToImageWriter;
 import com.icanpay.utils.Utility;
+import org.apache.commons.lang3.NotImplementedException;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * 设置需要支付的订单的数据，创建支付订单URL地址或HTML表单
@@ -44,7 +32,6 @@ import com.icanpay.utils.Utility;
  */
 public class PaymentSetting {
 
-	static Logger logger = LoggerFactory.getLogger(PaymentSetting.class);
 
 	GatewayBase gateway;
 	Merchant merchant;
@@ -146,7 +133,7 @@ public class PaymentSetting {
 				response.sendRedirect(paymentUrl.buildPaymentUrl());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				logger.error(e.getMessage(), e);
+				throw new GatewayException(e.getMessage(), e);
 			}
 			return;
 		}
@@ -157,7 +144,7 @@ public class PaymentSetting {
 				response.getWriter().write(paymentForm.buildPaymentForm());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				logger.error(e.getMessage(), e);
+				throw new GatewayException(e.getMessage(), e);
 			}
 			return;
 		}
@@ -182,14 +169,14 @@ public class PaymentSetting {
 							.write(String.format("<script language='javascript'>window.location='%s'</script>", paymentUrl.buildWapPaymentUrl(map)));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					logger.error(e.getMessage(), e);
+					throw new GatewayException(e.getMessage(), e);
 				}
 			} else {
 				try {
 					response.sendRedirect(paymentUrl.buildWapPaymentUrl(map));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					logger.error(e.getMessage(), e);
+					throw new GatewayException(e.getMessage(), e);
 				}
 			}
 			return;
@@ -201,7 +188,7 @@ public class PaymentSetting {
 				response.getWriter().write(paymentForm.buildWapPaymentForm());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				logger.error(e.getMessage(), e);
+				throw new GatewayException(e.getMessage(), e);
 			}
 			return;
 		}
@@ -224,10 +211,10 @@ public class PaymentSetting {
 				buildQRCodeImage(paymentQRCode.getPaymentQRCodeContent());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				logger.error(e.getMessage(), e);
+				throw new GatewayException(e.getMessage(), e);
 			} catch (WriterException e) {
 				// TODO Auto-generated catch block
-				logger.error(e.getMessage(), e);
+				throw new GatewayException(e.getMessage(), e);
 			}
 			return;
 		}
@@ -265,7 +252,7 @@ public class PaymentSetting {
 				response.sendRedirect(queryUrl.buildQueryUrl());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				logger.error(e.getMessage(), e);
+				throw new GatewayException(e.getMessage(), e);
 			}
 			return;
 		}
@@ -276,7 +263,7 @@ public class PaymentSetting {
 				response.sendRedirect(queryForm.buildQueryForm());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				logger.error(e.getMessage(), e);
+				throw new GatewayException(e.getMessage(), e);
 			}
 			return;
 		}
@@ -287,7 +274,6 @@ public class PaymentSetting {
 	/**
 	 * 查询订单，立即获得订单的查询结果
 	 * 
-	 * @param productSet
 	 * @return
 	 * @throws Exception
 	 */

@@ -1,5 +1,14 @@
 package com.icanpay.providers;
 
+import com.icanpay.Refund;
+import com.icanpay.enums.GatewayType;
+import com.icanpay.exceptions.GatewayException;
+import com.icanpay.gateways.GatewayBase;
+import com.icanpay.gateways.GatewayParameter;
+import com.icanpay.interfaces.*;
+import com.icanpay.utils.HttpClientUtil;
+import com.icanpay.utils.Utility;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -7,30 +16,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.icanpay.Refund;
-import com.icanpay.enums.GatewayType;
-import com.icanpay.gateways.GatewayBase;
-import com.icanpay.gateways.GatewayParameter;
-import com.icanpay.interfaces.AppParams;
-import com.icanpay.interfaces.PaymentQRCode;
-import com.icanpay.interfaces.QueryNow;
-import com.icanpay.interfaces.RefundReq;
-import com.icanpay.interfaces.WapPaymentUrl;
-import com.icanpay.utils.HttpClientUtil;
-import com.icanpay.utils.Utility;
-
 /**
  * 微信支付网关
- * 
+ *
  * @author milanyangbo
  *
  */
 public class WeChatPayGataway extends GatewayBase implements PaymentQRCode, WapPaymentUrl, AppParams, QueryNow, RefundReq {
-
-	static Logger logger = LoggerFactory.getLogger(WeChatPayGataway.class);
 
 	final String payGatewayUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 	final String queryGatewayUrl = "https://api.mch.weixin.qq.com/pay/orderquery";
@@ -45,7 +37,7 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode, WapP
 
 	/**
 	 * 初始化微信支付网关
-	 * 
+	 *
 	 * @param gatewayParameterData
 	 *            网关通知的数据集合
 	 */
@@ -85,7 +77,7 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode, WapP
 			redirect_url = URLEncoder.encode(redirect_url, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
-			logger.error(e.getMessage(), e);
+			throw new GatewayException(e.getMessage(), e);
 		}
 
 		if (Utility.isBlankOrEmpty(redirect_url)) {
@@ -228,7 +220,7 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode, WapP
 			Utility.getHttpServletResponse().getWriter().write(convertGatewayParameterDataToXml());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			logger.error(e.getMessage(), e);
+			throw new GatewayException(e.getMessage(), e);
 		}
 	}
 
@@ -249,7 +241,7 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode, WapP
 
 	/**
 	 * 初始化支付订单的参数
-	 * 
+	 *
 	 */
 	private void initQueryOrderParameter() {
 		// TODO Auto-generated method stub
@@ -262,8 +254,8 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode, WapP
 
 	/**
 	 * 获得微信支付的URL
-	 * 
-	 * @param resultString
+	 *
+	 * @param resultXml
 	 * @return 创建订单返回的数据
 	 */
 	private String getWeixinPaymentUrl(String resultXml) {
@@ -272,8 +264,9 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode, WapP
 		clearGatewayParameterData();
 		readResultXml(resultXml);
 		if (isSuccessResult()) {
-			return Utility.isBlankOrEmpty(getGatewayParameterValue("code_url")) ? getGatewayParameterValue("mweb_url")
-					: getGatewayParameterValue("code_url");
+			return Utility.isBlankOrEmpty(getGatewayParameterValue("code_url")) ?
+					getGatewayParameterValue("mweb_url") :
+					getGatewayParameterValue("code_url");
 		}
 
 		return null;
@@ -281,7 +274,7 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode, WapP
 
 	/**
 	 * 是否是成功的结果
-	 * 
+	 *
 	 * @return
 	 */
 	private boolean isSuccessResult() {
@@ -294,13 +287,13 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode, WapP
 
 	/**
 	 * 验证返回的结果
-	 * 
+	 *
 	 * @return
 	 */
 	private boolean validateResult() {
 		// TODO Auto-generated method stub
-		if (getGatewayParameterValue("return_code").equalsIgnoreCase("SUCCESS")
-				&& getGatewayParameterValue("result_code").equalsIgnoreCase("SUCCESS")) {
+		if (getGatewayParameterValue("return_code").equalsIgnoreCase("SUCCESS") && getGatewayParameterValue("result_code")
+				.equalsIgnoreCase("SUCCESS")) {
 			return true;
 		}
 		return false;
@@ -308,7 +301,7 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode, WapP
 
 	/**
 	 * 验证签名
-	 * 
+	 *
 	 * @return
 	 */
 	private boolean validateSign() {
@@ -321,7 +314,7 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode, WapP
 
 	/**
 	 * 读取结果的XML
-	 * 
+	 *
 	 * @param resultXml
 	 */
 	private void readResultXml(String resultXml) {
@@ -341,7 +334,7 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode, WapP
 
 	/**
 	 * 将网关数据转换成XML
-	 * 
+	 *
 	 * @return
 	 */
 	private String convertGatewayParameterDataToXml() {
@@ -351,7 +344,7 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode, WapP
 
 	/**
 	 * 初始化支付订单的参数
-	 * 
+	 *
 	 * @param trade_type
 	 * @param spbill_create_ip
 	 */

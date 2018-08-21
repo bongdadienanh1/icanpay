@@ -1,16 +1,5 @@
 package com.icanpay.ioc;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
-
 import com.icanpay.events.PaymentNotify;
 import com.icanpay.gateways.Gateways;
 import com.icanpay.gateways.GatewaysImpl;
@@ -21,6 +10,16 @@ import com.icanpay.providers.AlipayGateway;
 import com.icanpay.providers.UnionPayGateway;
 import com.icanpay.providers.WeChatPayGataway;
 import com.unionpay.acp.sdk.SDKConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @Configuration
 public class ICanpayConfig {
@@ -90,7 +89,7 @@ public class ICanpayConfig {
 
 	@Bean()
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public PaymentNotify paymentNotify() {
-		return new PaymentNotify(gateways().getMerchants());
+	public PaymentNotify paymentNotify(@Autowired Gateways gateways) {
+		return new PaymentNotify(gateways.getMerchants());
 	}
 }
