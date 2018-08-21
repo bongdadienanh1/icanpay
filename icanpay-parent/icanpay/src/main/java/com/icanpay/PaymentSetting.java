@@ -12,8 +12,8 @@ import com.icanpay.gateways.GatewayBase;
 import com.icanpay.interfaces.*;
 import com.icanpay.providers.AlipayGateway;
 import com.icanpay.providers.NullGateway;
-import com.icanpay.providers.UnionPayGateway;
-import com.icanpay.providers.WeChatPayGataway;
+import com.icanpay.providers.UnionpayGateway;
+import com.icanpay.providers.WeChatpayGataway;
 import com.icanpay.utils.MatrixToImageWriter;
 import com.icanpay.utils.Utility;
 import org.apache.commons.lang3.NotImplementedException;
@@ -26,7 +26,7 @@ import java.util.Map;
 
 /**
  * 设置需要支付的订单的数据，创建支付订单URL地址或HTML表单
- * 
+ *
  * @author milanyangbo
  *
  */
@@ -69,11 +69,11 @@ public class PaymentSetting {
 			case Alipay: {
 				return new AlipayGateway();
 			}
-			case WeChatPay: {
-				return new WeChatPayGataway();
+			case WeChatpay: {
+				return new WeChatpayGataway();
 			}
-			case UnionPay: {
-				return new UnionPayGateway();
+			case Unionpay: {
+				return new UnionpayGateway();
 			}
 			default: {
 				return new NullGateway();
@@ -88,20 +88,16 @@ public class PaymentSetting {
 
 	public Map<String, String> payment(HashMap<String, String> map) {
 		switch (gateway.getGatewayTradeType()) {
-			case APP: {
+			case APP:
 				return buildPayParams();
-			}
-			case Wap: {
+			case Wap:
 				wapPayment(map);
-			}
 				break;
-			case Web: {
+			case Web:
 				webPayment();
-			}
 				break;
-			case QRCode: {
+			case QRCode:
 				qRCodePayment();
-			}
 				break;
 			case Public:
 				break;
@@ -120,7 +116,7 @@ public class PaymentSetting {
 
 	/**
 	 * 创建订单的支付Url、Form表单、二维码。 如果创建的是订单的Url或Form表单将跳转到相应网关支付，如果是二维码将输出二维码图片。
-	 * 
+	 *
 	 * @throws IOException
 	 * @throws Exception
 	 */
@@ -154,7 +150,7 @@ public class PaymentSetting {
 
 	/**
 	 * WAP支付
-	 * 
+	 *
 	 * @param map
 	 * @throws Exception
 	 */
@@ -163,7 +159,7 @@ public class PaymentSetting {
 		response.setCharacterEncoding(gateway.getCharset());
 		if (gateway instanceof WapPaymentUrl) {
 			WapPaymentUrl paymentUrl = (WapPaymentUrl) gateway;
-			if (gateway.getGatewayType() == GatewayType.WeChatPay) {
+			if (gateway.getGatewayType() == GatewayType.WeChatpay) {
 				try {
 					response.getWriter()
 							.write(String.format("<script language='javascript'>window.location='%s'</script>", paymentUrl.buildWapPaymentUrl(map)));
@@ -198,7 +194,7 @@ public class PaymentSetting {
 
 	/**
 	 * 二维码支付
-	 * 
+	 *
 	 * @throws IOException
 	 * @throws WriterException
 	 * @throws Exception
@@ -224,7 +220,7 @@ public class PaymentSetting {
 
 	/**
 	 * 创建APP端SDK支付需要的参数
-	 * 
+	 *
 	 * @return
 	 * @throws Exception
 	 */
@@ -239,7 +235,7 @@ public class PaymentSetting {
 
 	/**
 	 * 查询订单，订单的查询通知数据通过跟支付通知一样的形式反回。用处理网关通知一样的方法接受查询订单的数据。
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void queryNotify() {
@@ -273,7 +269,7 @@ public class PaymentSetting {
 
 	/**
 	 * 查询订单，立即获得订单的查询结果
-	 * 
+	 *
 	 * @return
 	 * @throws Exception
 	 */
@@ -286,42 +282,10 @@ public class PaymentSetting {
 		throw new NotImplementedException(gateway.getGatewayType() + " 没有实现 QueryNow 查询接口");
 	}
 
-	/**
-	 * 创建退款
-	 * 
-	 * @param refund
-	 * @return
-	 * @throws Exception
-	 */
-	public Refund buildRefund(Refund refund) {
-		if (gateway instanceof RefundReq) {
-			RefundReq appParams = (RefundReq) gateway;
-			return appParams.buildRefund(refund);
-		}
-
-		throw new NotImplementedException(gateway.getGatewayType() + " 没有实现 RefundReq 查询接口");
-	}
-
-	/**
-	 * 查询退款结果
-	 * 
-	 * @param refund
-	 * @return
-	 * @throws Exception
-	 */
-
-	public Refund buildRefundQuery(Refund refund) {
-		if (gateway instanceof RefundReq) {
-			RefundReq appParams = (RefundReq) gateway;
-			return appParams.buildRefundQuery(refund);
-		}
-
-		throw new NotImplementedException(gateway.getGatewayType() + " 没有实现 RefundReq 查询接口");
-	}
 
 	/**
 	 * 设置网关的数据
-	 * 
+	 *
 	 * @param gatewayParameterName
 	 * @param gatewayParameterValue
 	 */
@@ -331,7 +295,7 @@ public class PaymentSetting {
 
 	/**
 	 * 生成并输出二维码图片
-	 * 
+	 *
 	 * @param paymentQRCodeContent
 	 * @throws IOException
 	 * @throws WriterException

@@ -1,12 +1,11 @@
 package com.icanpay.events;
 
 import com.icanpay.Merchant;
-import com.icanpay.NotifyProcess;
 import com.icanpay.enums.GatewayType;
 import com.icanpay.enums.PaymentNotifyMethod;
 import com.icanpay.gateways.GatewayBase;
+import com.icanpay.notifys.NotifyProcess;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,20 +16,25 @@ import java.util.List;
  */
 public class PaymentNotify {
 
+	NotifyProcess notifyProcess;
 
-	List<Merchant> merchantList;
-
-	public PaymentNotify() {
-		this(new ArrayList<Merchant>());
+	public NotifyProcess getNotifyProcess() {
+		return notifyProcess;
 	}
 
-	public PaymentNotify(Merchant merchant) {
-		merchantList = new ArrayList<Merchant>();
+	public void setNotifyProcess(NotifyProcess notifyProcess) {
+		this.notifyProcess = notifyProcess;
 	}
 
-	public PaymentNotify(List<Merchant> merchantList) {
+	public List<Merchant> getMerchantList() {
+		return merchantList;
+	}
+
+	public void setMerchantList(List<Merchant> merchantList) {
 		this.merchantList = merchantList;
 	}
+
+	List<Merchant> merchantList;
 
 	/**
 	 * 网关返回的支付通知验证失败时触发
@@ -84,7 +88,7 @@ public class PaymentNotify {
 	 * @throws Exception
 	 */
 	public void received(PaymentNotifyMethod paymentNotifyMethod) {
-		GatewayBase gateway = NotifyProcess.getGateway();
+		GatewayBase gateway = notifyProcess.getGateway();
 		gateway.setPaymentNotifyMethod(paymentNotifyMethod);
 		if (gateway.getGatewayType() != GatewayType.None) {
 			gateway.setMerchant(getMerchant(gateway.getGatewayType()));

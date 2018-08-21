@@ -14,12 +14,12 @@ public enum GatewayType {
 	/**
 	 * 微信支付
 	 */
-	WeChatPay(2),
+	WeChatpay(2),
 
 	/**
 	 * 中国银联
 	 */
-	UnionPay(3),
+	Unionpay(3),
 
 	/**
 	 * 财付通

@@ -1,13 +1,13 @@
 package com.icanpay.gateways;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.icanpay.Merchant;
 import com.icanpay.enums.GatewayTradeType;
 import com.icanpay.enums.GatewayType;
 import com.icanpay.exceptions.GatewayException;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class GatewaysImpl implements Gateways {
 
@@ -23,7 +23,7 @@ public class GatewaysImpl implements Gateways {
 	public boolean add(GatewayBase gateway) {
 		// TODO Auto-generated method stub
 		if (gateway != null) {
-			if (!_list.stream().anyMatch(g -> g.getMerchant().getAppId().equals(gateway.getMerchant().getAppId()))) {
+			if (!_list.stream().anyMatch(g -> g.getClass() == gateway.getClass())) {
 				_list.add(gateway);
 
 				return true;
@@ -50,7 +50,8 @@ public class GatewaysImpl implements Gateways {
 	@Override
 	public GatewayBase get(GatewayType gatewayType, GatewayTradeType gatewayTradeType) {
 		// TODO Auto-generated method stub
-		GatewayBase gateway = _list.stream().filter(a -> a.getGatewayType() == gatewayType && a.getGatewayTradeType() == gatewayTradeType).findFirst().orElse(null);
+		GatewayBase gateway = _list.stream().filter(a -> a.getGatewayType() == gatewayType && a.getGatewayTradeType() == gatewayTradeType).findFirst()
+				.orElse(null);
 		if (gateway == null) {
 			gateway = get(gatewayType);
 			if (gateway == null) {

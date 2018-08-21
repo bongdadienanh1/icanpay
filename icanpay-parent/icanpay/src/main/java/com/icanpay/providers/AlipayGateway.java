@@ -3,19 +3,25 @@ package com.icanpay.providers;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
-import com.alipay.api.domain.*;
+import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.domain.AlipayTradePagePayModel;
+import com.alipay.api.domain.AlipayTradeQueryModel;
+import com.alipay.api.domain.AlipayTradeWapPayModel;
 import com.alipay.api.internal.util.AlipaySignature;
-import com.alipay.api.request.*;
-import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
+import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.request.AlipayTradePagePayRequest;
+import com.alipay.api.request.AlipayTradeQueryRequest;
+import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.response.AlipayTradeQueryResponse;
-import com.alipay.api.response.AlipayTradeRefundResponse;
-import com.icanpay.Refund;
 import com.icanpay.enums.GatewayType;
 import com.icanpay.enums.PaymentNotifyMethod;
 import com.icanpay.exceptions.GatewayException;
 import com.icanpay.gateways.GatewayBase;
 import com.icanpay.gateways.GatewayParameter;
-import com.icanpay.interfaces.*;
+import com.icanpay.interfaces.AppParams;
+import com.icanpay.interfaces.PaymentForm;
+import com.icanpay.interfaces.QueryNow;
+import com.icanpay.interfaces.WapPaymentUrl;
 import com.icanpay.utils.Utility;
 
 import java.io.IOException;
@@ -23,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AlipayGateway extends GatewayBase implements PaymentForm, WapPaymentUrl, AppParams, QueryNow, RefundReq {
+public class AlipayGateway extends GatewayBase implements PaymentForm, WapPaymentUrl, AppParams, QueryNow {
 
 	final String payGatewayUrl = "https://mapi.alipay.com/gateway.do";
 	final String openapiGatewayUrl = "https://openapi.alipay.com/gateway.do";
@@ -163,63 +169,6 @@ public class AlipayGateway extends GatewayBase implements PaymentForm, WapPaymen
 
 	}
 
-	@Override
-	public Refund buildRefund(Refund refund) {
-		// TODO Auto-generated method stub
-		AlipayClient alipayClient = getAopClient();
-		AlipayTradeRefundRequest alipayRequest = new AlipayTradeRefundRequest();
-		AlipayTradeRefundModel model = new AlipayTradeRefundModel();
-		model.setOutTradeNo(refund.getOrderNo());
-		if (!Utility.isBlankOrEmpty(refund.getTradeNo())) {
-			model.setTradeNo(refund.getTradeNo());
-		}
-		model.setOutRequestNo(refund.getRefoundNo());
-		model.setRefundAmount(String.valueOf(refund.getOrderAmount()));
-		if (!Utility.isBlankOrEmpty(refund.getRefundDesc())) {
-			model.setRefundReason(refund.getRefundDesc());
-		}
-		alipayRequest.setBizModel(model);
-		AlipayTradeRefundResponse response = null;
-		try {
-			response = alipayClient.execute(alipayRequest);
-		} catch (AlipayApiException e) {
-			// TODO Auto-generated catch block
-			throw new GatewayException(e.getMessage(), e);
-		}
-		if (response.getCode() == "10000") {
-			refund.setTradeNo(response.getTradeNo());
-			refund.setRefoundStatus(true);
-		}
-		return refund;
-	}
-
-	@Override
-	public Refund buildRefundQuery(Refund refund) {
-		// TODO Auto-generated method stub
-		AlipayClient alipayClient = getAopClient();
-		AlipayTradeFastpayRefundQueryRequest alipayRequest = new AlipayTradeFastpayRefundQueryRequest();
-		AlipayTradeFastpayRefundQueryModel model = new AlipayTradeFastpayRefundQueryModel();
-		model.setOutTradeNo(refund.getOrderNo());
-		if (!Utility.isBlankOrEmpty(refund.getTradeNo())) {
-			model.setTradeNo(refund.getTradeNo());
-		}
-		model.setOutRequestNo(refund.getRefoundNo());
-		alipayRequest.setBizModel(model);
-		AlipayTradeFastpayRefundQueryResponse response = null;
-		try {
-			response = alipayClient.execute(alipayRequest);
-		} catch (AlipayApiException e) {
-			// TODO Auto-generated catch block
-			throw new GatewayException(e.getMessage(), e);
-		}
-		if (response.getCode() == "10000" && !Utility.isBlankOrEmpty(response.getRefundAmount())) {
-			double refundAmount = Double.parseDouble(response.getRefundAmount());
-			refund.setRefundAmount(refundAmount);
-			refund.setTradeNo(response.getTradeNo());
-			refund.setRefoundStatus(true);
-		}
-		return refund;
-	}
 
 	@Override
 	protected boolean checkNotifyData() {

@@ -1,6 +1,5 @@
 package com.icanpay.providers;
 
-import com.icanpay.Refund;
 import com.icanpay.enums.GatewayType;
 import com.icanpay.exceptions.GatewayException;
 import com.icanpay.gateways.GatewayBase;
@@ -22,7 +21,7 @@ import java.util.Map;
  * @author milanyangbo
  *
  */
-public class WeChatPayGataway extends GatewayBase implements PaymentQRCode, WapPaymentUrl, AppParams, QueryNow, RefundReq {
+public class WeChatpayGataway extends GatewayBase implements PaymentQRCode, WapPaymentUrl, AppParams, QueryNow {
 
 	final String payGatewayUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 	final String queryGatewayUrl = "https://api.mch.weixin.qq.com/pay/orderquery";
@@ -32,7 +31,7 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode, WapP
 	/**
 	 * 初始化微信支付网关
 	 */
-	public WeChatPayGataway() {
+	public WeChatpayGataway() {
 	}
 
 	/**
@@ -41,13 +40,13 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode, WapP
 	 * @param gatewayParameterData
 	 *            网关通知的数据集合
 	 */
-	public WeChatPayGataway(List<GatewayParameter> gatewayParameterData) {
+	public WeChatpayGataway(List<GatewayParameter> gatewayParameterData) {
 		super(gatewayParameterData);
 	}
 
 	@Override
 	public GatewayType getGatewayType() {
-		return GatewayType.WeChatPay;
+		return GatewayType.WeChatpay;
 	}
 
 	@Override
@@ -128,62 +127,6 @@ public class WeChatPayGataway extends GatewayBase implements PaymentQRCode, WapP
 		return checkQueryResult(resultXml);
 	}
 
-	@Override
-	public Refund buildRefund(Refund refund) {
-		// TODO Auto-generated method stub
-		setGatewayParameterValue("appid", getMerchant().getAppId());
-		setGatewayParameterValue("mch_id", getMerchant().getPartner());
-		setGatewayParameterValue("nonce_str", Utility.generateUUID());
-		setGatewayParameterValue("sign_type", "MD5");
-		if (!Utility.isBlankOrEmpty(refund.getTradeNo())) {
-			setGatewayParameterValue("transaction_id", refund.getTradeNo());
-		} else {
-			setGatewayParameterValue("out_trade_no", refund.getOrderNo());
-		}
-		setGatewayParameterValue("out_refund_no", refund.getRefoundNo());
-		setGatewayParameterValue("total_fee", (int) (refund.getOrderAmount() * 100));
-		setGatewayParameterValue("refund_fee", (int) (refund.getRefundAmount() * 100));
-		if (!Utility.isBlankOrEmpty(refund.getRefundDesc())) {
-			setGatewayParameterValue("refund_desc", refund.getRefundDesc());
-		}
-		setGatewayParameterValue("sign", getSign()); // 签名需要在最后设置，以免缺少参数。
-		String xmlString = convertGatewayParameterDataToXml();
-		String resultString = HttpClientUtil.doPost(refundGatewayUrl, xmlString, "text/xml");
-
-		getWeixinPaymentUrl(resultString);
-
-		if (getGatewayParameterValue("result_code") == "SUCCESS") {
-			refund.setTradeNo(getGatewayParameterValue("transaction_id"));
-			refund.setRefoundNo(getGatewayParameterValue("refund_id"));
-			refund.setRefoundStatus(true);
-		}
-		return refund;
-	}
-
-	@Override
-	public Refund buildRefundQuery(Refund refund) {
-		// TODO Auto-generated method stub
-		setGatewayParameterValue("appid", getMerchant().getAppId());
-		setGatewayParameterValue("mch_id", getMerchant().getPartner());
-		setGatewayParameterValue("nonce_str", Utility.generateUUID());
-		setGatewayParameterValue("sign_type", "MD5");
-		setGatewayParameterValue("out_refund_no", refund.getRefoundNo());
-		setGatewayParameterValue("sign", getSign()); // 签名需要在最后设置，以免缺少参数。
-		String xmlString = convertGatewayParameterDataToXml();
-		String resultString = HttpClientUtil.doPost(refundqueryGatewayUrl, xmlString, "text/xml");
-
-		getWeixinPaymentUrl(resultString);
-
-		if (getGatewayParameterValue("result_code") == "SUCCESS") {
-			refund.setTradeNo(getGatewayParameterValue("transaction_id"));
-			refund.setRefoundNo(getGatewayParameterValue("refund_id"));
-			refund.setRefoundNo(getGatewayParameterValue("out_refund_no"));
-			refund.setOrderAmount(Double.parseDouble(getGatewayParameterValue("total_fee")) * 0.01);
-			refund.setRefundAmount(Double.parseDouble(getGatewayParameterValue("refund_fee")) * 0.01);
-			refund.setRefoundStatus(true);
-		}
-		return refund;
-	}
 
 	private boolean checkQueryResult(String resultXml) {
 		// TODO Auto-generated method stub
