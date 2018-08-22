@@ -2,6 +2,7 @@
 统一支付网关。支持支付宝，微信，银联支付渠道通过Web，App，Wap，QRCode方式支付。简化订单的创建、查询跟接收网关返回的支付通知等功能
 
 WebPayment（网站支付）
+```
    @GetMapping("/createorder")
 	public void createOrder(int type) {
 		GatewayType gatewayType = GatewayType.getGatewayType(type);
@@ -13,8 +14,10 @@ WebPayment（网站支付）
 		paymentSetting.getOrder().setSubject("webpay");
 		paymentSetting.payment(null);
 	}
+```
 	
 WapPayment（手机网站支付）
+```
    @GetMapping("/createorder")
 	public void createOrder(int type) {
 		GatewayType gatewayType = GatewayType.getGatewayType(type);
@@ -26,8 +29,10 @@ WapPayment（手机网站支付）
 		paymentSetting.getOrder().setSubject("webpay");
 		paymentSetting.payment(null);
 	}
+```
 	
 QRCodePayment（二维码支付）
+```
 	@GetMapping("/createorder")
 	public void createOrder(int type) {
 		GatewayType gatewayType = GatewayType.getGatewayType(type);
@@ -39,8 +44,10 @@ QRCodePayment（二维码支付）
 		paymentSetting.getOrder().setSubject("qrcodepay");
 		paymentSetting.payment(null);
 	}
+```
 	
 AppPayment（手机APP支付）
+```
 	@GetMapping("/createorder")
 	public Map<String, String> createOrder(int type) {
 		GatewayType gatewayType = GatewayType.getGatewayType(type);
@@ -52,8 +59,10 @@ AppPayment（手机APP支付）
 		paymentSetting.getOrder().setSubject("apppay");
 		return paymentSetting.payment(null);
 	}
+```
 	
 QueryPayment（查询订单）
+```
    @GetMapping("/createquery")
 	public void createQuery(int type) {
 		GatewayType gatewayType = GatewayType.getGatewayType(type);
@@ -68,8 +77,10 @@ QueryPayment（查询订单）
 			// 订单已支付
 		}
 	}
+```
 
 Notify（异步通知）
+```
 	PaymentNotify paymentNotify;
 
 	@Autowired
@@ -107,6 +118,7 @@ Notify（异步通知）
 		// 接收并处理支付通知
 		paymentNotify.received(PaymentNotifyMethod.AutoReturn);
 	}
+```
 
 ## Wiki
  * [如何使用](https://github.com/milanyangbo/icanpay-paysdk/wiki/Getting-started)
