@@ -37,19 +37,12 @@ public class PaymentSetting {
 	Merchant merchant;
 	Order order;
 
+	public static PaymentSetting buid(GatewayBase gateway) {
+		return new PaymentSetting(gateway);
+	}
+
 	public PaymentSetting(GatewayBase gateway) {
 		this.gateway = gateway;
-	}
-
-	public PaymentSetting(GatewayType gatewayType) {
-		gateway = createGateway(gatewayType);
-	}
-
-	public PaymentSetting(GatewayType gatewayType, Merchant merchant, Order order) {
-		this(gatewayType);
-		gateway.setMerchant(merchant);
-		gateway.setOrder(order);
-
 	}
 
 	public GatewayBase getGateway() {
@@ -62,6 +55,11 @@ public class PaymentSetting {
 
 	public Order getOrder() {
 		return gateway.getOrder();
+	}
+
+	public PaymentSetting setOrder(Order order) {
+		gateway.setOrder(order);
+		return this;
 	}
 
 	private GatewayBase createGateway(GatewayType gatewayType) {
@@ -316,4 +314,5 @@ public class PaymentSetting {
 
 		MatrixToImageWriter.writeToStream(bitMatrix, format, response.getOutputStream());
 	}
+
 }

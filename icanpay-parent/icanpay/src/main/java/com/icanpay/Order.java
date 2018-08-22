@@ -1,12 +1,12 @@
 package com.icanpay;
 
-import java.util.Date;
-
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Date;
 
 /**
  * 订单的金额、编号
- * 
+ *
  * @author milanyangbo
  *
  */
@@ -75,7 +75,7 @@ public class Order {
 
 	/**
 	 * 订单主题，订单主题为空时将使用订单orderNo作为主题
-	 * 
+	 *
 	 * @return
 	 */
 	public String getSubject() {
@@ -105,4 +105,60 @@ public class Order {
 		this.paymentDate = paymentDate;
 	}
 
+	public static class OrderBuilder {
+
+		double orderAmount;
+		String orderNo;
+		String tradeNo;
+		String subject;
+		Date paymentDate;
+
+		public static OrderBuilder builder() {
+			OrderBuilder builder = new OrderBuilder();
+			return builder;
+		}
+
+		public OrderBuilder orderAmount(double orderAmount) {
+			this.orderAmount = orderAmount;
+			return this;
+		}
+
+		public OrderBuilder orderNo(String orderNo) {
+			this.orderNo = orderNo;
+			return this;
+		}
+
+		public OrderBuilder tradeNo(String tradeNo) {
+			this.tradeNo = tradeNo;
+			return this;
+		}
+
+		public OrderBuilder subject(String subject) {
+			this.subject = subject;
+			return this;
+		}
+
+		public OrderBuilder paymentDate(Date paymentDate) {
+			this.paymentDate = paymentDate;
+			return this;
+		}
+
+		public Order build() {
+			Order order = new Order();
+			if (orderAmount >= (double) 0.01) {
+				order.setOrderAmount(orderAmount);
+			}
+			if (!StringUtils.isBlank(orderNo)) {
+				order.setOrderNo(orderNo);
+			}
+			if (!StringUtils.isBlank(tradeNo)) {
+				order.setTradeNo(tradeNo);
+			}
+			order.setSubject(subject);
+			if (paymentDate != null) {
+				order.setPaymentDate(paymentDate);
+			}
+			return order;
+		}
+	}
 }

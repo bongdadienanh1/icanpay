@@ -5,29 +5,32 @@ WebPayment（网站支付）
 ```
    @GetMapping("/createorder")
 	public void createOrder(int type) {
-		GatewayType gatewayType = GatewayType.getGatewayType(type);
-		GatewayBase gateway = gateways.get(gatewayType, GatewayTradeType.Web);
-		PaymentSetting paymentSetting = new PaymentSetting(gateway);
-		paymentSetting.getOrder().setOrderAmount(0.01);
-		paymentSetting.getOrder().setOrderNo(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()));
-		paymentSetting.getOrder().setPaymentDate(new Date());
-		paymentSetting.getOrder().setSubject("webpay");
-		paymentSetting.payment(null);
+		GatewayBase gateway = gateways.get(GatewayType.getGatewayType(type), GatewayTradeType.Web);
+		PaymentSetting.buid(gateway).setOrder(
+				Order.OrderBuilder.builder()
+						.orderAmount(0.01)
+						.orderNo(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()))
+						.paymentDate(new Date())
+						.subject("webpay")
+						.build())
+				.payment(null);
+
 	}
 ```
 	
 WapPayment（手机网站支付）
 ```
-   @GetMapping("/createorder")
+	@GetMapping("/createorder")
 	public void createOrder(int type) {
-		GatewayType gatewayType = GatewayType.getGatewayType(type);
-		GatewayBase gateway = gateways.get(gatewayType, GatewayTradeType.Wap);
-		PaymentSetting paymentSetting = new PaymentSetting(gateway);
-		paymentSetting.getOrder().setOrderAmount(0.01);
-		paymentSetting.getOrder().setOrderNo(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()));
-		paymentSetting.getOrder().setPaymentDate(new Date());
-		paymentSetting.getOrder().setSubject("webpay");
-		paymentSetting.payment(null);
+		GatewayBase gateway = gateways.get(GatewayType.getGatewayType(type), GatewayTradeType.Wap);
+		PaymentSetting.buid(gateway).setOrder(
+				Order.OrderBuilder.builder()
+						.orderAmount(0.01)
+						.orderNo(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()))
+						.paymentDate(new Date())
+						.subject("wappay")
+						.build())
+				.payment(new HashMap<String, String>());
 	}
 ```
 	
@@ -35,14 +38,15 @@ QRCodePayment（二维码支付）
 ```
 	@GetMapping("/createorder")
 	public void createOrder(int type) {
-		GatewayType gatewayType = GatewayType.getGatewayType(type);
-		GatewayBase gateway = gateways.get(gatewayType, GatewayTradeType.QRCode);
-		PaymentSetting paymentSetting = new PaymentSetting(gateway);
-		paymentSetting.getOrder().setOrderAmount(0.01);
-		paymentSetting.getOrder().setOrderNo(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()));
-		paymentSetting.getOrder().setPaymentDate(new Date());
-		paymentSetting.getOrder().setSubject("qrcodepay");
-		paymentSetting.payment(null);
+		GatewayBase gateway = gateways.get(GatewayType.getGatewayType(type), GatewayTradeType.QRCode);
+		PaymentSetting.buid(gateway).setOrder(
+				Order.OrderBuilder.builder()
+						.orderAmount(0.01)
+						.orderNo(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()))
+						.paymentDate(new Date())
+						.subject("qrcodepay")
+						.build())
+				.payment(null);
 	}
 ```
 	
@@ -50,30 +54,32 @@ AppPayment（手机APP支付）
 ```
 	@GetMapping("/createorder")
 	public Map<String, String> createOrder(int type) {
-		GatewayType gatewayType = GatewayType.getGatewayType(type);
-		GatewayBase gateway = gateways.get(gatewayType, GatewayTradeType.APP);
-		PaymentSetting paymentSetting = new PaymentSetting(gateway);
-		paymentSetting.getOrder().setOrderAmount(0.01);
-		paymentSetting.getOrder().setOrderNo(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()));
-		paymentSetting.getOrder().setPaymentDate(new Date());
-		paymentSetting.getOrder().setSubject("apppay");
-		return paymentSetting.payment(null);
+		GatewayBase gateway = gateways.get(GatewayType.getGatewayType(type), GatewayTradeType.APP);
+		return PaymentSetting.buid(gateway).setOrder(
+				Order.OrderBuilder.builder()
+						.orderAmount(0.01)
+						.orderNo(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()))
+						.paymentDate(new Date())
+						.subject("apppay")
+						.build())
+				.payment(null);
 	}
 ```
 	
 QueryPayment（查询订单）
 ```
-   @GetMapping("/createquery")
+	@GetMapping("/createquery")
 	public void createQuery(int type) {
-		GatewayType gatewayType = GatewayType.getGatewayType(type);
-		GatewayBase gateway = gateways.get(gatewayType);
-		PaymentSetting paymentSetting = new PaymentSetting(gateway);
-
 		// 查询时需要设置订单的Id与金额，在查询结果中将会核对订单的Id与金额，如果不相符会返回查询失败。
-		paymentSetting.getOrder().setOrderAmount(0.01);
-		paymentSetting.getOrder().setOrderNo("yourorderno");
+		GatewayBase gateway = gateways.get(GatewayType.getGatewayType(type));
+		boolean query = PaymentSetting.buid(gateway).setOrder(
+				Order.OrderBuilder.builder()
+						.orderAmount(0.01)
+						.orderNo(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()))
+						.build())
+				.queryNow();
 
-		if (paymentSetting.queryNow()) {
+		if (query) {
 			// 订单已支付
 		}
 	}

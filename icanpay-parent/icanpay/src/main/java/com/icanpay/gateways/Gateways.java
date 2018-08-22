@@ -1,11 +1,11 @@
 package com.icanpay.gateways;
 
-import java.util.List;
-
 import com.icanpay.Merchant;
 import com.icanpay.enums.GatewayTradeType;
 import com.icanpay.enums.GatewayType;
 import com.icanpay.exceptions.GatewayException;
+
+import java.util.List;
 
 public interface Gateways {
 
