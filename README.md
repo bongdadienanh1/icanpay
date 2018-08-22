@@ -13,6 +13,7 @@ WebPayment（网站支付）
 		paymentSetting.getOrder().setSubject("webpay");
 		paymentSetting.payment(null);
 	}
+	
 WapPayment（手机网站支付）
    @GetMapping("/createorder")
 	public void createOrder(int type) {
@@ -25,6 +26,7 @@ WapPayment（手机网站支付）
 		paymentSetting.getOrder().setSubject("webpay");
 		paymentSetting.payment(null);
 	}
+	
 QRCodePayment（二维码支付）
 	@GetMapping("/createorder")
 	public void createOrder(int type) {
@@ -37,6 +39,7 @@ QRCodePayment（二维码支付）
 		paymentSetting.getOrder().setSubject("qrcodepay");
 		paymentSetting.payment(null);
 	}
+	
 AppPayment（手机APP支付）
 	@GetMapping("/createorder")
 	public Map<String, String> createOrder(int type) {
@@ -49,6 +52,7 @@ AppPayment（手机APP支付）
 		paymentSetting.getOrder().setSubject("apppay");
 		return paymentSetting.payment(null);
 	}
+	
 QueryPayment（查询订单）
    @GetMapping("/createquery")
 	public void createQuery(int type) {
