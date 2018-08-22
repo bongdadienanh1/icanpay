@@ -22,18 +22,18 @@ public class ICanpayConfig {
 
 	@Bean()
 	@Scope("prototype")
-	public Gateways gateways(Set<BasePayProperties> payProperties) {
+	public Gateways gateways(Set<BasePayProperties> payPropertiess) {
 		Gateways gateways = new GatewaysImpl();
-		payProperties.forEach(p -> {
+		payPropertiess.forEach(p -> {
 			gateways.add(p.initGateway());
 		});
 		return gateways;
 	}
 
 	@Bean()
-	public NotifyProcess notifyProcess(Set<BaseGatewayVerify> gatewayVerify) {
+	public NotifyProcess notifyProcess(Set<BaseGatewayVerify> gatewayVerifys) {
 		NotifyProcess notifyProcess = new NotifyProcess();
-		notifyProcess.setBaseGatewayVerify(gatewayVerify);
+		notifyProcess.setBaseGatewayVerifys(gatewayVerifys);
 		return notifyProcess;
 	}
 
