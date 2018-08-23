@@ -25,12 +25,12 @@ public class QRCodeController {
 	public void createOrder(int type) {
 		GatewayBase gateway = gateways.get(GatewayType.getGatewayType(type), GatewayTradeType.QRCode);
 		PaymentSetting.buid(gateway).setOrder(
-				Order.OrderBuilder.builder()
+				Order.newBuilder()
 						.orderAmount(0.01)
 						.orderNo(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()))
 						.paymentDate(new Date())
 						.subject("qrcodepay")
 						.build())
-				.payment(null);
+				.payment();
 	}
 }

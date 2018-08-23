@@ -25,7 +25,7 @@ public class QueryPaymentController {
 		// 查询时需要设置订单的Id与金额，在查询结果中将会核对订单的Id与金额，如果不相符会返回查询失败。
 		GatewayBase gateway = gateways.get(GatewayType.getGatewayType(type));
 		boolean query = PaymentSetting.buid(gateway).setOrder(
-				Order.OrderBuilder.builder()
+				Order.newBuilder()
 						.orderAmount(0.01)
 						.orderNo(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()))
 						.build())

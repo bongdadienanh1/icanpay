@@ -79,17 +79,18 @@ public class PaymentSetting {
 		}
 	}
 
-	public Map<String, String> payment(GatewayTradeType gatewayTradeType, HashMap<String, String> map) {
+	public Map<String, String> payment(GatewayTradeType gatewayTradeType, HashMap<String, String>... map) {
 		gateway.setGatewayTradeType(gatewayTradeType);
 		return payment(map);
 	}
 
-	public Map<String, String> payment(HashMap<String, String> map) {
+	public Map<String, String> payment(HashMap<String, String>... map) {
+		HashMap<String, String> _map = map != null && map.length > 0 ? map[0] : null;
 		switch (gateway.getGatewayTradeType()) {
 			case APP:
 				return buildPayParams();
 			case Wap:
-				wapPayment(map);
+				wapPayment(_map);
 				break;
 			case Web:
 				webPayment();

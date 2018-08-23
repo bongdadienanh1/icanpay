@@ -7,13 +7,13 @@ WebPayment（网站支付）
 	public void createOrder(int type) {
 		GatewayBase gateway = gateways.get(GatewayType.getGatewayType(type), GatewayTradeType.Web);
 		PaymentSetting.buid(gateway).setOrder(
-				Order.OrderBuilder.builder()
+				Order.newBuilder()
 						.orderAmount(0.01)
 						.orderNo(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()))
 						.paymentDate(new Date())
 						.subject("webpay")
 						.build())
-				.payment(null);
+				.payment();
 
 	}
 ```
@@ -24,7 +24,7 @@ WapPayment（手机网站支付）
 	public void createOrder(int type) {
 		GatewayBase gateway = gateways.get(GatewayType.getGatewayType(type), GatewayTradeType.Wap);
 		PaymentSetting.buid(gateway).setOrder(
-				Order.OrderBuilder.builder()
+				Order.newBuilder()
 						.orderAmount(0.01)
 						.orderNo(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()))
 						.paymentDate(new Date())
@@ -40,13 +40,13 @@ QRCodePayment（二维码支付）
 	public void createOrder(int type) {
 		GatewayBase gateway = gateways.get(GatewayType.getGatewayType(type), GatewayTradeType.QRCode);
 		PaymentSetting.buid(gateway).setOrder(
-				Order.OrderBuilder.builder()
+				Order.newBuilder()
 						.orderAmount(0.01)
 						.orderNo(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()))
 						.paymentDate(new Date())
 						.subject("qrcodepay")
 						.build())
-				.payment(null);
+				.payment();
 	}
 ```
 	
@@ -56,13 +56,13 @@ AppPayment（手机APP支付）
 	public Map<String, String> createOrder(int type) {
 		GatewayBase gateway = gateways.get(GatewayType.getGatewayType(type), GatewayTradeType.APP);
 		return PaymentSetting.buid(gateway).setOrder(
-				Order.OrderBuilder.builder()
+				Order.newBuilder()
 						.orderAmount(0.01)
 						.orderNo(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()))
 						.paymentDate(new Date())
 						.subject("apppay")
 						.build())
-				.payment(null);
+				.payment();
 	}
 ```
 	
@@ -114,13 +114,13 @@ Notify（异步通知）
 	}
 
 	@GetMapping("/servernotify")
-	public void ServerNotify() {
+	public void serverNotify() {
 		// 接收并处理支付通知
 		paymentNotify.received(PaymentNotifyMethod.ServerNotify);
 	}
 
 	@GetMapping("/autoreturn")
-	public void AutoReturn() {
+	public void autoReturn() {
 		// 接收并处理支付通知
 		paymentNotify.received(PaymentNotifyMethod.AutoReturn);
 	}

@@ -26,7 +26,7 @@ public class WapPaymentController {
 	public void createOrder(int type) {
 		GatewayBase gateway = gateways.get(GatewayType.getGatewayType(type), GatewayTradeType.Wap);
 		PaymentSetting.buid(gateway).setOrder(
-				Order.OrderBuilder.builder()
+				Order.newBuilder()
 						.orderAmount(0.01)
 						.orderNo(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()))
 						.paymentDate(new Date())

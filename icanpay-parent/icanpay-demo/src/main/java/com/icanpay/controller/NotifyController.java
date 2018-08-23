@@ -39,13 +39,13 @@ public class NotifyController {
 	}
 
 	@GetMapping("/servernotify")
-	public void ServerNotify() {
+	public void serverNotify() {
 		// 接收并处理支付通知
 		paymentNotify.received(PaymentNotifyMethod.ServerNotify);
 	}
 
 	@GetMapping("/autoreturn")
-	public void AutoReturn() {
+	public void autoReturn() {
 		// 接收并处理支付通知
 		paymentNotify.received(PaymentNotifyMethod.AutoReturn);
 	}

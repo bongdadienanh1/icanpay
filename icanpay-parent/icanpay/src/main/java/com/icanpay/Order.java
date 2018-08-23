@@ -105,6 +105,11 @@ public class Order {
 		this.paymentDate = paymentDate;
 	}
 
+	public static OrderBuilder newBuilder() {
+		OrderBuilder builder = new OrderBuilder();
+		return builder;
+	}
+
 	public static class OrderBuilder {
 
 		double orderAmount;
@@ -113,10 +118,6 @@ public class Order {
 		String subject;
 		Date paymentDate;
 
-		public static OrderBuilder builder() {
-			OrderBuilder builder = new OrderBuilder();
-			return builder;
-		}
 
 		public OrderBuilder orderAmount(double orderAmount) {
 			this.orderAmount = orderAmount;

@@ -26,12 +26,12 @@ public class AppPaymentController {
 	public Map<String, String> createOrder(int type) {
 		GatewayBase gateway = gateways.get(GatewayType.getGatewayType(type), GatewayTradeType.APP);
 		return PaymentSetting.buid(gateway).setOrder(
-				Order.OrderBuilder.builder()
+				Order.newBuilder()
 						.orderAmount(0.01)
 						.orderNo(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()))
 						.paymentDate(new Date())
 						.subject("apppay")
 						.build())
-				.payment(null);
+				.payment();
 	}
 }
