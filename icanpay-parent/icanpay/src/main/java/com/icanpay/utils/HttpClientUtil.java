@@ -1,7 +1,5 @@
 package com.icanpay.utils;
 
-import java.io.IOException;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -20,13 +18,33 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 public class HttpClientUtil {
 
 	static Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
 
 	/**
+	 * HTTP(S) 连接超时时间，单位毫秒
+	 *
+	 * @return
+	 */
+	static int getHttpConnectTimeoutMs() {
+		return 6 * 1000;
+	}
+
+	/**
+	 * HTTP(S) 读数据超时时间，单位毫秒
+	 *
+	 * @return
+	 */
+	static int getHttpReadTimeoutMs() {
+		return 8 * 1000;
+	}
+
+	/**
 	 * Post请求
-	 * 
+	 *
 	 * @param url
 	 * @param data
 	 * @param contentType
@@ -36,16 +54,16 @@ public class HttpClientUtil {
 	 */
 	public static String doPost(String url, String data, String contentType) {
 		BasicHttpClientConnectionManager connManager;
-		connManager = new BasicHttpClientConnectionManager(RegistryBuilder.<ConnectionSocketFactory>create()
-				.register("http", PlainConnectionSocketFactory.getSocketFactory()).register("https", SSLConnectionSocketFactory.getSocketFactory()).build(), null, null,
-				null);
+		connManager = new BasicHttpClientConnectionManager(
+				RegistryBuilder.<ConnectionSocketFactory>create().register("http", PlainConnectionSocketFactory.getSocketFactory())
+						.register("https", SSLConnectionSocketFactory.getSocketFactory()).build(), null, null, null);
 
 		HttpClient httpClient = HttpClientBuilder.create().setConnectionManager(connManager).build();
 
 		HttpPost httpPost = new HttpPost(url);
 
-		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(ICanPayConfig.getHttpReadTimeoutMs())
-				.setConnectTimeout(ICanPayConfig.getHttpConnectTimeoutMs()).build();
+		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(getHttpReadTimeoutMs()).setConnectTimeout(getHttpConnectTimeoutMs())
+				.build();
 		httpPost.setConfig(requestConfig);
 
 		StringEntity postEntity = new StringEntity(data, "UTF-8");
@@ -67,7 +85,7 @@ public class HttpClientUtil {
 
 	/**
 	 * Get请求
-	 * 
+	 *
 	 * @param url
 	 * @return
 	 * @throws ClientProtocolException
@@ -75,16 +93,16 @@ public class HttpClientUtil {
 	 */
 	public static String doGet(String url) {
 		BasicHttpClientConnectionManager connManager;
-		connManager = new BasicHttpClientConnectionManager(RegistryBuilder.<ConnectionSocketFactory>create()
-				.register("http", PlainConnectionSocketFactory.getSocketFactory()).register("https", SSLConnectionSocketFactory.getSocketFactory()).build(), null, null,
-				null);
+		connManager = new BasicHttpClientConnectionManager(
+				RegistryBuilder.<ConnectionSocketFactory>create().register("http", PlainConnectionSocketFactory.getSocketFactory())
+						.register("https", SSLConnectionSocketFactory.getSocketFactory()).build(), null, null, null);
 
 		HttpClient httpClient = HttpClientBuilder.create().setConnectionManager(connManager).build();
 
 		HttpGet httpget = new HttpGet(url);
 
-		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(ICanPayConfig.getHttpReadTimeoutMs())
-				.setConnectTimeout(ICanPayConfig.getHttpConnectTimeoutMs()).build();
+		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(getHttpReadTimeoutMs()).setConnectTimeout(getHttpConnectTimeoutMs())
+				.build();
 		httpget.setConfig(requestConfig);
 
 		HttpResponse httpResponse;

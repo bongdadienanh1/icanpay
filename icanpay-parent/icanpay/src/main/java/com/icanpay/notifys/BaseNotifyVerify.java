@@ -5,9 +5,9 @@ import com.icanpay.gateways.GatewayParameter;
 
 import java.util.List;
 
-public abstract class BaseGatewayVerify {
+public abstract class BaseNotifyVerify {
 
-	abstract GatewayBase verify(List<GatewayParameter> gatewayParameterData);
+	public abstract GatewayBase verify(List<GatewayParameter> gatewayParameterData);
 
 	/**
 	 * 网关参数数据项中是否存在指定的所有参数名

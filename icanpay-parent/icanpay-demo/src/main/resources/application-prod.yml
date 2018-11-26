@@ -17,3 +17,7 @@ unionpay:
   merid: appid000000000000000
   notifyurl: http://yourwebsite.com/notify/servernotify
   returnurl: http://yourwebsite.com/notify/autoreturn
+demo:
+  merid: appid000000000000000
+  notifyurl: http://yourwebsite.com/notify/servernotify
+  returnurl: http://yourwebsite.com/notify/autoreturn

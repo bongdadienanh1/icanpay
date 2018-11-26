@@ -23,14 +23,14 @@ import java.util.Set;
  */
 public class NotifyProcess {
 
-	Set<BaseGatewayVerify> baseGatewayVerifys;
+	Set<BaseNotifyVerify> baseNotifyVerifies;
 
-	public Set<BaseGatewayVerify> getBaseGatewayVerifys() {
-		return baseGatewayVerifys;
+	public Set<BaseNotifyVerify> getBaseNotifyVerifies() {
+		return baseNotifyVerifies;
 	}
 
-	public void setBaseGatewayVerifys(Set<BaseGatewayVerify> baseGatewayVerifys) {
-		this.baseGatewayVerifys = baseGatewayVerifys;
+	public void setBaseNotifyVerifies(Set<BaseNotifyVerify> baseNotifyVerifies) {
+		this.baseNotifyVerifies = baseNotifyVerifies;
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class NotifyProcess {
 	 */
 	public GatewayBase getGateway() {
 		List<GatewayParameter> gatewayParameterData = readNotifyData();
-		for (BaseGatewayVerify verify : baseGatewayVerifys) {
+		for (BaseNotifyVerify verify : baseNotifyVerifies) {
 			GatewayBase gatewayBase = verify.verify(gatewayParameterData);
 			if (gatewayBase != null)
 				return gatewayBase;

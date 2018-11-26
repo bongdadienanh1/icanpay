@@ -63,7 +63,7 @@ public class WeChatpayProperties extends BasePayProperties {
 	}
 
 	@Override
-	GatewayBase initGateway() {
+	public GatewayBase initGateway() {
 		WeChatpayGataway weChatpayGataway = new WeChatpayGataway();
 		weChatpayGataway.getMerchant().setAppId(this.getAppid());
 		weChatpayGataway.getMerchant().setPartner(this.getMch_id());

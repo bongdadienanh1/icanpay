@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class WeChatpayGatewayVerify extends BaseGatewayVerify {
+public class WeChatpayNotifyVerify extends BaseNotifyVerify {
 	static final String[] weChatpayGatewayVerifyParmaNames = {"return_code", "appid", "mch_id", "nonce_str", "result_code"};
 
 	@Override
-	GatewayBase verify(List<GatewayParameter> gatewayParameterData) {
+	public GatewayBase verify(List<GatewayParameter> gatewayParameterData) {
 		if (isWeChatpayGateway(gatewayParameterData)) {
 			return new WeChatpayGataway(gatewayParameterData);
 		}

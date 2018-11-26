@@ -1,8 +1,9 @@
-package com.icanpay.config;
+package com.icanpay.demo;
 
+
+import com.icanpay.config.BasePayProperties;
 import com.icanpay.exceptions.GatewayException;
 import com.icanpay.gateways.GatewayBase;
-import com.icanpay.providers.UnionpayGateway;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -10,13 +11,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @Component
-public class UnionpayProperties extends BasePayProperties {
-	@Value("${unionpay.merid:}")
+public class DemoProperties extends BasePayProperties {
+	@Value("${demo.merid:}")
 	private String merid;
-	@Value("${unionpay.notifyurl:}")
+	@Value("${demo.notifyurl:}")
 	private String notifyurl;
-	@Value("${unionpay.returnurl:}")
+	@Value("${demo.returnurl:}")
 	private String returnurl;
+
 
 	public String getMerid() {
 		return merid;
@@ -43,16 +45,17 @@ public class UnionpayProperties extends BasePayProperties {
 	}
 
 	@Override
+
 	public GatewayBase initGateway() {
-		UnionpayGateway unionpayGateway = new UnionpayGateway();
-		unionpayGateway.getMerchant().setPartner(this.getMerid());
+		DemoGateway demoGateway = new DemoGateway();
+		demoGateway.getMerchant().setPartner(this.getMerid());
 		try {
-			unionpayGateway.getMerchant().setNotifyUrl(new URI(this.getNotifyurl()));
-			unionpayGateway.getMerchant().setReturnUrl(new URI(this.getReturnurl()));
+			demoGateway.getMerchant().setNotifyUrl(new URI(this.getNotifyurl()));
+			demoGateway.getMerchant().setReturnUrl(new URI(this.getReturnurl()));
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			throw new GatewayException(e.getMessage(), e);
 		}
-		return unionpayGateway;
+		return demoGateway;
 	}
 }

@@ -27,6 +27,7 @@
     <modules>
         <module>icanpay</module>
         <module>icanpay-demo</module>
+        <module>icanpay-demogateway</module>
     </modules>
 
     <dependencyManagement>

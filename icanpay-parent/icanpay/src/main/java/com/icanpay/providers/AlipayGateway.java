@@ -18,7 +18,7 @@ import com.icanpay.enums.PaymentNotifyMethod;
 import com.icanpay.exceptions.GatewayException;
 import com.icanpay.gateways.GatewayBase;
 import com.icanpay.gateways.GatewayParameter;
-import com.icanpay.interfaces.AppParams;
+import com.icanpay.interfaces.PaymentApp;
 import com.icanpay.interfaces.PaymentForm;
 import com.icanpay.interfaces.QueryNow;
 import com.icanpay.interfaces.WapPaymentUrl;
@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AlipayGateway extends GatewayBase implements PaymentForm, WapPaymentUrl, AppParams, QueryNow {
+public class AlipayGateway extends GatewayBase implements PaymentForm, WapPaymentUrl, PaymentApp, QueryNow {
 
 	final String payGatewayUrl = "https://mapi.alipay.com/gateway.do";
 	final String openapiGatewayUrl = "https://openapi.alipay.com/gateway.do";

@@ -1,10 +1,5 @@
 package com.icanpay.gateways;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
 import com.alipay.api.AlipayApiException;
 import com.icanpay.Merchant;
 import com.icanpay.Order;
@@ -12,6 +7,11 @@ import com.icanpay.enums.GatewayParameterRequestMethod;
 import com.icanpay.enums.GatewayTradeType;
 import com.icanpay.enums.GatewayType;
 import com.icanpay.enums.PaymentNotifyMethod;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * 支付网关的抽象基类
@@ -60,8 +60,6 @@ public abstract class GatewayBase {
 	 * 支付网关的Get、Post数据的集合。Get方式传入QueryString的值均为未解码
 	 */
 	List<GatewayParameter> gatewayParameterData;
-
-	final String formItem = "<input type='hidden' name='%s' value='%s'> ";
 
 	protected GatewayBase() {
 		this(new ArrayList<GatewayParameter>());
@@ -117,31 +115,6 @@ public abstract class GatewayBase {
 
 	public void setGatewayParameterData(List<GatewayParameter> gatewayParameterData) {
 		this.gatewayParameterData = gatewayParameterData;
-	}
-
-	/**
-	 * 创建Form HTML代码
-	 * 
-	 * @param url
-	 *            网关的Url
-	 * @return
-	 */
-	protected String getFormHtml(String url) {
-
-		StringBuilder html = new StringBuilder();
-		html.append("<body>").append(" \r\n");
-		html.append("<form name='Gateway' method='post' action ='" + url + "'>").append(" \r\n");
-		for (GatewayParameter item : gatewayParameterData) {
-			if (item.requestMethod == GatewayParameterRequestMethod.Post || item.requestMethod == GatewayParameterRequestMethod.Both) {
-				html.append(String.format(formItem, item.getName(), item.getValue())).append(" \r\n");
-			}
-		}
-		html.append("</form>").append(" \r\n");
-		html.append("<script language='javascript' type='text/javascript'>").append(" \r\n");
-		html.append("document.Gateway.submit();").append(" \r\n");
-		html.append("</script>").append(" \r\n");
-		html.append("</body>").append(" \r\n");
-		return html.toString();
 	}
 
 	/**

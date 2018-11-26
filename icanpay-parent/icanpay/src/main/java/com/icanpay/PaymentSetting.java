@@ -5,15 +5,10 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.icanpay.enums.GatewayTradeType;
 import com.icanpay.enums.GatewayType;
 import com.icanpay.exceptions.GatewayException;
 import com.icanpay.gateways.GatewayBase;
 import com.icanpay.interfaces.*;
-import com.icanpay.providers.AlipayGateway;
-import com.icanpay.providers.NullGateway;
-import com.icanpay.providers.UnionpayGateway;
-import com.icanpay.providers.WeChatpayGataway;
 import com.icanpay.utils.MatrixToImageWriter;
 import com.icanpay.utils.Utility;
 import org.apache.commons.lang3.NotImplementedException;
@@ -31,7 +26,6 @@ import java.util.Map;
  *
  */
 public class PaymentSetting {
-
 
 	GatewayBase gateway;
 	Merchant merchant;
@@ -62,35 +56,13 @@ public class PaymentSetting {
 		return this;
 	}
 
-	private GatewayBase createGateway(GatewayType gatewayType) {
-		switch (gatewayType) {
-			case Alipay: {
-				return new AlipayGateway();
-			}
-			case WeChatpay: {
-				return new WeChatpayGataway();
-			}
-			case Unionpay: {
-				return new UnionpayGateway();
-			}
-			default: {
-				return new NullGateway();
-			}
-		}
-	}
-
-	public Map<String, String> payment(GatewayTradeType gatewayTradeType, HashMap<String, String>... map) {
-		gateway.setGatewayTradeType(gatewayTradeType);
-		return payment(map);
-	}
-
-	public Map<String, String> payment(HashMap<String, String>... map) {
-		HashMap<String, String> _map = map != null && map.length > 0 ? map[0] : null;
+	public Map<String, String> payment(HashMap<String, String>... extraParams) {
+		HashMap<String, String> _extraParams = extraParams != null && extraParams.length > 0 ? extraParams[0] : null;
 		switch (gateway.getGatewayTradeType()) {
 			case APP:
-				return buildPayParams();
+				return appPayment();
 			case Wap:
-				wapPayment(_map);
+				wapPayment(_extraParams);
 				break;
 			case Web:
 				webPayment();
@@ -115,9 +87,6 @@ public class PaymentSetting {
 
 	/**
 	 * 创建订单的支付Url、Form表单、二维码。 如果创建的是订单的Url或Form表单将跳转到相应网关支付，如果是二维码将输出二维码图片。
-	 *
-	 * @throws IOException
-	 * @throws Exception
 	 */
 	private void webPayment() {
 		HttpServletResponse response = Utility.getHttpServletResponse();
@@ -143,15 +112,13 @@ public class PaymentSetting {
 			}
 			return;
 		}
-
-		throw new NotImplementedException(gateway.getGatewayType() + " 没有实现支付接口");
+		throw new NotImplementedException(gateway.getGatewayType() + " 没有实现 PaymentUrl 或 PaymentForm 支付接口");
 	}
 
 	/**
 	 * WAP支付
 	 *
 	 * @param map
-	 * @throws Exception
 	 */
 	private void wapPayment(Map<String, String> map) {
 		HttpServletResponse response = Utility.getHttpServletResponse();
@@ -187,16 +154,11 @@ public class PaymentSetting {
 			}
 			return;
 		}
-
-		throw new NotImplementedException(gateway.getGatewayType() + " 没有实现支付接口");
+		throw new NotImplementedException(gateway.getGatewayType() + " 没有实现 WapPaymentUrl 或 WapPaymentForm 支付接口");
 	}
 
 	/**
 	 * 二维码支付
-	 *
-	 * @throws IOException
-	 * @throws WriterException
-	 * @throws Exception
 	 */
 	private void qRCodePayment() {
 		// TODO Auto-generated method stub
@@ -213,29 +175,23 @@ public class PaymentSetting {
 			}
 			return;
 		}
-
-		throw new NotImplementedException(gateway.getGatewayType() + " 没有实现支付接口");
+		throw new NotImplementedException(gateway.getGatewayType() + " 没有实现 PaymentQRCode 支付接口");
 	}
 
 	/**
 	 * 创建APP端SDK支付需要的参数
-	 *
 	 * @return
-	 * @throws Exception
 	 */
-	private Map<String, String> buildPayParams() {
-		if (gateway instanceof AppParams) {
-			AppParams appParams = (AppParams) gateway;
-			return appParams.buildPayParams();
+	private Map<String, String> appPayment() {
+		if (gateway instanceof PaymentApp) {
+			PaymentApp paymentApp = (PaymentApp) gateway;
+			return paymentApp.buildPayParams();
 		}
-
-		throw new NotImplementedException(gateway.getGatewayType() + " 没有实现 AppParams 查询接口");
+		throw new NotImplementedException(gateway.getGatewayType() + " 没有实现 PaymentApp 支付接口");
 	}
 
 	/**
 	 * 查询订单，订单的查询通知数据通过跟支付通知一样的形式反回。用处理网关通知一样的方法接受查询订单的数据。
-	 *
-	 * @throws Exception
 	 */
 	public void queryNotify() {
 		HttpServletResponse response = Utility.getHttpServletResponse();
@@ -262,34 +218,19 @@ public class PaymentSetting {
 			}
 			return;
 		}
-
 		throw new NotImplementedException(gateway.getGatewayType() + " 没有实现 QueryUrl 或 QueryForm 查询接口");
 	}
 
 	/**
 	 * 查询订单，立即获得订单的查询结果
-	 *
 	 * @return
-	 * @throws Exception
 	 */
 	public boolean queryNow() {
 		if (gateway instanceof QueryNow) {
 			QueryNow queryNow = (QueryNow) gateway;
 			return queryNow.queryNow();
 		}
-
 		throw new NotImplementedException(gateway.getGatewayType() + " 没有实现 QueryNow 查询接口");
-	}
-
-
-	/**
-	 * 设置网关的数据
-	 *
-	 * @param gatewayParameterName
-	 * @param gatewayParameterValue
-	 */
-	public void setGatewayParameterValue(String gatewayParameterName, String gatewayParameterValue) {
-		gateway.setGatewayParameterValue(gatewayParameterName, gatewayParameterValue);
 	}
 
 	/**
@@ -312,8 +253,6 @@ public class PaymentSetting {
 
 		BitMatrix bitMatrix = new MultiFormatWriter().encode(paymentQRCodeContent, BarcodeFormat.QR_CODE, width, height, hints);
 		// 生成二维码
-
 		MatrixToImageWriter.writeToStream(bitMatrix, format, response.getOutputStream());
 	}
-
 }

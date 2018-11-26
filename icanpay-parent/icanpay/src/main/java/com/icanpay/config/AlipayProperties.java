@@ -93,7 +93,7 @@ public class AlipayProperties extends BasePayProperties {
 	}
 
 	@Override
-	GatewayBase initGateway() {
+	public GatewayBase initGateway() {
 		AlipayGateway alipayGateway = new AlipayGateway();
 		alipayGateway.getMerchant().setAppId(this.getAppid());
 		alipayGateway.getMerchant().setEmail(this.getSeller_email());

@@ -21,7 +21,7 @@ import java.util.Map;
  * @author milanyangbo
  *
  */
-public class WeChatpayGataway extends GatewayBase implements PaymentQRCode, WapPaymentUrl, AppParams, QueryNow {
+public class WeChatpayGataway extends GatewayBase implements PaymentQRCode, WapPaymentUrl, PaymentApp, QueryNow {
 
 	final String payGatewayUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 	final String queryGatewayUrl = "https://api.mch.weixin.qq.com/pay/orderquery";

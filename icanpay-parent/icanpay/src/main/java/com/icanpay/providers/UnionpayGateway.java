@@ -4,7 +4,7 @@ import com.icanpay.enums.GatewayType;
 import com.icanpay.enums.PaymentNotifyMethod;
 import com.icanpay.gateways.GatewayBase;
 import com.icanpay.gateways.GatewayParameter;
-import com.icanpay.interfaces.AppParams;
+import com.icanpay.interfaces.PaymentApp;
 import com.icanpay.interfaces.PaymentForm;
 import com.icanpay.interfaces.QueryNow;
 import com.icanpay.interfaces.WapPaymentForm;
@@ -28,7 +28,7 @@ import java.util.*;
  * @author milanyangbo
  *
  */
-public class UnionpayGateway extends GatewayBase implements PaymentForm, WapPaymentForm, AppParams, QueryNow {
+public class UnionpayGateway extends GatewayBase implements PaymentForm, WapPaymentForm, PaymentApp, QueryNow {
 
 	/**
 	 * 初始化中国银联网关

@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class AlipayGatewayVerify extends BaseGatewayVerify {
+public class AlipayNotifyVerify extends BaseNotifyVerify {
 	static final String[] alipayGatewayVerifyParmaNames = {"notify_type", "notify_id", "notify_time", "sign", "sign_type"};
 	static final String[] alipayWapGatewayVerifyParmaNames = {"auth_app_id", "method", "seller_id", "sign", "sign_type"};
 
 	@Override
-	GatewayBase verify(List<GatewayParameter> gatewayParameterData) {
+	public GatewayBase verify(List<GatewayParameter> gatewayParameterData) {
 		if (isAlipayGateway(gatewayParameterData)) {
 			return new AlipayGateway(gatewayParameterData);
 		}

@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class UnionpayGatewayVerify extends BaseGatewayVerify {
+public class UnionpayNotifyVerify extends BaseNotifyVerify {
 	static final String[] unionpayGatewayVerifyParmaNames = {"respMsg", "merId", "respCode", "orderId", "queryId"};
 
 	@Override
-	GatewayBase verify(List<GatewayParameter> gatewayParameterData) {
+	public GatewayBase verify(List<GatewayParameter> gatewayParameterData) {
 		if (isUnionpayGateway(gatewayParameterData)) {
 			return new UnionpayGateway(gatewayParameterData);
 		}

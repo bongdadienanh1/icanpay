@@ -3,7 +3,7 @@ package com.icanpay.config;
 import com.icanpay.events.PaymentNotify;
 import com.icanpay.gateways.Gateways;
 import com.icanpay.gateways.GatewaysImpl;
-import com.icanpay.notifys.BaseGatewayVerify;
+import com.icanpay.notifys.BaseNotifyVerify;
 import com.icanpay.notifys.NotifyProcess;
 import com.unionpay.acp.sdk.SDKConfig;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Scope;
 import java.util.Set;
 
 @Configuration
-public class ICanpayConfig {
+public class ICanPayConfig {
 
 	static {
 		SDKConfig.getConfig().loadPropertiesFromSrc();
@@ -31,9 +31,9 @@ public class ICanpayConfig {
 	}
 
 	@Bean()
-	public NotifyProcess notifyProcess(Set<BaseGatewayVerify> gatewayVerifys) {
+	public NotifyProcess notifyProcess(Set<BaseNotifyVerify> gatewayVerifys) {
 		NotifyProcess notifyProcess = new NotifyProcess();
-		notifyProcess.setBaseGatewayVerifys(gatewayVerifys);
+		notifyProcess.setBaseNotifyVerifies(gatewayVerifys);
 		return notifyProcess;
 	}
 
