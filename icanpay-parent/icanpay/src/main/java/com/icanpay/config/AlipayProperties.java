@@ -11,6 +11,7 @@ import java.net.URISyntaxException;
 
 @Component
 public class AlipayProperties extends BasePayProperties {
+
 	@Value("${alipay.appid:}")
 	private String appid;
 	@Value("${alipay.partner:}")

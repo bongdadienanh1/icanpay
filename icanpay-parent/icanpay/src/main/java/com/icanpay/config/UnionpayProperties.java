@@ -11,6 +11,7 @@ import java.net.URISyntaxException;
 
 @Component
 public class UnionpayProperties extends BasePayProperties {
+
 	@Value("${unionpay.merid:}")
 	private String merid;
 	@Value("${unionpay.notifyurl:}")

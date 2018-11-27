@@ -1,6 +1,7 @@
 package com.icanpay.events;
 
 import com.icanpay.Merchant;
+import com.icanpay.enums.BasicGatewayType;
 import com.icanpay.enums.GatewayType;
 import com.icanpay.enums.PaymentNotifyMethod;
 import com.icanpay.gateways.GatewayBase;
@@ -90,7 +91,7 @@ public class PaymentNotify {
 	public void received(PaymentNotifyMethod paymentNotifyMethod) {
 		GatewayBase gateway = notifyProcess.getGateway();
 		gateway.setPaymentNotifyMethod(paymentNotifyMethod);
-		if (gateway.getGatewayType() != GatewayType.None) {
+		if (gateway.getGatewayType() != BasicGatewayType.None) {
 			gateway.setMerchant(getMerchant(gateway.getGatewayType()));
 			if (gateway.validateNotify()) {
 				onPaymentSucceed(new PaymentSucceedEventArgs(gateway));

@@ -1,14 +1,14 @@
 package com.icanpay;
 
-import java.net.URI;
-
+import com.icanpay.enums.GatewayType;
 import org.apache.commons.lang3.StringUtils;
 
-import com.icanpay.enums.GatewayType;
+import java.net.URI;
+
 
 /**
  * 商户数据
- * 
+ *
  * @author milanyangbo
  *
  */

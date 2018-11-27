@@ -1,5 +1,6 @@
 package com.icanpay.providers;
 
+import com.icanpay.enums.BasicGatewayType;
 import com.icanpay.enums.GatewayType;
 import com.icanpay.exceptions.GatewayException;
 import com.icanpay.gateways.GatewayBase;
@@ -46,7 +47,7 @@ public class WeChatpayGataway extends GatewayBase implements PaymentQRCode, WapP
 
 	@Override
 	public GatewayType getGatewayType() {
-		return GatewayType.WeChatpay;
+		return BasicGatewayType.WeChatpay;
 	}
 
 	@Override

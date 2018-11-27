@@ -11,6 +11,7 @@ import java.net.URISyntaxException;
 
 @Component
 public class WeChatpayProperties extends BasePayProperties {
+
 	@Value("${wechatpay.appid:}")
 	private String appid;
 	@Value("${wechatpay.mch_id:}")

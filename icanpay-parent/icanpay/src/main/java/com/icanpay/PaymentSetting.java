@@ -5,6 +5,7 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.icanpay.enums.BasicGatewayType;
 import com.icanpay.enums.GatewayType;
 import com.icanpay.exceptions.GatewayException;
 import com.icanpay.gateways.GatewayBase;
@@ -30,6 +31,22 @@ public class PaymentSetting {
 	GatewayBase gateway;
 	Merchant merchant;
 	Order order;
+
+	public static GatewayType getGatewayType(int code, GatewayType... otherGatewayTypes) {
+		for (GatewayType gatewayType : BasicGatewayType.values()) {
+			if (gatewayType.getCode() == code) {
+				return gatewayType;
+			}
+		}
+		if (otherGatewayTypes != null && otherGatewayTypes.length > 0) {
+			for (GatewayType gatewayType : otherGatewayTypes) {
+				if (gatewayType.getCode() == code) {
+					return gatewayType;
+				}
+			}
+		}
+		return null;
+	}
 
 	public static PaymentSetting buid(GatewayBase gateway) {
 		return new PaymentSetting(gateway);
@@ -125,7 +142,7 @@ public class PaymentSetting {
 		response.setCharacterEncoding(gateway.getCharset());
 		if (gateway instanceof WapPaymentUrl) {
 			WapPaymentUrl paymentUrl = (WapPaymentUrl) gateway;
-			if (gateway.getGatewayType() == GatewayType.WeChatpay) {
+			if (gateway.getGatewayType() == BasicGatewayType.WeChatpay) {
 				try {
 					response.getWriter()
 							.write(String.format("<script language='javascript'>window.location='%s'</script>", paymentUrl.buildWapPaymentUrl(map)));

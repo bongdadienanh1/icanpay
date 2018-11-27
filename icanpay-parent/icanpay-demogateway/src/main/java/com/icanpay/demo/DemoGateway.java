@@ -23,7 +23,7 @@ public class DemoGateway extends GatewayBase implements PaymentForm, WapPaymentU
 
 	@Override
 	public GatewayType getGatewayType() {
-		return GatewayType.Demo;
+		return DemoGatewayType.Demo;
 	}
 
 	@Override

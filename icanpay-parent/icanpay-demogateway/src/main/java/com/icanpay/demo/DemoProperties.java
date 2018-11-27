@@ -12,6 +12,7 @@ import java.net.URISyntaxException;
 
 @Component
 public class DemoProperties extends BasePayProperties {
+
 	@Value("${demo.merid:}")
 	private String merid;
 	@Value("${demo.notifyurl:}")
@@ -45,7 +46,6 @@ public class DemoProperties extends BasePayProperties {
 	}
 
 	@Override
-
 	public GatewayBase initGateway() {
 		DemoGateway demoGateway = new DemoGateway();
 		demoGateway.getMerchant().setPartner(this.getMerid());

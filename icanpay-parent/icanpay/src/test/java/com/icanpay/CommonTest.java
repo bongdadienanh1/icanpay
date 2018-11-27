@@ -1,9 +1,9 @@
 package com.icanpay;
 
+import org.junit.Test;
+
 import java.util.SortedMap;
 import java.util.TreeMap;
-
-import org.junit.Test;
 
 public class CommonTest {
 
@@ -20,4 +20,5 @@ public class CommonTest {
 			System.out.print(key);
 		});
 	}
+
 }

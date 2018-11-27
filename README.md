@@ -5,7 +5,7 @@ WebPayment（网站支付）
 ```
    @GetMapping("/createorder")
 	public void createOrder(int type) {
-		GatewayBase gateway = gateways.get(GatewayType.getGatewayType(type), GatewayTradeType.Web);
+		GatewayBase gateway = gateways.get(PaymentSetting.getGatewayType(type), GatewayTradeType.Web);
 		PaymentSetting.buid(gateway).setOrder(
 				Order.newBuilder()
 						.orderAmount(0.01)
@@ -22,7 +22,7 @@ WapPayment（手机网站支付）
 ```
 	@GetMapping("/createorder")
 	public void createOrder(int type) {
-		GatewayBase gateway = gateways.get(GatewayType.getGatewayType(type), GatewayTradeType.Wap);
+		GatewayBase gateway = gateways.get(PaymentSetting.getGatewayType(type), GatewayTradeType.Wap);
 		PaymentSetting.buid(gateway).setOrder(
 				Order.newBuilder()
 						.orderAmount(0.01)
@@ -38,7 +38,7 @@ QRCodePayment（二维码支付）
 ```
 	@GetMapping("/createorder")
 	public void createOrder(int type) {
-		GatewayBase gateway = gateways.get(GatewayType.getGatewayType(type), GatewayTradeType.QRCode);
+		GatewayBase gateway = gateways.get(PaymentSetting.getGatewayType(type), GatewayTradeType.QRCode);
 		PaymentSetting.buid(gateway).setOrder(
 				Order.newBuilder()
 						.orderAmount(0.01)
@@ -54,7 +54,7 @@ AppPayment（手机APP支付）
 ```
 	@GetMapping("/createorder")
 	public Map<String, String> createOrder(int type) {
-		GatewayBase gateway = gateways.get(GatewayType.getGatewayType(type), GatewayTradeType.APP);
+		GatewayBase gateway = gateways.get(PaymentSetting.getGatewayType(type), GatewayTradeType.APP);
 		return PaymentSetting.buid(gateway).setOrder(
 				Order.newBuilder()
 						.orderAmount(0.01)
@@ -71,7 +71,7 @@ QueryPayment（查询订单）
 	@GetMapping("/createquery")
 	public void createQuery(int type) {
 		// 查询时需要设置订单的Id与金额，在查询结果中将会核对订单的Id与金额，如果不相符会返回查询失败。
-		GatewayBase gateway = gateways.get(GatewayType.getGatewayType(type));
+		GatewayBase gateway = gateways.get(PaymentSetting.getGatewayType(type));
 		boolean query = PaymentSetting.buid(gateway).setOrder(
 				Order.OrderBuilder.builder()
 						.orderAmount(0.01)

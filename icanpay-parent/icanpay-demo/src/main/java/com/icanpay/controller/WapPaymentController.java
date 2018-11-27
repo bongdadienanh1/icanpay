@@ -2,8 +2,8 @@ package com.icanpay.controller;
 
 import com.icanpay.Order;
 import com.icanpay.PaymentSetting;
+import com.icanpay.demo.DemoGatewayType;
 import com.icanpay.enums.GatewayTradeType;
-import com.icanpay.enums.GatewayType;
 import com.icanpay.gateways.GatewayBase;
 import com.icanpay.gateways.Gateways;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class WapPaymentController {
 
 	@GetMapping("/createorder")
 	public void createOrder(int type) {
-		GatewayBase gateway = gateways.get(GatewayType.getGatewayType(type), GatewayTradeType.Wap);
+		GatewayBase gateway = gateways.get(PaymentSetting.getGatewayType(type,DemoGatewayType.values()), GatewayTradeType.Wap);
 		PaymentSetting.buid(gateway).setOrder(
 				Order.newBuilder()
 						.orderAmount(0.01)

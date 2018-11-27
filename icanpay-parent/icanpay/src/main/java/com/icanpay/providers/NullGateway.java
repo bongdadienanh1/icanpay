@@ -2,6 +2,7 @@ package com.icanpay.providers;
 
 import java.util.List;
 
+import com.icanpay.enums.BasicGatewayType;
 import com.icanpay.enums.GatewayType;
 import com.icanpay.gateways.GatewayBase;
 import com.icanpay.gateways.GatewayParameter;
@@ -26,7 +27,7 @@ public class NullGateway extends GatewayBase {
 
 	@Override
 	public GatewayType getGatewayType() {
-		return GatewayType.Alipay;
+		return BasicGatewayType.None;
 	}
 
 	@Override

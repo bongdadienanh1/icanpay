@@ -2,7 +2,7 @@ package com.icanpay.controller;
 
 import com.icanpay.Order;
 import com.icanpay.PaymentSetting;
-import com.icanpay.enums.GatewayType;
+import com.icanpay.demo.DemoGatewayType;
 import com.icanpay.gateways.GatewayBase;
 import com.icanpay.gateways.Gateways;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class QueryPaymentController {
 	@GetMapping("/createquery")
 	public void createQuery(int type) {
 		// 查询时需要设置订单的Id与金额，在查询结果中将会核对订单的Id与金额，如果不相符会返回查询失败。
-		GatewayBase gateway = gateways.get(GatewayType.getGatewayType(type));
+		GatewayBase gateway = gateways.get(PaymentSetting.getGatewayType(type,DemoGatewayType.values()));
 		boolean query = PaymentSetting.buid(gateway).setOrder(
 				Order.newBuilder()
 						.orderAmount(0.01)

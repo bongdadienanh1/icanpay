@@ -3,10 +3,7 @@ package com.icanpay.gateways;
 import com.alipay.api.AlipayApiException;
 import com.icanpay.Merchant;
 import com.icanpay.Order;
-import com.icanpay.enums.GatewayParameterRequestMethod;
-import com.icanpay.enums.GatewayTradeType;
-import com.icanpay.enums.GatewayType;
-import com.icanpay.enums.PaymentNotifyMethod;
+import com.icanpay.enums.*;
 
 import java.util.ArrayList;
 import java.util.List;

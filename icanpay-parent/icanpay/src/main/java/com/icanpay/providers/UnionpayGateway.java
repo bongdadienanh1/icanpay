@@ -1,5 +1,6 @@
 package com.icanpay.providers;
 
+import com.icanpay.enums.BasicGatewayType;
 import com.icanpay.enums.GatewayType;
 import com.icanpay.enums.PaymentNotifyMethod;
 import com.icanpay.gateways.GatewayBase;
@@ -48,7 +49,7 @@ public class UnionpayGateway extends GatewayBase implements PaymentForm, WapPaym
 
 	@Override
 	public GatewayType getGatewayType() {
-		return GatewayType.Unionpay;
+		return BasicGatewayType.Unionpay;
 	}
 
 	@Override

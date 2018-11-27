@@ -13,6 +13,7 @@ import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.response.AlipayTradeQueryResponse;
+import com.icanpay.enums.BasicGatewayType;
 import com.icanpay.enums.GatewayType;
 import com.icanpay.enums.PaymentNotifyMethod;
 import com.icanpay.exceptions.GatewayException;
@@ -56,7 +57,7 @@ public class AlipayGateway extends GatewayBase implements PaymentForm, WapPaymen
 
 	@Override
 	public GatewayType getGatewayType() {
-		return GatewayType.Alipay;
+		return BasicGatewayType.Alipay;
 	}
 
 	@Override
